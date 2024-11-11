@@ -20,36 +20,21 @@ sheet = client.open("Dataset").sheet1
 data = sheet.get_all_records()
 df = pd.DataFrame(data)
 
-# Initialize session state for page tracking
-if "page" not in st.session_state:
-    st.session_state.page = "Home"
-
-# Display navigation buttons at the top
-col1, col2, col3 = st.columns([1, 1, 1])
-with col1:
-    if st.button("Home"):
-        st.session_state.page = "Home"
-with col2:
-    if st.button("Dashboard"):
-        st.session_state.page = "Dashboard"
-with col3:
-    if st.button("Machine Learning"):
-        st.session_state.page = "Machine Learning"
-with col3:
-    if st.button("Backend"):
-        st.session_state.page = "Backend"
+# Add sidebar for navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Select a Page:", ["Home", "Dashboard", "Machine Learning", "Backend"])
 
 # Home Page
-if st.session_state.page == "Home":
+if page == "Home":
     st.title("Welcome to the Data Analysis App")
     st.write("This application provides an in-depth analysis of the Google Sheets data.")
-    st.write("Please use the buttons above to navigate between the different sections:")
+    st.write("Please use the sidebar to navigate between the different sections:")
     st.write("- **Dashboard:** View data analysis visualizations and summaries.")
     st.write("- **Machine Learning:** Access machine learning models and predictions (Coming Soon).")
     st.write("- **Backend:** Backend management and settings (Coming Soon).")
 
 # Dashboard Page - Original Content
-elif st.session_state.page == "Dashboard":
+elif page == "Dashboard":
     st.title("Google Sheets Data Analysis")
 
     # Display data in Streamlit
@@ -171,10 +156,10 @@ elif st.session_state.page == "Dashboard":
     st.pyplot(plt)
 
 # Placeholder Pages
-elif st.session_state.page == "Machine Learning":
+elif page == "Machine Learning":
     st.title("Machine Learning")
     st.write("Machine Learning content will be added here.")
 
-elif st.session_state.page == "Backend":
+elif page == "Backend":
     st.title("Backend")
     st.write("Backend management content will be added here.")
