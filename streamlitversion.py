@@ -26,10 +26,10 @@ if "page" not in st.session_state:
 
 # Home Page
 if st.session_state.page == "Home":
-    st.title("Welcome to the Data Analysis App")
-    st.write("This application provides an in-depth analysis of the Google Sheets data.")
+    st.title("Welcome to the HR monitor!")
+    st.write("This application provides you with in-depth analysis of your HR data in real time.")
     st.write("Choose a section to navigate to for different functionalities:")
-    st.write("- **Dashboard:** Check your HR dashboards in real time.")
+    st.write("- **Dashboard:** Check your HR dashboards.")
     st.write("- **Machine Learning:** Leverage AI to make predictions about your workforce (Coming Soon).")
     st.write("- **Backend:** Backend management and settings (Coming Soon).")
 
