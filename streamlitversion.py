@@ -26,12 +26,12 @@ page = st.sidebar.radio("Select a Page:", ["Home", "Dashboard", "Machine Learnin
 
 # Home Page
 if page == "Home":
-    st.title("Welcome to the Data Analysis App")
-    st.write("This application provides an in-depth analysis of the Google Sheets data.")
+    st.title("Welcome to the HR Monitor!")
+    st.write("This application will allow you to derive insights into your company's HR data in real time.")
     st.write("Please use the sidebar to navigate between the different sections:")
     st.write("- **Dashboard:** View data analysis visualizations and summaries.")
-    st.write("- **Machine Learning:** Access machine learning models and predictions (Coming Soon).")
-    st.write("- **Backend:** Backend management and settings (Coming Soon).")
+    st.write("- **Machine Learning:** Leverage AI to make predictions about your workforce.")
+    st.write("- **Backend:** Interact with your data by adding ad removing profiles as you see fit.")
 
 # Dashboard Page - Original Content
 elif page == "Dashboard":
