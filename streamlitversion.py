@@ -38,10 +38,6 @@ if page == "Home":
 elif page == "Dashboard":
     st.title("Google Sheets Data Analysis")
 
-    # Display data in Streamlit
-    st.subheader("Data Preview")
-    st.write(df.head())
-
     # 1. Pie Chart - Percentage of Employees by Department
     st.subheader("Percentage of Employees by Department")
     department_counts = df['Department'].value_counts()
