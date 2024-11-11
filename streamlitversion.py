@@ -36,7 +36,7 @@ if page == "Home":
 
 # Dashboard Page - Original Content
 elif page == "Dashboard":
-    st.title("Google Sheets Data Analysis")
+    st.title("HR Dashboards")
 
     # 1. Pie Chart - Percentage of Employees by Department
     st.subheader("Percentage of Employees by Department")
