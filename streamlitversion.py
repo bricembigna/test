@@ -29,17 +29,15 @@ if page == "Home":
     st.title("Welcome to the Data Analysis App")
     st.write("This application provides an in-depth analysis of the Google Sheets data.")
     st.write("Please use the sidebar to navigate between the different sections:")
-    st.write("- **Dashboard:** View data analysis visualizations and summaries.")
-    st.write("- **Machine Learning:** Access machine learning models and predictions (Coming Soon).")
+    st.write("- **Dashboard:** Check your HR dashboards in real time.")
+    st.write("- **Machine Learning:** Leverage AI to make predictions about your workforce.")
     st.write("- **Backend:** Backend management and settings (Coming Soon).")
 
 # Dashboard Page - Original Content
 elif page == "Dashboard":
     st.title("Google Sheets Data Analysis")
 
-    # Display data in Streamlit
-    st.subheader("Data Preview")
-    st.write(df.head())
+
 
     # 1. Pie Chart - Percentage of Employees by Department
     st.subheader("Percentage of Employees by Department")
