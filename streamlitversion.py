@@ -8,6 +8,7 @@ import seaborn as sns
 # Define scopes
 scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
+
 # Authenticate using Streamlit secrets
 credentials = Credentials.from_service_account_info(
     st.secrets["google_credentials"],
