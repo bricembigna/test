@@ -149,17 +149,7 @@ elif st.session_state.page == "Dashboard":
     plt.ylabel('Job Role')
     st.pyplot(plt)
 
-    # 11. Scatter Plot - Years at Company vs. Years Since Last Promotion
-    st.subheader("Years at Company vs. Years Since Last Promotion (Attrition Highlighted)")
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(x='YearsAtCompany', y='YearsSinceLastPromotion', hue='Attrition', data=df, palette='coolwarm', alpha=0.7)
-    plt.title('Years at Company vs. Years Since Last Promotion (Attrition Highlighted)')
-    plt.xlabel('Years at Company')
-    plt.ylabel('Years Since Last Promotion')
-    plt.legend(title='Attrition')
-    st.pyplot(plt)
-
-    # 12. Violin Plot - Work-Life Balance by Job Role
+    # 11. Violin Plot - Work-Life Balance by Job Role
     st.subheader("Distribution of Work-Life Balance by Job Role")
     plt.figure(figsize=(12, 8))
     sns.violinplot(y='JobRole', x='WorkLifeBalance', data=df, inner='quartile')
