@@ -54,6 +54,18 @@ elif st.session_state.page == "Dashboard":
     if st.button("Back to Home"):
         st.session_state.page = "Home"
 
+
+     # 5. Income Statistics
+    st.subheader("Income Statistics")
+    mean_income = df['MonthlyIncome'].mean()
+    median_income = df['MonthlyIncome'].median()
+    std_income = df['MonthlyIncome'].std()
+    st.write(f"Mean Monthly Income: ${mean_income:.2f}")
+    st.write(f"Median Monthly Income: ${median_income:.2f}")
+    st.write(f"Standard Deviation of Monthly Income: ${std_income:.2f}")
+
+
+    
     # 1. Pie Chart - Percentage of Employees by Department
     st.subheader("Percentage of Employees by Department")
     department_counts = df['Department'].value_counts()
@@ -94,14 +106,6 @@ elif st.session_state.page == "Dashboard":
     plt.xticks(rotation=45)
     st.pyplot(plt)
 
-    # 5. Income Statistics
-    st.subheader("Income Statistics")
-    mean_income = df['MonthlyIncome'].mean()
-    median_income = df['MonthlyIncome'].median()
-    std_income = df['MonthlyIncome'].std()
-    st.write(f"Mean Monthly Income: ${mean_income:.2f}")
-    st.write(f"Median Monthly Income: ${median_income:.2f}")
-    st.write(f"Standard Deviation of Monthly Income: ${std_income:.2f}")
 
     # 6. Business Travel Frequency
     st.subheader("Business Travel Frequency")
