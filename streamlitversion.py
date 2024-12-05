@@ -380,7 +380,7 @@ elif st.session_state.page == "Backend":
 
         if selected_emp:
             emp_index = employee_numbers.index(selected_emp) + 1
-            if st.button("Delete"):
+            if st.button("Delete Employee"):
                 worksheet.delete_rows(emp_index + 1)
                 st.success(f"Employee {selected_emp} deleted successfully!")
 
