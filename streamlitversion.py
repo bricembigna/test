@@ -31,7 +31,7 @@ if st.session_state.page == "Home":
     st.write("Choose a section to navigate to for different functionalities:")
     st.write("- **Dashboard:** Check your HR dashboards.")
     st.write("- **Machine Learning:** Leverage AI to make predictions about your workforce (Coming Soon).")
-    st.write("- **Backend:** Backend management and settings (Coming Soon).")
+    st.write("- **Data Input:** Data Input management and settings (Coming Soon).")
 
     # Display navigation buttons under the explanation
     st.write("### Navigate to:")
@@ -43,8 +43,8 @@ if st.session_state.page == "Home":
         if st.button("Machine Learning"):
             st.session_state.page = "Machine Learning"
     with col3:
-        if st.button("Backend"):
-            st.session_state.page = "Backend"
+        if st.button("Data Input"):
+            st.session_state.page = "Data Input"
 
 # Dashboard Page - Complete Data Analysis Content
 elif st.session_state.page == "Dashboard":
@@ -274,9 +274,9 @@ st.pyplot(fig)
 
 
 
-# Backend Page - Placeholder Content
-elif st.session_state.page == "Backend":
-    st.title("Backend")
+# Data Input Page - Placeholder Content
+elif st.session_state.page == "Data Input":
+    st.title("Data Input")
     if st.button("Back to Home"):
         st.session_state.page = "Home"
-    st.write("Backend management content will be added here.")
+    st.write("Data Input management content will be added here.")
