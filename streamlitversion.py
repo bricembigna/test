@@ -299,7 +299,17 @@ elif st.session_state.page == "Backend":
             hourly_rate = st.number_input("Hourly Rate", min_value=0, step=1)
             job_involvement = st.slider("Job Involvement", min_value=1, max_value=4)
             job_level = st.slider("Job Level", min_value=1, max_value=5)
-            job_role = st.selectbox("Job Role", ["Laboratory Technician", "Sales Representative", "Research Scientist", "Human Resources", "Manufacturing Director", "Sales Executive", "Healthcare Representative", "Research Director","Manager"])
+            job_role = st.selectbox("Job Role", [
+                                                    "Laboratory Technician",
+                                                    "Sales Representative",
+                                                    "Research Scientist",
+                                                    "Human Resources",
+                                                    "Manufacturing Director",
+                                                    "Sales Executive",
+                                                    "Healthcare Representative",
+                                                    "Research Director",
+                                                    "Manager"
+                                                ])
             job_satisfaction = st.slider("Job Satisfaction", min_value=1, max_value=4)
             marital_status = st.selectbox("Marital Status", ["Single", "Married", "Divorced"])
             monthly_income = st.number_input("Monthly Income ($)", min_value=1009, step=1)
