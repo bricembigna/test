@@ -339,8 +339,8 @@ elif st.session_state.page == "Backend":
         if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
             # Display 'Homepage' button
-         if st.button("Homepage"):
-              st.session_state.page = "Home"
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
 
     # Change Employee Page
     def change_employee_page():
