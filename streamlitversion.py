@@ -268,6 +268,9 @@ elif st.session_state.page == "Backend":
             st.session_state.Backend_subpage = "change_employee"
         if st.button("Delete Employee Data"):
             st.session_state.Backend_subpage = "delete_employee"
+        # Display 'Homepage' button
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
 
     # Add Employee Page
     def add_employee_page():
@@ -335,6 +338,9 @@ elif st.session_state.page == "Backend":
 
         if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
+            # Display 'Homepage' button
+         if st.button("Homepage"):
+              st.session_state.page = "Home"
 
     # Change Employee Page
     def change_employee_page():
@@ -359,6 +365,9 @@ elif st.session_state.page == "Backend":
 
         if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
+            # Display 'Homepage' button
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
 
 
     # Delete Employee Page
@@ -377,6 +386,9 @@ elif st.session_state.page == "Backend":
 
         if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
+        # Display 'Homepage' button
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
 
 
     # Render Subpages
@@ -391,7 +403,3 @@ elif st.session_state.page == "Backend":
         change_employee_page()
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
-
-    # Display 'Homepage' button
-     if st.button("Homepage"):
-          st.session_state.page = "Home"
