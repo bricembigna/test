@@ -392,6 +392,6 @@ elif st.session_state.page == "Backend":
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
 
-# Display 'Homepage' button
- if st.button("Homepage"):
-      st.session_state.page = "Home"
+    # Display 'Homepage' button
+     if st.button("Homepage"):
+          st.session_state.page = "Home"
