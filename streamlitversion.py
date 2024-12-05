@@ -249,9 +249,103 @@ elif st.session_state.page == "Machine Learning":
     st.pyplot(fig)
 
 
-# Backend Page - Placeholder Content
+
+# Backend Page - Employee Data Management
 elif st.session_state.page == "Backend":
     st.title("Backend")
-    if st.button("Back to Home"):
-        st.session_state.page = "Home"
-    st.write("Backend management content will be added here.")
+
+    # Global variables for sheet data and headers
+    worksheet = sheet
+    sheet_data = worksheet.get_all_values()
+    headers = sheet_data[0]  # First row contains headers
+
+    # Main Page for Backend
+    def main_page():
+        st.header("Main Page")
+        st.write("Choose an action:")
+        if st.button("Add New Employee Data"):
+            st.session_state.page = "add_employee"
+        if st.button("Change Employee Data"):
+            st.session_state.page = "change_employee"
+        if st.button("Delete Employee Data"):
+            st.session_state.page = "delete_employee"
+
+    # Add Employee Page
+    def add_employee_page():
+        st.header("Add New Employee Data")
+        st.write("Enter details for the new employee:")
+
+        # Calculate next employee number
+        employee_numbers = [
+            int(row[headers.index("EmployeeNumber")])
+            for row in sheet_data[1:]
+            if row[headers.index("EmployeeNumber")].isdigit()
+        ]
+        next_employee_number = max(employee_numbers) + 1 if employee_numbers else 1
+
+        # Form for new employee data
+        with st.form("add_employee_form"):
+            new_employee = [
+                st.text_input(header, value="") for header in headers
+            ]
+            new_employee[headers.index("EmployeeNumber")] = next_employee_number  # Auto-increment EmployeeNumber
+            if st.form_submit_button("Submit"):
+                worksheet.append_row(new_employee)
+                st.success(f"Employee added successfully with Employee Number {next_employee_number}!")
+
+        # Back Button
+        if st.button("Back to Main Page"):
+            st.session_state.page = "Backend"
+
+    # Change Employee Page
+    def change_employee_page():
+        st.header("Change Employee Data")
+        employee_numbers = [row[headers.index("EmployeeNumber")] for row in sheet_data[1:]]
+        selected_emp = st.selectbox("Select Employee Number", employee_numbers)
+
+        if selected_emp:
+            emp_index = employee_numbers.index(selected_emp) + 1
+            current_data = sheet_data[emp_index]
+
+            with st.form("change_employee_form"):
+                updated_employee = [
+                    st.text_input(header, value=current_data[i]) for i, header in enumerate(headers)
+                ]
+                if st.form_submit_button("Update"):
+                    sheet_data[emp_index] = updated_employee
+                    worksheet.update(f"A{emp_index+1}:Z{emp_index+1}", [updated_employee])
+                    st.success("Employee data updated successfully!")
+
+        # Back Button
+        if st.button("Back to Main Page"):
+            st.session_state.page = "Backend"
+
+    # Delete Employee Page
+    def delete_employee_page():
+        st.header("Delete Employee Data")
+        employee_numbers = [row[headers.index("EmployeeNumber")] for row in sheet_data[1:]]
+        selected_emp = st.selectbox("Select Employee Number to Delete", employee_numbers)
+
+        if selected_emp:
+            emp_index = employee_numbers.index(selected_emp) + 1
+            if st.button("Delete"):
+                worksheet.delete_rows(emp_index + 1)  # Adjust for 1-based indexing in Google Sheets
+                st.success(f"Employee {selected_emp} deleted successfully!")
+
+        # Back Button
+        if st.button("Back to Main Page"):
+            st.session_state.page = "Backend"
+
+    # Backend Page Navigation
+    if "backend_subpage" not in st.session_state:
+        st.session_state.backend_subpage = "main"
+
+    if st.session_state.backend_subpage == "main":
+        main_page()
+    elif st.session_state.backend_subpage == "add_employee":
+        add_employee_page()
+    elif st.session_state.backend_subpage == "change_employee":
+        change_employee_page()
+    elif st.session_state.backend_subpage == "delete_employee":
+        delete_employee_page()
+
