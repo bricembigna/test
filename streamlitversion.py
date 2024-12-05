@@ -290,8 +290,8 @@ elif st.session_state.page == "Backend":
             daily_rate = st.number_input("Daily Rate", min_value=0, step=1)
             department = st.selectbox("Department", ["Sales", "Research & Development", "Human Resources"])
             distance_from_home = st.number_input("Distance from Home (km)", min_value=0, step=1)
-            education = st.selectbox("Education Level", min_value=1, max_value=5)
-            education_field = st.selectbox("Education Field", ["Medical", "Life Sciences", "Technical Degree", "Human Resources", "Marketing", "Other"])
+            education = st.selectbox("Education Level", ["High School", "Bachelor's", "Master's", "Doctorate"])
+            education_field = st.text_input("Education Field")
             employee_count = st.number_input("Employee Count", min_value=1, step=1)
             employee_number = next_employee_number
             environment_satisfaction = st.slider("Environment Satisfaction", min_value=1, max_value=4)
@@ -299,23 +299,13 @@ elif st.session_state.page == "Backend":
             hourly_rate = st.number_input("Hourly Rate", min_value=0, step=1)
             job_involvement = st.slider("Job Involvement", min_value=1, max_value=4)
             job_level = st.slider("Job Level", min_value=1, max_value=5)
-            job_role = st.selectbox("Job Role", [
-                                                    "Laboratory Technician",
-                                                    "Sales Representative",
-                                                    "Research Scientist",
-                                                    "Human Resources",
-                                                    "Manufacturing Director",
-                                                    "Sales Executive",
-                                                    "Healthcare Representative",
-                                                    "Research Director",
-                                                    "Manager"
-                                                ])
+            job_role = st.text_input("Job Role")
             job_satisfaction = st.slider("Job Satisfaction", min_value=1, max_value=4)
             marital_status = st.selectbox("Marital Status", ["Single", "Married", "Divorced"])
             monthly_income = st.number_input("Monthly Income ($)", min_value=1009, step=1)
             monthly_rate = st.number_input("Monthly Rate", min_value=1000, step=100)
             num_companies_worked = st.number_input("Number of Companies Worked", min_value=0, step=1)
-            over_18 = st.selectbox("Over 18", ["Y", "N"])
+            over_18 = st.selectbox("Over 18", ["Yes", "No"])
             overtime = st.selectbox("Overtime", ["Yes", "No"])
             percent_salary_hike = st.slider("Percent Salary Hike", min_value=0, max_value=100)
             performance_rating = st.slider("Performance Rating", min_value=1, max_value=5)
@@ -399,4 +389,3 @@ elif st.session_state.page == "Backend":
         change_employee_page()
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
-
