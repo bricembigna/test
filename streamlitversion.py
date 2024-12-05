@@ -252,6 +252,24 @@ elif st.session_state.page == "Machine Learning":
 # Backend Page
 elif st.session_state.page == "Backend":
     st.title("Data Input Manager")
+
+
+
+  SERVICE_ACCOUNT_FILE = 'apikey2.json'
+    SCOPES = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
+    credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    client = gspread.authorize(credentials)
+
+    spreadsheet_name = "Dataset"
+    spreadsheet = client.open(spreadsheet_name)
+    worksheet = spreadsheet.sheet1
+
+    headers = worksheet.row_values(1)
+    sheet_data = worksheet.get_all_values()
     
     if "page" not in st.session_state:
         st.session_state.page = "main"
