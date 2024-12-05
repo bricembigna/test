@@ -168,66 +168,82 @@ elif st.session_state.page == "Machine Learning":
     if st.button("Back to Home"):
         st.session_state.page = "Home"
 
-    import pandas as pd
-    import numpy as np
-    from sklearn.model_selection import train_test_split
-    from sklearn.linear_model import LinearRegression
-    import matplotlib.pyplot as plt
 
-    # Access Google Sheet for the required data
-    try:
-        # Ensure the Google Sheet contains the relevant columns
-        sheet = client.open("Dataset").sheet1
-        data = sheet.get_all_records()
-        df = pd.DataFrame(data)
-    except Exception as e:
-        st.error(f"Error accessing Google Sheet: {e}")
-        st.stop()
+import pandas as pd
+import numpy as np
+import streamlit as st
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+import gspread
+from google.oauth2.service_account import Credentials
 
-    # Ensure the dataset contains the necessary columns
-    try:
-        df = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
-    except KeyError as e:
-        st.error(f"Missing columns in the dataset: {e}")
-        st.stop()
+# Authenticate with Google Sheets API using Streamlit secrets
+scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+credentials = Credentials.from_service_account_info(st.secrets["google_credentials"], scopes=scopes)
+client = gspread.authorize(credentials)
 
-    # Prepare data for regression
-    X = df[['TotalWorkingYears', 'JobLevel']]
-    y = df['MonthlyIncome']
+# Access the Google Sheet
+sheet = client.open("Dataset").sheet1  # Replace "Dataset" with your Google Sheet's name
+data = sheet.get_all_records()
+df = pd.DataFrame(data)
 
-    # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+# Validate the data to ensure necessary columns are present
+try:
+    df = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
+except KeyError as e:
+    st.error(f"Missing columns in the dataset: {e}")
+    st.stop()
 
-    # Train the linear regression model
-    model = LinearRegression()
-    model.fit(X_train, y_train)
+# Define features (independent variables) and the target (dependent variable)
+X = df[['TotalWorkingYears', 'JobLevel']]
+y = df['MonthlyIncome']
 
-    # Make predictions
-    y_pred = model.predict(X_test)
+# Split the data into training and testing sets (70% train, 30% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-    # User input for prediction
-    st.subheader("Predict Monthly Income")
-    user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
-    user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
+# Initialize and train a linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
 
-    # Make prediction using user input
-    user_input = pd.DataFrame({'TotalWorkingYears': [user_working_years], 'JobLevel': [user_job_level]})
-    predicted_income = model.predict(user_input)[0]
-    st.write(f"Predicted Monthly Income: *{predicted_income:.2f}*")
+# Make predictions on the test set
+y_pred = model.predict(X_test)
 
-    # Visualization: Scatterplot
-    fig, ax = plt.subplots(figsize=(10, 6))
-    scatter = ax.scatter(X_test['TotalWorkingYears'], y_pred, c=X_test['JobLevel'], cmap='viridis', s=50, alpha=0.8)
-    ax.set_xlabel("Total Working Years")
-    ax.set_ylabel("Predicted Monthly Income")
-    ax.set_title("Predicted Monthly Income vs. Total Working Years (Color: Job Level)")
-    cbar = plt.colorbar(scatter, ax=ax)
-    cbar.set_label("Job Level")
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
 
-    # Highlight user input on the graph
-    ax.scatter(user_working_years, predicted_income, color='red', s=100, label='Your Input', zorder=5)
-    ax.legend()
-    st.pyplot(fig)
+# Streamlit UI
+st.title("Linear Regression: Total Working Years and Job Level vs. Predicted Monthly Income")
+st.subheader("Regression Results")
+st.write(f"Mean Squared Error (MSE): {mse:.2f}")
+st.write(f"R² Score: {r2:.2f}")
+st.write("Model Coefficients (Impact of each feature on the prediction):")
+st.write(dict(zip(['TotalWorkingYears', 'JobLevel'], model.coef_)))
+st.write(f"Intercept (Base value when all features are zero): {model.intercept_:.2f}")
+
+# User input for prediction
+st.subheader("Predict Monthly Income")
+user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
+user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
+user_input = pd.DataFrame({'TotalWorkingYears': [user_working_years], 'JobLevel': [user_job_level]})
+predicted_income = model.predict(user_input)[0]
+st.write(f"Predicted Monthly Income: *{predicted_income:.2f}*")
+
+# Visualize results
+fig, ax = plt.subplots(figsize=(10, 6))
+scatter = ax.scatter(X_test['TotalWorkingYears'], y_pred, c=X_test['JobLevel'], cmap='viridis', s=50, alpha=0.8)
+ax.set_xlabel("Total Working Years")
+ax.set_ylabel("Predicted Monthly Income")
+ax.set_title("Predicted Monthly Income vs. Total Working Years (Color: Job Level)")
+cbar = plt.colorbar(scatter, ax=ax)
+cbar.set_label("Job Level")
+ax.scatter(user_working_years, predicted_income, color='black', s=100, label='Your Input', zorder=5)
+ax.legend()
+st.pyplot(fig)
+
 
 
 # Backend Page - Placeholder Content
