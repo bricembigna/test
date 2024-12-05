@@ -255,3 +255,131 @@ elif st.session_state.page == "Backend":
     if st.button("Back to Home"):
         st.session_state.page = "Home"
     st.write("Backend management content will be added here.")
+
+    
+    #Übersichtsseite definieren
+    def main_page():
+        st.header("Main Page")
+        st.write("Choose an action:")
+        if st.button("Add New Employee Data"):
+            st.session_state.page = "add_employee"
+        if st.button("Change Employee Data"):
+            st.session_state.page = "change_employee"
+        if st.button("Delete Employee Data"):
+            st.session_state.page = "delete_employee"
+    
+    #Funktion_1: Mitarbeiterdaten hinzufügen
+    def add_employee_page():
+        st.header("Add New Employee Data")
+        st.write("Enter details for the new employee:")
+    
+        #Extra-Sauce: Standardisieren der Employee Number auf höchsten Wert
+        employee_numbers = [int(row[headers.index("EmployeeNumber")]) for row in sheet_data[1:] if row[headers.index("EmployeeNumber")].isdigit()] #Berücksichtiung von nur gültigen Zahlen in der "Employee Zeile"
+        next_employee_number = max(employee_numbers) + 1
+    
+        #Input-Formular: Gebrauch von Selectbox/Sliders wo hilfreich, sonst einfach Nummber eingeben
+        with st.form("add_employee_form"):
+            age = st.selectbox("Age", list(range(18, 63))) #+Alter-Range
+            attrition = st.selectbox("Attrition", ["Yes", "No"])
+            business_travel = st.selectbox("Business Travel", ["Travel_Rarely", "Travel_Frequently", "Non-Travel"])
+            daily_rate = st.number_input("Daily Rate", min_value=0, step=1) #+ Minimum Value
+            department = st.selectbox("Department", ["Sales", "Research & Development", "Human Resources"])
+            distance_from_home = st.number_input("Distance from Home (km)", min_value=0, step=1)
+            education = st.selectbox("Education Level", ["High School", "Bachelor's", "Master's", "Doctorate"])
+            education_field = st.text_input("Education Field")
+            employee_count = st.number_input("Employee Count", min_value=1, step=1)
+            employee_number = st.number_input("Employee Number", min_value=next_employee_number, value=next_employee_number, step=1) #Inkludiere die "Extra-Sauce", d.h. Standard auf höchste Employee Nummer + 1
+            environment_satisfaction = st.slider("Environment Satisfaction", min_value=1, max_value=4)
+            gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+            hourly_rate = st.number_input("Hourly Rate", min_value=0, step=1)
+            job_involvement = st.slider("Job Involvement", min_value=1, max_value=4)
+            job_level = st.slider("Job Level", min_value=1, max_value=5)
+            job_role = st.text_input("Job Role")
+            job_satisfaction = st.slider("Job Satisfaction", min_value=1, max_value=4)
+            marital_status = st.selectbox("Marital Status", ["Single", "Married", "Divorced"])
+            monthly_income = st.number_input("Monthly Income ($)", min_value=1009, step=1)
+            monthly_rate = st.number_input("Monthly Rate", min_value=1000, step=100)
+            num_companies_worked = st.number_input("Number of Companies Worked", min_value=0, step=1)
+            over_18 = st.selectbox("Over 18", ["Yes", "No"])
+            overtime = st.selectbox("Overtime", ["Yes", "No"])
+            percent_salary_hike = st.slider("Percent Salary Hike", min_value=0, max_value=100)
+            performance_rating = st.slider("Performance Rating", min_value=1, max_value=5)
+            relationship_satisfaction = st.slider("Relationship Satisfaction", min_value=1, max_value=4)
+            standard_hours = st.number_input("Standard Hours", min_value=1, step=1)
+            stock_option_level = st.number_input("Stock Option Level", min_value=0, step=1)
+            total_working_years = st.number_input("Total Working Years", min_value=0, step=1)
+            training_times_last_year = st.number_input("Training Times Last Year", min_value=0, step=1)
+            work_life_balance = st.slider("Work-Life Balance", min_value=1, max_value=4)
+            years_at_company = st.number_input("Years at Company", min_value=0, step=1)
+            years_in_current_role = st.number_input("Years in Current Role", min_value=0, step=1)
+            years_since_last_promotion = st.number_input("Years Since Last Promotion", min_value=0, step=1)
+            years_with_curr_manager = st.number_input("Years with Current Manager", min_value=0, step=1)
+    
+            #Submit Button (also Streamlit Button + Liste erstellen mit neuen Infos + Excel Sheet Reihe hinzufügen Funktion)
+            if st.form_submit_button("Submit"):
+                new_employee = [
+                    age, attrition, business_travel, daily_rate, department, distance_from_home,
+                    education, education_field, employee_count, employee_number, environment_satisfaction,
+                    gender, hourly_rate, job_involvement, job_level, job_role, job_satisfaction, marital_status,
+                    monthly_income, monthly_rate, num_companies_worked, over_18, overtime, percent_salary_hike,
+                    performance_rating, relationship_satisfaction, standard_hours, stock_option_level,
+                    total_working_years, training_times_last_year, work_life_balance, years_at_company,
+                    years_in_current_role, years_since_last_promotion, years_with_curr_manager
+                ]
+                #Excel-Sheet Reihe hinzufügen funktion
+                worksheet.append_row(new_employee)
+                st.success(f"Employee added successfully with Employee Number {employee_number}!")
+        
+        #Rückkehr-Button auf Übersichtseite
+        if st.button("Back to Main Page"):
+            st.session_state.page = "main"
+    
+    #Funktion_2: Mitarbeiterdaten verändern
+    def change_employee_page():
+        st.header("Change Employee Data")
+        employee_numbers = [row[headers.index("EmployeeNumber")] for row in sheet_data[1:]]
+        selected_emp = st.selectbox("Select Employee Number", employee_numbers)
+    
+        if selected_emp:
+            emp_index = employee_numbers.index(selected_emp) + 1
+            current_data = sheet_data[emp_index]
+    
+            with st.form("change_employee_form"):
+                updated_employee = []
+                for i, header in enumerate(headers):
+                    updated_employee.append(st.text_input(header, value=current_data[i]))
+    
+                if st.form_submit_button("Update"):
+                    sheet_data[emp_index] = updated_employee
+                    worksheet.update("A1", sheet_data)
+                    st.success("Employee data updated successfully!")
+        
+        #Rückkehr-Button auf Übersichtseite
+        if st.button("Back to Main Page"):
+            st.session_state.page = "main"
+    
+    # Delete Employee Page
+    def delete_employee_page():
+        st.header("Delete Employee Data")
+        employee_numbers = [row[headers.index("EmployeeNumber")] for row in sheet_data[1:]]
+        selected_emp = st.selectbox("Select Employee Number to Delete", employee_numbers)
+    
+        if selected_emp:
+            emp_index = employee_numbers.index(selected_emp) + 1
+            if st.button("Delete"):
+                sheet_data.pop(emp_index)
+                worksheet.update("A1", sheet_data)
+                st.success(f"Employee {selected_emp} deleted successfully!")
+    
+        if st.button("Back to Main Page"):
+            st.session_state.page = "main"
+    
+    # Navigation zwischen Übersichts- & Funktionsseiten
+    if st.session_state.page == "main":
+        main_page()
+    elif st.session_state.page == "add_employee":
+        add_employee_page()
+    elif st.session_state.page == "change_employee":
+        change_employee_page()
+    elif st.session_state.page == "delete_employee":
+        delete_employee_page()
