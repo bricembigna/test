@@ -250,11 +250,11 @@ elif st.session_state.page == "Machine Learning":
 
 
 
- Backend Page - Placeholder Content
-elif st.session_state.page == "Backend":
-    st.title("Backend")
-    if st.button("Back to Home"):
-        st.session_state.page = "Home"
-    st.write("Backend management content will be added here.")
+    #Backend Page - Placeholder Content
+    elif st.session_state.page == "Backend":
+        st.title("Backend")
+        if st.button("Back to Home"):
+            st.session_state.page = "Home"
+        st.write("Backend management content will be added here.")
 
 
