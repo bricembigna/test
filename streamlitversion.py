@@ -258,16 +258,16 @@ elif st.session_state.page == "Backend":
     headers = worksheet.row_values(1)  # Get header row
     sheet_data = worksheet.get_all_values()  # Get all sheet data
 
-    # Übersichtsseite definieren
+    # Main Page
     def main_page():
         st.header("Main Page")
         st.write("Choose an action:")
         if st.button("Add New Employee Data"):
-            st.session_state.page = "add_employee"
+            st.session_state.Backend_subpage = "add_employee"
         if st.button("Change Employee Data"):
-            st.session_state.page = "change_employee"
+            st.session_state.Backend_subpage = "change_employee"
         if st.button("Delete Employee Data"):
-            st.session_state.page = "delete_employee"
+            st.session_state.Backend_subpage = "delete_employee"
 
     # Add Employee Page
     def add_employee_page():
@@ -334,7 +334,7 @@ elif st.session_state.page == "Backend":
                 st.success(f"Employee added successfully with Employee Number {employee_number}!")
 
         if st.button("Back to Main Page"):
-            st.session_state.page = "Backend"
+            st.session_state.Backend_subpage = "main"
 
     # Change Employee Page
     def change_employee_page():
@@ -358,7 +358,7 @@ elif st.session_state.page == "Backend":
                     st.success("Employee data updated successfully!")
 
         if st.button("Back to Main Page"):
-            st.session_state.page = "Backend"
+            st.session_state.Backend_subpage = "main"
 
     # Delete Employee Page
     def delete_employee_page():
@@ -375,9 +375,9 @@ elif st.session_state.page == "Backend":
                 st.success(f"Employee {selected_emp} deleted successfully!")
 
         if st.button("Back to Main Page"):
-            st.session_state.page = "Backend"
+            st.session_state.Backend_subpage = "main"
 
-    # Navigation
+    # Render Subpages
     if "Backend_subpage" not in st.session_state:
         st.session_state.Backend_subpage = "main"
 
@@ -389,3 +389,4 @@ elif st.session_state.page == "Backend":
         change_employee_page()
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
+
