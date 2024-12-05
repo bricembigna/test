@@ -305,7 +305,7 @@ elif st.session_state.page == "Backend":
             monthly_income = st.number_input("Monthly Income ($)", min_value=1009, step=1)
             monthly_rate = st.number_input("Monthly Rate", min_value=1000, step=100)
             num_companies_worked = st.number_input("Number of Companies Worked", min_value=0, step=1)
-            over_18 = st.selectbox("Over 18", ["Yes", "No"])
+            over_18 = st.selectbox("Over 18", ["Y", "N"])
             overtime = st.selectbox("Overtime", ["Yes", "No"])
             percent_salary_hike = st.slider("Percent Salary Hike", min_value=0, max_value=100)
             performance_rating = st.slider("Performance Rating", min_value=1, max_value=5)
