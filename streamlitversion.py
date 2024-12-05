@@ -167,7 +167,6 @@ elif st.session_state.page == "Machine Learning":
     st.title("Machine Learning")
     if st.button("Back to Home"):
         st.session_state.page = "Home"
-    st.write("Machine Learning content will be added here.")
 
 
     # Import necessary libraries for data manipulation, visualization, and modeling
