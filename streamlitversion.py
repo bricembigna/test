@@ -335,7 +335,7 @@ elif st.session_state.page == "Backend":
                 worksheet.append_row(new_employee)
                 st.success(f"Employee added successfully with Employee Number {employee_number}!")
 
-        if st.button("Back to Main Page"):
+        if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
 
     # Change Employee Page
@@ -359,7 +359,7 @@ elif st.session_state.page == "Backend":
                     worksheet.update(f"A{emp_index + 1}", [updated_employee])
                     st.success("Employee data updated successfully!")
 
-        if st.button("Back to Main Page"):
+        if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
 
     # Delete Employee Page
@@ -376,7 +376,7 @@ elif st.session_state.page == "Backend":
                 worksheet.delete_rows(emp_index + 1)
                 st.success(f"Employee {selected_emp} deleted successfully!")
 
-        if st.button("Back to Main Page"):
+        if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
 
     # Render Subpages
