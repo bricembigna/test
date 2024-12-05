@@ -255,16 +255,14 @@ elif st.session_state.page == "Backend":
     st.title("Backend")
     if st.button("Back to Home"):
         st.session_state.page = "Home"
-    st.write("Backend management content will be added here.")
-
         
     #Übersichtsseite standardisieren
     if "page" not in st.session_state:
-        st.session_state.page = "main"
+        st.session_state.page = "Backend"
     
     #Übersichtsseite definieren
     def main_page():
-        st.header("Main Page")
+        st.header("Backend")
         st.write("Choose an action:")
         if st.button("Add New Employee Data"):
             st.session_state.page = "add_employee"
@@ -336,7 +334,7 @@ elif st.session_state.page == "Backend":
                 st.success(f"Employee added successfully with Employee Number {employee_number}!")
         
         #Rückkehr-Button auf Übersichtseite
-        if st.button("Back to Main Page"):
+        if st.button("Back to Backend"):
             st.session_state.page = "main"
     
     #Funktion_2: Mitarbeiterdaten verändern
@@ -360,7 +358,7 @@ elif st.session_state.page == "Backend":
                     st.success("Employee data updated successfully!")
         
         #Rückkehr-Button auf Übersichtseite
-        if st.button("Back to Main Page"):
+        if st.button("Back to Backend"):
             st.session_state.page = "main"
     
     # Delete Employee Page
@@ -376,7 +374,7 @@ elif st.session_state.page == "Backend":
                 worksheet.update("A1", sheet_data)
                 st.success(f"Employee {selected_emp} deleted successfully!")
     
-        if st.button("Back to Main Page"):
+        if st.button("Back to Backend"):
             st.session_state.page = "main"
     
     # Navigation zwischen Übersichts- & Funktionsseiten
