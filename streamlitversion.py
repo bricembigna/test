@@ -291,7 +291,7 @@ elif st.session_state.page == "Backend":
             department = st.selectbox("Department", ["Sales", "Research & Development", "Human Resources"])
             distance_from_home = st.number_input("Distance from Home (km)", min_value=0, step=1)
             education = st.slider("Educaiton level", min_value=1, max_value=5)
-            education_field = st.selectbox("Education Field", [ "Life Sciences", "Medical", "Marketing", "Technical Degree", "Human Resources", "Other"])
+            education_field = st.selectbox("Education Field", [ "Human Resources", "Life Sciences", "Marketing", "Medical", "Technical Degree", "Other"])
             employee_count = st.number_input("Employee Count", min_value=1, step=1)
             employee_number = next_employee_number
             environment_satisfaction = st.slider("Environment Satisfaction", min_value=1, max_value=4)
@@ -299,7 +299,7 @@ elif st.session_state.page == "Backend":
             hourly_rate = st.number_input("Hourly Rate", min_value=0, step=1)
             job_involvement = st.slider("Job Involvement", min_value=1, max_value=4)
             job_level = st.slider("Job Level", min_value=1, max_value=5)
-            job_role = st.text_input("Job Role")
+            job_role = st.selectbox("Job Role", ["Healthcare Representative", "Human Resources", "Laboratory Technician", "Manager", "Manufacturing Director", "Research Director", "Research Scientist", "Sales Executive", "Sales Representative"])
             job_satisfaction = st.slider("Job Satisfaction", min_value=1, max_value=4)
             marital_status = st.selectbox("Marital Status", ["Single", "Married", "Divorced"])
             monthly_income = st.number_input("Monthly Income ($)", min_value=1009, step=1)
