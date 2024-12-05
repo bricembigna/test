@@ -50,8 +50,8 @@ if st.session_state.page == "Home":
 elif st.session_state.page == "Dashboard":
     st.title("Google Sheets Data Analysis")
 
-    # Display 'Back to Home' button
-    if st.button("Back to Home"):
+    # Display 'Homepage' button
+    if st.button("Homepage"):
         st.session_state.page = "Home"
 
 
@@ -165,7 +165,7 @@ elif st.session_state.page == "Dashboard":
 # Machine Learning Page - Placeholder Content
 elif st.session_state.page == "Machine Learning":
     st.title("Machine Learning")
-    if st.button("Back to Home"):
+    if st.button("Homepage"):
         st.session_state.page = "Home"
 
 
@@ -251,9 +251,7 @@ elif st.session_state.page == "Machine Learning":
 # Backend Page - Data Input Manager
 elif st.session_state.page == "Backend":
     st.title("Data Input Manager")
-# Display 'Back to Home' button
-    if st.button("Back to Home"):
-        st.session_state.page = "Home"
+
     # Access Google Sheets
     spreadsheet_name = "Dataset"  # Replace with your actual sheet name
     worksheet = client.open(spreadsheet_name).sheet1
@@ -361,6 +359,9 @@ elif st.session_state.page == "Backend":
 
         if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
+            # Display 'Homepage' button
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
 
     # Delete Employee Page
     def delete_employee_page():
@@ -378,6 +379,8 @@ elif st.session_state.page == "Backend":
 
         if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
 
     # Render Subpages
     if "Backend_subpage" not in st.session_state:
