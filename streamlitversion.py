@@ -251,7 +251,9 @@ elif st.session_state.page == "Machine Learning":
 # Backend Page - Data Input Manager
 elif st.session_state.page == "Backend":
     st.title("Data Input Manager")
-
+    # Display 'Back to Home' button
+        if st.button("Back to Home"):
+            st.session_state.page = "Home"
     # Access Google Sheets
     spreadsheet_name = "Dataset"  # Replace with your actual sheet name
     worksheet = client.open(spreadsheet_name).sheet1
