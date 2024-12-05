@@ -203,11 +203,11 @@ elif st.session_state.page == "Machine Learning":
 
     #Sorting only the necessary data and error if not found
     try:
-    # Selektiere nur die relevanten Spalten für die Regression
-    df = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
+        # Selektiere nur die relevanten Spalten für die Regression
+        df = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
     except KeyError as e:
-    st.error(f"Fehlende Spalten: {e}")
-    st.stop()
+        st.error(f"Fehlende Spalten: {e}")
+        st.stop()
 
     # X and y data for and training them 
     X = df[['TotalWorkingYears', 'JobLevel']]
