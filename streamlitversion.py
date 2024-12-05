@@ -290,7 +290,7 @@ elif st.session_state.page == "Backend":
             daily_rate = st.number_input("Daily Rate", min_value=0, step=1)
             department = st.selectbox("Department", ["Sales", "Research & Development", "Human Resources"])
             distance_from_home = st.number_input("Distance from Home (km)", min_value=0, step=1)
-            education = st.selectbox("Education Level", ["High School", "Bachelor's", "Master's", "Doctorate"])
+            education = st.slider("Educaiton level", min_value=1, max_value=5)
             education_field = st.text_input("Education Field")
             employee_count = st.number_input("Employee Count", min_value=1, step=1)
             employee_number = next_employee_number
