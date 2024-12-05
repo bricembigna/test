@@ -200,76 +200,53 @@ elif st.session_state.page == "Machine Learning":
     except Exception as e:
         st.error(f"Error accessing Google Sheet: {e}")
         st.stop()
+
+    #Sorting only the necessary data and error if not found
+try:
+    # Selektiere nur die relevanten Spalten für die Regression
+    df = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
+except KeyError as e:
+    st.error(f"Fehlende Spalten: {e}")
+    st.stop()
+
+    # X and y data for and training them 
+    X = df[['TotalWorkingYears', 'JobLevel']]
+    y = df['MonthlyIncome']
     
-    # Set the title of the Streamlit application
-    st.title("Linear Regression: Total Working Years and Job Level vs. Predicted Monthly Income")
-    
-    # Validate the data to ensure necessary columns are present
-    try:
-        # Select only the relevant columns for regression and drop any rows with missing values
-        df = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
-    except KeyError as e:
-        # Display an error message if any required columns are missing and stop execution
-        st.error(f"Missing columns in the dataset: {e}")
-        st.stop()
-    
-    # Define the features (independent variables) and the target (dependent variable)
-    X = df[['TotalWorkingYears', 'JobLevel']]  # Features: Total Working Years and Job Level
-    y = df['MonthlyIncome']  # Target: Monthly Income
-    
-    # Split the data into training and testing sets (70% train, 30% test)
+    # Datenaufteilung in Trainings- und Testdaten
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
     
-    # Initialize and train a linear regression model
+    # Regressiontraining through sklearn formula
     model = LinearRegression()
-    model.fit(X_train, y_train)  # Fit the model to the training data
+    model.fit(X_train, y_train)
     
-    # Use the trained model to make predictions on the test set
+    # Prediction with method
     y_pred = model.predict(X_test)
     
-    # Evaluate the model's performance using common regression metrics
-    mse = mean_squared_error(y_test, y_pred)  # Mean Squared Error: Measures average squared difference between actual and predicted values
-    r2 = r2_score(y_test, y_pred)  # R² Score: Indicates how well the model explains the variance in the target variable
     
-    # Display regression results in the Streamlit app
-    st.subheader("Regression Results")
-    st.write(f"Mean Squared Error (MSE): {mse:.2f}")
-    st.write(f"R² Score: {r2:.2f}")
-    st.write("Model Coefficients (Impact of each feature on the prediction):")
-    st.write(dict(zip(['TotalWorkingYears', 'JobLevel'], model.coef_)))
-    st.write(f"Intercept (Base value when all features are zero): {model.intercept_:.2f}")
-    
-    # Create user input fields for Total Working Years and Job Level
+    # Userinterface: using input of working years (max 40) and Job Level(1-5) with streamlit
     st.subheader("Predict Monthly Income")
     user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
     user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
     
-    # Prepare the user's input for prediction
+    # Prediction with user input data while making data frame with entered variables 
     user_input = pd.DataFrame({'TotalWorkingYears': [user_working_years], 'JobLevel': [user_job_level]})
-    predicted_income = model.predict(user_input)[0]  # Predict Monthly Income for the user's input
+    predicted_income = model.predict(user_input)[0]
     st.write(f"Predicted Monthly Income: *{predicted_income:.2f}*")
     
-    # Visualize the results using a scatter plot
-    fig, ax = plt.subplots(figsize=(10, 6))  # Create a plot figure
-    # Scatter plot: Total Working Years vs. Predicted Monthly Income, with Job Level represented by color
-    scatter = ax.scatter(
-        X_test['TotalWorkingYears'], y_pred, c=X_test['JobLevel'], cmap='viridis', s=50, alpha=0.8
-    )
-    ax.set_xlabel("Total Working Years")  # Label for x-axis
-    ax.set_ylabel("Predicted Monthly Income")  # Label for y-axis
-    ax.set_title("Predicted Monthly Income vs. Total Working Years (Color: Job Level)")  # Plot title
-    
-    # Add a color bar to indicate Job Level
+    # Visualization: Scatterplot with farbcoded joblevel for better overview, the x-axis displays total working years and the y-axis shows predicted income, 
+    # with point colors assigned via the viridis colormap for clear differentiation of job levels + color bar is added to show the job levels
+    fig, ax = plt.subplots(figsize=(10, 6))
+    scatter = ax.scatter(X_test['TotalWorkingYears'], y_pred, c=X_test['JobLevel'], cmap='viridis', s=50, alpha=0.8)
+    ax.set_xlabel("Total Working Years")
+    ax.set_ylabel("Predicted Monthly Income")
+    ax.set_title("Predicted Monthly Income vs. Total Working Years (Color: Job Level)")
     cbar = plt.colorbar(scatter, ax=ax)
-    cbar.set_label("Job Level")  # Label for the color bar
+    cbar.set_label("Job Level")
     
-    # Highlight the user's input on the scatter plot
-    ax.scatter(
-        user_working_years, predicted_income, color='black', s=100, label='Your Input', zorder=5
-    )
-    ax.legend()  # Add a legend to the plot
-    
-    # Display the plot in the Streamlit app
+    # Point of user output on graph and showing graph
+    ax.scatter(user_working_years, predicted_income, color='red', s=100, label='Your Input', zorder=5)
+    ax.legend()
     st.pyplot(fig)
 
 
