@@ -359,9 +359,7 @@ elif st.session_state.page == "Backend":
 
         if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
-            # Display 'Homepage' button
-        if st.button("Homepage"):
-            st.session_state.page = "Home"
+
 
     # Delete Employee Page
     def delete_employee_page():
@@ -379,8 +377,7 @@ elif st.session_state.page == "Backend":
 
         if st.button("Previous page"):
             st.session_state.Backend_subpage = "main"
-        if st.button("Homepage"):
-            st.session_state.page = "Home"
+
 
     # Render Subpages
     if "Backend_subpage" not in st.session_state:
@@ -394,3 +391,7 @@ elif st.session_state.page == "Backend":
         change_employee_page()
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
+
+# Display 'Homepage' button
+ if st.button("Homepage"):
+      st.session_state.page = "Home"
