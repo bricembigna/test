@@ -178,6 +178,38 @@ elif st.session_state.page == "Dashboard":
   ##############  plt.xticks(bins)
   ##############  st.pyplot(plt)
 
+
+
+
+    st.subheader("Department and Business Travel Insights")
+    
+    # Create a single figure with two subplots (side by side)
+    fig, axs = plt.subplots(1, 2, figsize=(20, 6))
+    
+    # 1. Distribution of Employees by Department
+    department_counts.plot(kind='bar', color='skyblue', edgecolor='black', ax=axs[0])
+    axs[0].set_title('Distribution of Employees by Department', fontsize=14)
+    axs[0].set_xlabel('Department')
+    axs[0].set_ylabel('Number of Employees')
+    axs[0].tick_params(axis='x', rotation=45)
+    
+    # 2. Business Travel Frequency
+    business_travel_counts = df['BusinessTravel'].value_counts()
+    business_travel_counts.plot(kind='bar', color='lightcoral', edgecolor='black', ax=axs[1])
+    axs[1].set_title('Business Travel Frequency', fontsize=14)
+    axs[1].set_xlabel('Business Travel Category')
+    axs[1].set_ylabel('Number of Employees')
+    axs[1].tick_params(axis='x', rotation=45)
+    
+    # Adjust layout for better spacing
+    plt.tight_layout()
+    
+    # Render the combined plot in Streamlit
+    st.pyplot(fig)
+
+
+    #################
+
     # 4. Bar Chart - Distribution of Employees by Department
     st.subheader("Distribution of Employees by Department")
     plt.figure(figsize=(10, 6))
