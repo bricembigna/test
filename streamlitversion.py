@@ -432,3 +432,78 @@ elif st.session_state.page == "Backend":
         change_employee_page()
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
+
+
+
+
+
+##############
+
+
+
+import requests
+import pandas as pd
+import streamlit as st
+import matplotlib.pyplot as plt
+
+# API Base URL
+BASE_URL = "https://dam-api.bfs.admin.ch/hub/api/dam/assets"
+
+# Fetch data from the DAM API
+def fetch_demographic_data():
+    params = {
+        "language": "en",  # Use 'en' for English
+        "topic": "population",  # Topic of interest
+        "contentType": "dataset",  # Fetch datasets
+    }
+    response = requests.get(BASE_URL, params=params)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        st.error("Failed to fetch data from FSO DAM API.")
+        return None
+
+# Parse API Response
+def parse_population_data(api_data):
+    data_list = []
+    for item in api_data.get("result", []):
+        data_list.append({
+            "Title": item.get("title", "N/A"),
+            "Date": item.get("publicationDate", "N/A"),
+            "URL": item.get("_links", {}).get("self", {}).get("href", "N/A")
+        })
+    return pd.DataFrame(data_list)
+
+# Visualization and Integration with Streamlit
+def main():
+    st.title("Switzerland Population Statistics (FSO)")
+    
+    # Fetch API Data
+    api_data = fetch_demographic_data()
+    
+    if api_data:
+        # Parse the Data
+        df = parse_population_data(api_data)
+        
+        st.subheader("Demographic Datasets")
+        st.dataframe(df)
+        
+        # Select a dataset and visualize its details
+        selected_dataset = st.selectbox("Choose a Dataset:", df["Title"])
+        selected_row = df[df["Title"] == selected_dataset]
+        dataset_url = selected_row.iloc[0]["URL"]
+        
+        st.write(f"Dataset URL: [View Dataset]({dataset_url})")
+        
+        # Example Visualization Placeholder (You can customize based on dataset content)
+        if "Age" in selected_dataset:
+            st.subheader("Example Visualization: Age Distribution")
+            # Example chart with dummy data
+            age_data = pd.DataFrame({
+                "Age Group": ["0-18", "19-35", "36-50", "51+"],
+                "Population": [1500000, 2000000, 1800000, 1200000]
+            })
+            st.bar_chart(age_data.set_index("Age Group"))
+
+if __name__ == "__main__":
+    main()
