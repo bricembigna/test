@@ -444,3 +444,36 @@ completion = client.chat.completions.create(
         {"role": "user", "content": "write a haiku about ai"}
     ]
 )
+
+
+
+import openai
+import streamlit as st
+
+# Initialize OpenAI API
+openai.api_key = st.secrets["openai_api_key"]  # Ensure your OpenAI API key is securely stored in Streamlit secrets
+
+st.title("Creative AI Assistant")
+
+# User Input
+st.subheader("Generate a Haiku with AI")
+user_input = st.text_input("Enter a topic for your haiku:", value="AI")
+
+# Button to Generate
+if st.button("Generate Haiku"):
+    try:
+        # OpenAI API Call
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "user", "content": f"Write a haiku about {user_input}"}
+            ]
+        )
+        # Extract and Display the Haiku
+        haiku = response['choices'][0]['message']['content']
+        st.subheader("Your Haiku:")
+        st.write(haiku)
+
+    except Exception as e:
+        st.error(f"Error generating haiku: {e}")
+
