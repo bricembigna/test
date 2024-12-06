@@ -443,11 +443,3 @@ skills = st.text_input("Enter employee skills (comma-separated):")
 experience = st.number_input("Years of Experience:", min_value=0)
 if st.button("Get Suggestions"):
     st.write("Recommendation: Consider exploring management roles in R&D based on skills and experience.")
-
-st.subheader("Salary Benchmarking")
-role = st.selectbox("Select Job Role", df['JobRole'].unique())
-industry_salary = 75000  # Replace with fetched salary from API
-employee_salary = df[df['JobRole'] == role]['MonthlyIncome'].mean()
-st.write(f"Industry Average: ${industry_salary:.2f}")
-st.write(f"Your Employees' Average: ${employee_salary:.2f}")
-
