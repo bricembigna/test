@@ -438,3 +438,59 @@ elif st.session_state.page == "Backend":
 
 
 ##############
+
+
+
+import streamlit as st
+import requests
+
+# BFS API base URL
+API_BASE_URL = "https://dam-api.bfs.admin.ch/hub/api/dam"
+
+# Function to fetch data from BFS API
+def fetch_data(endpoint, params=None):
+    try:
+        response = requests.get(f"{API_BASE_URL}/{endpoint}", params=params)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error fetching data: {e}")
+        return None
+
+# Streamlit App
+def main():
+    st.title("BFS Demographics Dashboard")
+    st.markdown(
+        """
+        This application fetches demographic data from the BFS API and displays it interactively.
+        """
+    )
+    
+    # User selects a dataset
+    st.sidebar.header("Options")
+    dataset_id = st.sidebar.text_input("Enter Dataset ID", value="16944731")
+    
+    # Fetch data
+    if st.sidebar.button("Fetch Data"):
+        st.info("Fetching data from BFS API...")
+        data = fetch_data(f"assets/{dataset_id}/master")
+        
+        if data:
+            st.success("Data fetched successfully!")
+            st.json(data)  # Display raw data for transparency
+            
+            # Display key demographic information
+            if "metaData" in data and "content" in data:
+                st.subheader("Dataset Metadata")
+                st.write(data["metaData"])
+
+                st.subheader("Key Demographic Insights")
+                for item in data["content"]:
+                    st.write(f"Category: {item['name']}, Value: {item['value']}")
+            else:
+                st.warning("Data format not recognized. Please check the dataset ID.")
+        else:
+            st.error("No data returned. Check the dataset ID or API connection.")
+
+if __name__ == "__main__":
+    main()
