@@ -148,35 +148,35 @@ elif st.session_state.page == "Dashboard":
 
 ##############
     
-    # 1. Pie Chart - Percentage of Employees by Department
-    st.subheader("Percentage of Employees by Department")
-    department_counts = df['Department'].value_counts()
-    percentages = department_counts / department_counts.sum() * 100
-    plt.figure(figsize=(10, 6))
-    plt.pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
-    plt.title('Percentage of Employees by Department')
-    plt.axis('equal')
-    st.pyplot(plt)
+   ############## # 1. Pie Chart - Percentage of Employees by Department
+   ############## st.subheader("Percentage of Employees by Department")
+   ############## department_counts = df['Department'].value_counts()
+   ############## percentages = department_counts / department_counts.sum() * 100
+   ############## plt.figure(figsize=(10, 6))
+   ############## plt.pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
+   ############## plt.title('Percentage of Employees by Department')
+   ############## plt.axis('equal')
+   ############## st.pyplot(plt)
 
-    # 2. Violin Plot - Age Distribution by Gender
-    st.subheader("Age Distribution by Gender")
-    plt.figure(figsize=(10, 6))
-    sns.violinplot(x='Gender', y='Age', data=df, hue='Gender', split=True)
-    plt.title('Age Distribution by Gender')
-    plt.xlabel('Gender')
-    plt.ylabel('Age')
-    st.pyplot(plt)
+ ##############   # 2. Violin Plot - Age Distribution by Gender
+ ##############   st.subheader("Age Distribution by Gender")
+##############    plt.figure(figsize=(10, 6))
+ ##############   sns.violinplot(x='Gender', y='Age', data=df, hue='Gender', split=True)
+  ##############  plt.title('Age Distribution by Gender')
+  ##############  plt.xlabel('Gender')
+ ##############   plt.ylabel('Age')
+ ##############   st.pyplot(plt)
 
-    # 3. Histogram - Age Distribution
-    st.subheader("Age Distribution Histogram (Ages 18 to 60)")
-    bins = list(range(18, 61))
-    plt.figure(figsize=(12, 6))
-    plt.hist(df['Age'], bins=bins, edgecolor='white', color='skyblue', alpha=0.7, align='left')
-    plt.title('Age Distribution Histogram (Individual Ages 18 to 60)')
-    plt.xlabel('Age')
-    plt.ylabel('Frequency')
-    plt.xticks(bins)
-    st.pyplot(plt)
+##############    # 3. Histogram - Age Distribution
+ ##############   st.subheader("Age Distribution Histogram (Ages 18 to 60)")
+  ##############  bins = list(range(18, 61))
+  ##############  plt.figure(figsize=(12, 6))
+  ##############  plt.hist(df['Age'], bins=bins, edgecolor='white', color='skyblue', alpha=0.7, align='left')
+  ##############  plt.title('Age Distribution Histogram (Individual Ages 18 to 60)')
+  ##############  plt.xlabel('Age')
+  ##############  plt.ylabel('Frequency')
+  ##############  plt.xticks(bins)
+  ##############  st.pyplot(plt)
 
     # 4. Bar Chart - Distribution of Employees by Department
     st.subheader("Distribution of Employees by Department")
@@ -200,14 +200,14 @@ elif st.session_state.page == "Dashboard":
     plt.xticks(rotation=45)
     st.pyplot(plt)
 
-    # 10. Box Plot - Monthly Income by Job Role
-    st.subheader("Monthly Income by Job Role (Box Plot)")
-    plt.figure(figsize=(12, 8))
-    sns.boxplot(y='JobRole', x='MonthlyIncome', data=df)
-    plt.title('Distribution of Monthly Income by Job Role')
-    plt.xlabel('Monthly Income')
-    plt.ylabel('Job Role')
-    st.pyplot(plt)
+  ##############  # 10. Box Plot - Monthly Income by Job Role
+  ##############  st.subheader("Monthly Income by Job Role (Box Plot)")
+  ##############  plt.figure(figsize=(12, 8))
+  ##############  sns.boxplot(y='JobRole', x='MonthlyIncome', data=df)
+  ##############  plt.title('Distribution of Monthly Income by Job Role')
+  ##############  plt.xlabel('Monthly Income')
+  ##############  plt.ylabel('Job Role')
+  ##############  st.pyplot(plt)
 
 
     st.subheader("Kernel Density Estimate Plot")
