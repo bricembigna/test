@@ -134,23 +134,6 @@ elif st.session_state.page == "Dashboard":
     plt.xlabel('Monthly Income')
     plt.ylabel('Job Role')
     st.pyplot(plt)
-    
-    # Attrition Analysis by Department
-    st.subheader("Attrition Analysis by Department")
-    
-    # Drop rows with missing values in key columns
-    data_cleaned = data.dropna(subset=['Department', 'Attrition'])
-    
-    # Group and analyze attrition
-    attrition_dept = data_cleaned.groupby(['Department', 'Attrition']).size().unstack(fill_value=0)
-    
-    # Create the visualization
-    fig1, ax1 = plt.subplots(figsize=(8, 6))
-    attrition_dept.plot(kind='bar', stacked=True, ax=ax1)
-    ax1.set_title('Attrition by Department')
-    ax1.set_ylabel('Count')
-    ax1.set_xlabel('Department')
-    st.pyplot(fig1)
 
 
 
