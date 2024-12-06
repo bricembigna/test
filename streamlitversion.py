@@ -107,6 +107,42 @@ elif st.session_state.page == "Dashboard":
     # Render Plot
     st.pyplot(fig)
 
+
+
+    st.subheader("Insights on Income, Age, and Department")
+    fig, axs = plt.subplots(1, 3, figsize=(25, 8))  # Create 1 row and 3 columns of subplots
+    
+    # 1. Kernel Density Estimate Plot
+    sns.kdeplot(data=df['MonthlyIncome'], fill=True, color='skyblue', alpha=0.5, ax=axs[0])
+    axs[0].set_title('Density Plot of Monthly Income', fontsize=14)
+    axs[0].set_xlabel('Monthly Income')
+    axs[0].set_ylabel('Density')
+    
+    # 2. Joint Plot: Age vs. Monthly Income (Converted to Subplot)
+    sns.scatterplot(x=df['Age'], y=df['MonthlyIncome'], ax=axs[1], alpha=0.6, color='blue')
+    sns.regplot(x='Age', y='MonthlyIncome', data=df, ax=axs[1], scatter=False, color='red')
+    axs[1].set_title('Age vs. Monthly Income', fontsize=14)
+    axs[1].set_xlabel('Age')
+    axs[1].set_ylabel('Monthly Income')
+    
+    # 3. Grouped Bar Chart: Department vs. Business Travel
+    grouped_data = df.groupby(['Department', 'BusinessTravel']).size().unstack(fill_value=0)
+    grouped_data.plot(kind='bar', ax=axs[2], stacked=False, color=['lightblue', 'orange', 'green'])
+    axs[2].set_title('Department vs. Business Travel', fontsize=14)
+    axs[2].set_xlabel('Department')
+    axs[2].set_ylabel('Number of Employees')
+    axs[2].tick_params(axis='x', rotation=45)
+    
+    # Common Title for the Subplots
+    fig.suptitle('Key Insights: Income, Age, and Department', fontsize=16)
+    
+    # Adjust layout for better spacing
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    
+    # Render the Plot in Streamlit
+    st.pyplot(fig)
+
+
     
     # 1. Pie Chart - Percentage of Employees by Department
     st.subheader("Percentage of Employees by Department")
