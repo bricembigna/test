@@ -144,6 +144,49 @@ elif st.session_state.page == "Dashboard":
     st.pyplot(plt)
 
 
+    st.subheader("Kernel Density Estimate Plot")
+    plt.figure(figsize=(10, 6))
+    sns.kdeplot(data=df['MonthlyIncome'], fill=True, color='skyblue', alpha=0.5)
+    plt.title('Density Plot of Monthly Income')
+    plt.xlabel('Monthly Income')
+    plt.ylabel('Density')
+    st.pyplot(plt)
+    
+    
+    st.subheader("Joint Plot: Age vs. Monthly Income")
+    fig = sns.jointplot(x='Age', y='MonthlyIncome', data=df, kind='reg', height=8, space=0.2)
+    st.pyplot(fig)
+    
+    
+    st.subheader("Custom Box Plot: Monthly Income by Department")
+    plt.figure(figsize=(12, 8))
+    sns.boxplot(y='Department', x='MonthlyIncome', data=df, palette='Set3')
+    plt.title('Distribution of Monthly Income by Department')
+    plt.xlabel('Monthly Income')
+    plt.ylabel('Department')
+    st.pyplot(plt)
+    
+    
+    st.subheader("Grouped Bar Chart: Department vs. Business Travel")
+    grouped_data = df.groupby(['Department', 'BusinessTravel']).size().unstack(fill_value=0)
+    grouped_data.plot(kind='bar', figsize=(12, 6), stacked=False)
+    plt.title('Department vs. Business Travel')
+    plt.xlabel('Department')
+    plt.ylabel('Number of Employees')
+    plt.xticks(rotation=45)
+    st.pyplot(plt)
+    
+    
+    st.subheader("Multiple Subplots: Age, Income, and Distance from Home")
+    fig, axs = plt.subplots(1, 3, figsize=(20, 6), sharey=False)
+    sns.histplot(df['Age'], bins=20, kde=True, ax=axs[0], color='skyblue')
+    axs[0].set_title('Age Distribution')
+    sns.histplot(df['MonthlyIncome'], bins=20, kde=True, ax=axs[1], color='green')
+    axs[1].set_title('Monthly Income Distribution')
+    sns.histplot(df['DistanceFromHome'], bins=20, kde=True, ax=axs[2], color='orange')
+    axs[2].set_title('Distance from Home Distribution')
+    st.pyplot(fig)
+
 
 
 
