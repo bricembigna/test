@@ -226,14 +226,14 @@ elif st.session_state.page == "Dashboard":
     
     
     
-    st.subheader("Grouped Bar Chart: Department vs. Business Travel")
-    grouped_data = df.groupby(['Department', 'BusinessTravel']).size().unstack(fill_value=0)
-    grouped_data.plot(kind='bar', figsize=(12, 6), stacked=False)
-    plt.title('Department vs. Business Travel')
-    plt.xlabel('Department')
-    plt.ylabel('Number of Employees')
-    plt.xticks(rotation=45)
-    st.pyplot(plt)
+##############    st.subheader("Grouped Bar Chart: Department vs. Business Travel")
+ ##############   grouped_data = df.groupby(['Department', 'BusinessTravel']).size().unstack(fill_value=0)
+ ##############   grouped_data.plot(kind='bar', figsize=(12, 6), stacked=False)
+  ##############  plt.title('Department vs. Business Travel')
+ ##############   plt.xlabel('Department')
+ ##############   plt.ylabel('Number of Employees')
+ ##############   plt.xticks(rotation=45)
+ ##############   st.pyplot(plt)
     
     
    
