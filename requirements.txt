@@ -6,4 +6,4 @@ seaborn
 gspread
 oauth2client
 scikit-learn
-openai
+google-api-python-client
