@@ -64,7 +64,9 @@ elif st.session_state.page == "Dashboard":
     st.write(f"Median Monthly Income: ${median_income:.2f}")
     st.write(f"Standard Deviation of Monthly Income: ${std_income:.2f}")
 
+##############
 
+    
     st.subheader("Multiple Subplots: Age, Income, and Distance from Home")
     fig, axs = plt.subplots(1, 3, figsize=(20, 6), sharey=False)
     sns.histplot(df['Age'], bins=20, kde=True, ax=axs[0], color='skyblue')
@@ -107,7 +109,7 @@ elif st.session_state.page == "Dashboard":
     # Render Plot
     st.pyplot(fig)
 
-
+##############
 
     st.subheader("Insights on Income, Age, and Department")
     fig, axs = plt.subplots(1, 3, figsize=(25, 8))  # Create 1 row and 3 columns of subplots
@@ -144,58 +146,7 @@ elif st.session_state.page == "Dashboard":
 
 
 
-
-
-    #########
-    import matplotlib.gridspec as gridspec
-    
-    st.subheader("Insights on Income, Age, and Department")
-    
-    # Create a GridSpec layout for better control
-    fig = plt.figure(figsize=(25, 8))
-    gs = gridspec.GridSpec(1, 3, width_ratios=[1, 1.5, 1])  # Adjust widths for jointplot
-    
-    # 1. Kernel Density Estimate Plot
-    ax_kde = fig.add_subplot(gs[0])  # First subplot
-    sns.kdeplot(data=df['MonthlyIncome'], fill=True, color='skyblue', alpha=0.5, ax=ax_kde)
-    ax_kde.set_title('Density Plot of Monthly Income', fontsize=14)
-    ax_kde.set_xlabel('Monthly Income')
-    ax_kde.set_ylabel('Density')
-    
-    # 2. Joint Plot: Age vs. Monthly Income
-    # Create a Seaborn jointplot separately and add its figure to the layout
-    joint_plot = sns.jointplot(
-        x='Age',
-        y='MonthlyIncome',
-        data=df,
-        kind='reg',
-        height=8,
-        space=0.4,
-        ratio=3,
-    )
-    joint_plot.fig.tight_layout()  # Adjust layout of the jointplot
-    
-    # Grab the jointplot's axes to embed into our main figure
-    for ax_joint in joint_plot.fig.axes:
-        fig.add_subplot(gs[1], sharex=ax_joint, sharey=ax_joint)
-        ax_joint.set_position(gs[1].get_position(fig))
-    
-    # 3. Grouped Bar Chart: Department vs. Business Travel
-    ax_bar = fig.add_subplot(gs[2])  # Third subplot
-    grouped_data = df.groupby(['Department', 'BusinessTravel']).size().unstack(fill_value=0)
-    grouped_data.plot(kind='bar', ax=ax_bar, stacked=False, color=['lightblue', 'orange', 'green'])
-    ax_bar.set_title('Department vs. Business Travel', fontsize=14)
-    ax_bar.set_xlabel('Department')
-    ax_bar.set_ylabel('Number of Employees')
-    ax_bar.tick_params(axis='x', rotation=45)
-    
-    # Common Title
-    fig.suptitle('Key Insights: Income, Age, and Department', fontsize=16)
-    
-    # Render Plot in Streamlit
-    st.pyplot(fig)
-
-    ##########
+##############
     
     # 1. Pie Chart - Percentage of Employees by Department
     st.subheader("Percentage of Employees by Department")
