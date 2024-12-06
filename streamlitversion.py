@@ -152,13 +152,6 @@ elif st.session_state.page == "Dashboard":
     st.pyplot(fig)
     
     
-    st.subheader("Custom Box Plot: Monthly Income by Department")
-    plt.figure(figsize=(12, 8))
-    sns.boxplot(y='Department', x='MonthlyIncome', data=df, palette='Set3')
-    plt.title('Distribution of Monthly Income by Department')
-    plt.xlabel('Monthly Income')
-    plt.ylabel('Department')
-    st.pyplot(plt)
     
     
     st.subheader("Grouped Bar Chart: Department vs. Business Travel")
