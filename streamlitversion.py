@@ -70,7 +70,7 @@ elif st.session_state.page == "Dashboard":
     st.subheader("Percentage of Employees by Department")
     department_counts = df['Department'].value_counts()
     percentages = department_counts / department_counts.sum() * 100
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(5, 3))
     plt.pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
     plt.title('Percentage of Employees by Department')
     plt.axis('equal')
@@ -120,7 +120,7 @@ elif st.session_state.page == "Dashboard":
 
     # 7. Pie Chart - Business Travel Distribution
     st.subheader("Business Travel Distribution")
-    plt.figure(figsize=(8, 8))
+    plt.figure(figsize=(4, 4))
     plt.pie(business_travel_counts, labels=business_travel_counts.index, autopct='%1.1f%%', startangle=140)
     plt.title('Business Travel Distribution')
     plt.axis('equal')
@@ -133,14 +133,6 @@ elif st.session_state.page == "Dashboard":
     plt.title('Distribution of Monthly Income by Job Role')
     plt.xlabel('Monthly Income')
     plt.ylabel('Job Role')
-    st.pyplot(plt)
-
-    st.subheader("Scatter Plot with Regression Line")
-    plt.figure(figsize=(10, 6))
-    sns.regplot(x='Age', y='MonthlyIncome', data=df, order=1, scatter_kws={'s':50, 'color':'blue', 'alpha':0.6}, line_kws={'color':'red'})
-    plt.title('Age vs. Monthly Income with Regression Line')
-    plt.xlabel('Age')
-    plt.ylabel('Monthly Income')
     st.pyplot(plt)
 
 
