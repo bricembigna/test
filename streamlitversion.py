@@ -65,6 +65,16 @@ elif st.session_state.page == "Dashboard":
     st.write(f"Standard Deviation of Monthly Income: ${std_income:.2f}")
 
 
+     st.subheader("Multiple Subplots: Age, Income, and Distance from Home")
+    fig, axs = plt.subplots(1, 3, figsize=(20, 6), sharey=False)
+    sns.histplot(df['Age'], bins=20, kde=True, ax=axs[0], color='skyblue')
+    axs[0].set_title('Age Distribution')
+    sns.histplot(df['MonthlyIncome'], bins=20, kde=True, ax=axs[1], color='green')
+    axs[1].set_title('Monthly Income Distribution')
+    sns.histplot(df['DistanceFromHome'], bins=20, kde=True, ax=axs[2], color='orange')
+    axs[2].set_title('Distance from Home Distribution')
+    st.pyplot(fig)
+
     
     # 1. Pie Chart - Percentage of Employees by Department
     st.subheader("Percentage of Employees by Department")
@@ -169,16 +179,7 @@ elif st.session_state.page == "Dashboard":
     st.pyplot(plt)
     
     
-    st.subheader("Multiple Subplots: Age, Income, and Distance from Home")
-    fig, axs = plt.subplots(1, 3, figsize=(20, 6), sharey=False)
-    sns.histplot(df['Age'], bins=20, kde=True, ax=axs[0], color='skyblue')
-    axs[0].set_title('Age Distribution')
-    sns.histplot(df['MonthlyIncome'], bins=20, kde=True, ax=axs[1], color='green')
-    axs[1].set_title('Monthly Income Distribution')
-    sns.histplot(df['DistanceFromHome'], bins=20, kde=True, ax=axs[2], color='orange')
-    axs[2].set_title('Distance from Home Distribution')
-    st.pyplot(fig)
-
+   
 
 
 
