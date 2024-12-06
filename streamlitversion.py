@@ -144,8 +144,7 @@ elif st.session_state.page == "Dashboard":
     ax1.set_ylabel('Count')
     ax1.set_xlabel('Department')
     st.pyplot(fig1)
-    except Exception as e:
-    st.error(f"Error in generating Attrition Analysis: {e}")
+
 
 
 
