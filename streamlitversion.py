@@ -137,22 +137,20 @@ elif st.session_state.page == "Dashboard":
     
     # Attrition Analysis by Department
     st.subheader("Attrition Analysis by Department")
-    attrition_dept = data.groupby(['Department', 'Attrition']).size().unstack()
+    
+    # Drop rows with missing values in key columns
+    data_cleaned = data.dropna(subset=['Department', 'Attrition'])
+    
+    # Group and analyze attrition
+    attrition_dept = data_cleaned.groupby(['Department', 'Attrition']).size().unstack(fill_value=0)
+    
+    # Create the visualization
     fig1, ax1 = plt.subplots(figsize=(8, 6))
     attrition_dept.plot(kind='bar', stacked=True, ax=ax1)
     ax1.set_title('Attrition by Department')
     ax1.set_ylabel('Count')
     ax1.set_xlabel('Department')
     st.pyplot(fig1)
-
-    # Age Distribution
-    st.subheader("Age Distribution")
-    fig2, ax2 = plt.subplots(figsize=(8, 6))
-    sns.histplot(data['Age'], kde=True, bins=20, ax=ax2)
-    ax2.set_title('Age Distribution')
-    ax2.set_xlabel('Age')
-    ax2.set_ylabel('Frequency')
-    st.pyplot(fig2)
 
 
 
