@@ -135,14 +135,6 @@ elif st.session_state.page == "Dashboard":
     plt.ylabel('Job Role')
     st.pyplot(plt)
     
-    # 8. Violin Plot - Monthly Income by Job Role
-    st.subheader("Distribution of Monthly Income by Job Role")
-    plt.figure(figsize=(12, 8))
-    sns.violinplot(y='JobRole', x='MonthlyIncome', data=df, scale='count', inner='stick')
-    plt.title('Distribution of Monthly Income by Job Role')
-    plt.xlabel('Monthly Income')
-    plt.ylabel('Job Role')
-    st.pyplot(plt)
 
   
 
