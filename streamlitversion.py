@@ -126,6 +126,15 @@ elif st.session_state.page == "Dashboard":
     plt.axis('equal')
     st.pyplot(plt)
 
+    # 10. Box Plot - Monthly Income by Job Role
+    st.subheader("Monthly Income by Job Role (Box Plot)")
+    plt.figure(figsize=(12, 8))
+    sns.boxplot(y='JobRole', x='MonthlyIncome', data=df)
+    plt.title('Distribution of Monthly Income by Job Role')
+    plt.xlabel('Monthly Income')
+    plt.ylabel('Job Role')
+    st.pyplot(plt)
+    
     # 8. Violin Plot - Monthly Income by Job Role
     st.subheader("Distribution of Monthly Income by Job Role")
     plt.figure(figsize=(12, 8))
@@ -135,32 +144,7 @@ elif st.session_state.page == "Dashboard":
     plt.ylabel('Job Role')
     st.pyplot(plt)
 
-    # 9. Boxen Plot - Monthly Income by Job Role
-    st.subheader("Monthly Income by Job Role (Boxen Plot)")
-    plt.figure(figsize=(12, 8))
-    sns.boxenplot(y='JobRole', x='MonthlyIncome', data=df)
-    plt.title('Distribution of Monthly Income by Job Role')
-    plt.xlabel('Monthly Income')
-    plt.ylabel('Job Role')
-    st.pyplot(plt)
-
-    # 10. Box Plot - Monthly Income by Job Role
-    st.subheader("Monthly Income by Job Role (Box Plot)")
-    plt.figure(figsize=(12, 8))
-    sns.boxplot(y='JobRole', x='MonthlyIncome', data=df)
-    plt.title('Distribution of Monthly Income by Job Role')
-    plt.xlabel('Monthly Income')
-    plt.ylabel('Job Role')
-    st.pyplot(plt)
-
-    # 11. Violin Plot - Work-Life Balance by Job Role
-    st.subheader("Distribution of Work-Life Balance by Job Role")
-    plt.figure(figsize=(12, 8))
-    sns.violinplot(y='JobRole', x='WorkLifeBalance', data=df, inner='quartile')
-    plt.title('Distribution of Work-Life Balance by Job Role')
-    plt.xlabel('Work-Life Balance')
-    plt.ylabel('Job Role')
-    st.pyplot(plt)
+  
 
 # Machine Learning Page - Placeholder Content
 elif st.session_state.page == "Machine Learning":
