@@ -436,10 +436,11 @@ elif st.session_state.page == "Backend":
 
 ##################
 
-
-
-st.subheader("Career Development Suggestions")
-skills = st.text_input("Enter employee skills (comma-separated):")
-experience = st.number_input("Years of Experience:", min_value=0)
-if st.button("Get Suggestions"):
-    st.write("Recommendation: Consider exploring management roles in R&D based on skills and experience.")
+from openai import OpenAI
+client = OpenAI()
+completion = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "user", "content": "write a haiku about ai"}
+    ]
+)
