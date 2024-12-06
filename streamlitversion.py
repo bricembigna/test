@@ -56,7 +56,7 @@ elif st.session_state.page == "Dashboard":
         st.session_state.page = "Home"
 
 
-     # 5. Income Statistics
+     # Income Statistics
     st.subheader("Income Statistics")
     mean_income = df['MonthlyIncome'].mean()
     median_income = df['MonthlyIncome'].median()
