@@ -135,6 +135,14 @@ elif st.session_state.page == "Dashboard":
     plt.ylabel('Job Role')
     st.pyplot(plt)
 
+    # Correlation Heatmap
+    st.subheader("Correlation Heatmap")
+    numeric_cols = data.select_dtypes(include='number').columns
+    corr_matrix = data[numeric_cols].corr()
+    fig6, ax6 = plt.subplots(figsize=(10, 8))
+    sns.heatmap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', ax=ax6)
+    ax6.set_title('Correlation Heatmap')
+    st.pyplot(fig6)
 
 
 # Machine Learning Page - Placeholder Content
