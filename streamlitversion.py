@@ -70,7 +70,7 @@ elif st.session_state.page == "Dashboard":
     st.subheader("Percentage of Employees by Department")
     department_counts = df['Department'].value_counts()
     percentages = department_counts / department_counts.sum() * 100
-    plt.figure(figsize=(5, 3))
+    plt.figure(figsize=(10, 6))
     plt.pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
     plt.title('Percentage of Employees by Department')
     plt.axis('equal')
@@ -120,7 +120,7 @@ elif st.session_state.page == "Dashboard":
 
     # 7. Pie Chart - Business Travel Distribution
     st.subheader("Business Travel Distribution")
-    plt.figure(figsize=(4, 4))
+    plt.figure(figsize=(8, 8))
     plt.pie(business_travel_counts, labels=business_travel_counts.index, autopct='%1.1f%%', startangle=140)
     plt.title('Business Travel Distribution')
     plt.axis('equal')
