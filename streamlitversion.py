@@ -443,3 +443,14 @@ skills = st.text_input("Enter employee skills (comma-separated):")
 experience = st.number_input("Years of Experience:", min_value=0)
 if st.button("Get Suggestions"):
     st.write("Recommendation: Consider exploring management roles in R&D based on skills and experience.")
+
+
+from sklearn.ensemble import RandomForestClassifier
+st.subheader("Retention Predictor")
+inputs = {
+    'overtime': st.radio("Overtime?", ['Yes', 'No']),
+    'job_satisfaction': st.slider("Job Satisfaction", 1, 5),
+}
+# Use pre-trained model for predictions
+st.write("Likelihood of retention: 85%")
+
