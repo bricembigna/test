@@ -134,9 +134,15 @@ elif st.session_state.page == "Dashboard":
     plt.xlabel('Monthly Income')
     plt.ylabel('Job Role')
     st.pyplot(plt)
-    
 
-  
+    
+    st.subheader("Correlation Heatmap of HR Metrics")
+    correlation_matrix = df.corr()
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", fmt=".2f")
+    plt.title("Correlation Heatmap")
+    st.pyplot(plt)
+
 
 # Machine Learning Page - Placeholder Content
 elif st.session_state.page == "Machine Learning":
