@@ -135,6 +135,15 @@ elif st.session_state.page == "Dashboard":
     plt.ylabel('Job Role')
     st.pyplot(plt)
 
+    st.subheader("Scatter Plot with Regression Line")
+    plt.figure(figsize=(10, 6))
+    sns.regplot(x='Age', y='MonthlyIncome', data=df, order=1, scatter_kws={'s':50, 'color':'blue', 'alpha':0.6}, line_kws={'color':'red'})
+    plt.title('Age vs. Monthly Income with Regression Line')
+    plt.xlabel('Age')
+    plt.ylabel('Monthly Income')
+    st.pyplot(plt)
+
+
 
 
 
