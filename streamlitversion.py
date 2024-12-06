@@ -432,3 +432,54 @@ elif st.session_state.page == "Backend":
         change_employee_page()
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
+
+
+
+
+
+
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+
+def create_event():
+    # Authenticate the Calendar API
+    credentials = Credentials.from_service_account_info(
+        st.secrets["google_credentials"],
+        scopes=["https://www.googleapis.com/auth/calendar"]
+    )
+    service = build('calendar', 'v3', credentials=credentials)
+
+    st.title("Google Calendar Event Creator")
+    
+    # Input fields for event details
+    st.subheader("Create a New Calendar Event")
+    event_title = st.text_input("Event Title")
+    event_description = st.text_area("Event Description")
+    event_start_time = st.text_input("Start Time (YYYY-MM-DDTHH:MM:SS)")
+    event_end_time = st.text_input("End Time (YYYY-MM-DDTHH:MM:SS)")
+    attendees_emails = st.text_input("Attendee Emails (comma-separated)")
+
+    if st.button("Create Event"):
+        try:
+            event = {
+                'summary': event_title,
+                'description': event_description,
+                'start': {
+                    'dateTime': event_start_time,
+                    'timeZone': 'UTC',
+                },
+                'end': {
+                    'dateTime': event_end_time,
+                    'timeZone': 'UTC',
+                },
+                'attendees': [{'email': email.strip()} for email in attendees_emails.split(",") if email.strip()],
+            }
+
+            created_event = service.events().insert(calendarId='primary', body=event).execute()
+            st.success(f"Event created successfully: {created_event.get('htmlLink')}")
+        except HttpError as error:
+            st.error(f"An error occurred: {error}")
+
+# Call this function in the desired part of your Streamlit app
+if st.session_state.page == "Calendar":
+    create_event()
