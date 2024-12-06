@@ -454,3 +454,8 @@ inputs = {
 # Use pre-trained model for predictions
 st.write("Likelihood of retention: 85%")
 
+
+st.subheader("Learning Resources")
+role = st.selectbox("Select Job Role", df['JobRole'].unique())
+st.write(f"Recommended Course: 'Leadership Essentials' for {role}")
+
