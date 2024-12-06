@@ -65,7 +65,7 @@ elif st.session_state.page == "Dashboard":
     st.write(f"Standard Deviation of Monthly Income: ${std_income:.2f}")
 
 
-     st.subheader("Multiple Subplots: Age, Income, and Distance from Home")
+    st.subheader("Multiple Subplots: Age, Income, and Distance from Home")
     fig, axs = plt.subplots(1, 3, figsize=(20, 6), sharey=False)
     sns.histplot(df['Age'], bins=20, kde=True, ax=axs[0], color='skyblue')
     axs[0].set_title('Age Distribution')
