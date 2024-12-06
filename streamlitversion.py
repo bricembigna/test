@@ -210,13 +210,13 @@ elif st.session_state.page == "Dashboard":
   ##############  st.pyplot(plt)
 
 
-    st.subheader("Kernel Density Estimate Plot")
-    plt.figure(figsize=(10, 6))
-    sns.kdeplot(data=df['MonthlyIncome'], fill=True, color='skyblue', alpha=0.5)
-    plt.title('Density Plot of Monthly Income')
-    plt.xlabel('Monthly Income')
-    plt.ylabel('Density')
-    st.pyplot(plt)
+  ##############  st.subheader("Kernel Density Estimate Plot")
+   ############## plt.figure(figsize=(10, 6))
+  ##############  sns.kdeplot(data=df['MonthlyIncome'], fill=True, color='skyblue', alpha=0.5)
+  ##############  plt.title('Density Plot of Monthly Income')
+  ##############  plt.xlabel('Monthly Income')
+  ##############  plt.ylabel('Density')
+  ##############  st.pyplot(plt)
     
     
     st.subheader("Joint Plot: Age vs. Monthly Income")
