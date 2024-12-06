@@ -76,6 +76,38 @@ elif st.session_state.page == "Dashboard":
     st.pyplot(fig)
 
     
+    st.subheader("Department, Gender, and Job Role Insights")
+    fig, axs = plt.subplots(1, 3, figsize=(25, 8))  # Create 1 row and 3 columns of subplots
+    
+    # 1. Pie Chart - Percentage of Employees by Department
+    department_counts = df['Department'].value_counts()
+    percentages = department_counts / department_counts.sum() * 100
+    axs[0].pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
+    axs[0].set_title('Employees by Department', fontsize=14)
+    axs[0].axis('equal')  # Equal aspect ratio ensures a perfect circle
+    
+    # 2. Violin Plot - Age Distribution by Gender
+    sns.violinplot(x='Gender', y='Age', data=df, hue='Gender', split=True, ax=axs[1])
+    axs[1].set_title('Age Distribution by Gender', fontsize=14)
+    axs[1].set_xlabel('Gender')
+    axs[1].set_ylabel('Age')
+    
+    # 3. Box Plot - Monthly Income by Job Role
+    sns.boxplot(y='JobRole', x='MonthlyIncome', data=df, ax=axs[2])
+    axs[2].set_title('Monthly Income by Job Role', fontsize=14)
+    axs[2].set_xlabel('Monthly Income')
+    axs[2].set_ylabel('Job Role')
+    
+    # Common Title for the Subplots
+    fig.suptitle('Key HR Insights', fontsize=16)
+    
+    # Adjust layout for better spacing
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    
+    # Render Plot
+    st.pyplot(fig)
+
+    
     # 1. Pie Chart - Percentage of Employees by Department
     st.subheader("Percentage of Employees by Department")
     department_counts = df['Department'].value_counts()
