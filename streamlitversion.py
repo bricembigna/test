@@ -432,3 +432,65 @@ elif st.session_state.page == "Backend":
         change_employee_page()
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
+
+
+
+
+
+######################################
+
+
+
+from googleapiclient.discovery import build
+from google.oauth2.service_account import Credentials
+import streamlit as st
+
+# Define scopes
+scopes = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/calendar"
+]
+
+# Authenticate using Streamlit secrets
+credentials = Credentials.from_service_account_info(
+    st.secrets["google_credentials"],
+    scopes=scopes
+)
+service = build("calendar", "v3", credentials=credentials)
+
+# Function to create an event
+def create_event(summary, description, start_time, end_time, attendees=[]):
+    event = {
+        "summary": summary,
+        "description": description,
+        "start": {
+            "dateTime": start_time,
+            "timeZone": "UTC",
+        },
+        "end": {
+            "dateTime": end_time,
+            "timeZone": "UTC",
+        },
+        "attendees": [{"email": email} for email in attendees],
+    }
+    event_result = service.events().insert(calendarId="primary", body=event).execute()
+    return event_result
+
+# Streamlit UI for scheduling events
+st.title("Google Calendar Event Scheduler")
+
+st.subheader("Create a New Event")
+summary = st.text_input("Event Title", "HR Meeting")
+description = st.text_area("Event Description", "Discuss Q4 performance.")
+start_time = st.text_input("Start Time (YYYY-MM-DDTHH:MM:SS)", "2023-12-20T10:00:00")
+end_time = st.text_input("End Time (YYYY-MM-DDTHH:MM:SS)", "2023-12-20T11:00:00")
+attendees_input = st.text_input("Attendees (comma-separated emails)", "example1@gmail.com,example2@gmail.com")
+
+if st.button("Schedule Event"):
+    attendees = [email.strip() for email in attendees_input.split(",")]
+    try:
+        event = create_event(summary, description, start_time, end_time, attendees)
+        st.success(f"Event created successfully! [View Event]({event.get('htmlLink')})")
+    except Exception as e:
+        st.error(f"Error creating event: {e}")
