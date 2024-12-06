@@ -144,41 +144,7 @@ elif st.session_state.page == "Dashboard":
     # Render the Plot in Streamlit
     st.pyplot(fig)
 
-
-
-##############
-    
-   ############## # 1. Pie Chart - Percentage of Employees by Department
-   ############## st.subheader("Percentage of Employees by Department")
-   ############## department_counts = df['Department'].value_counts()
-   ############## percentages = department_counts / department_counts.sum() * 100
-   ############## plt.figure(figsize=(10, 6))
-   ############## plt.pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
-   ############## plt.title('Percentage of Employees by Department')
-   ############## plt.axis('equal')
-   ############## st.pyplot(plt)
-
- ##############   # 2. Violin Plot - Age Distribution by Gender
- ##############   st.subheader("Age Distribution by Gender")
-##############    plt.figure(figsize=(10, 6))
- ##############   sns.violinplot(x='Gender', y='Age', data=df, hue='Gender', split=True)
-  ##############  plt.title('Age Distribution by Gender')
-  ##############  plt.xlabel('Gender')
- ##############   plt.ylabel('Age')
- ##############   st.pyplot(plt)
-
-##############    # 3. Histogram - Age Distribution
- ##############   st.subheader("Age Distribution Histogram (Ages 18 to 60)")
-  ##############  bins = list(range(18, 61))
-  ##############  plt.figure(figsize=(12, 6))
-  ##############  plt.hist(df['Age'], bins=bins, edgecolor='white', color='skyblue', alpha=0.7, align='left')
-  ##############  plt.title('Age Distribution Histogram (Individual Ages 18 to 60)')
-  ##############  plt.xlabel('Age')
-  ##############  plt.ylabel('Frequency')
-  ##############  plt.xticks(bins)
-  ##############  st.pyplot(plt)
-
-
+ #################
 
 
     st.subheader("Department and Business Travel Insights")
@@ -210,62 +176,14 @@ elif st.session_state.page == "Dashboard":
 
     #################
 
-    # 4. Bar Chart - Distribution of Employees by Department
-   ################# st.subheader("Distribution of Employees by Department")
-    ################# plt.figure(figsize=(10, 6))
-    ################# department_counts.plot(kind='bar', color='skyblue', edgecolor='black')
-    ################# plt.title('Distribution of Employees by Department')
-    ################# plt.xlabel('Department')
-    ################# plt.ylabel('Number of Employees')
-    ################# plt.xticks(rotation=45)
-    ################# st.pyplot(plt)
-
-
-    ################# # 6. Business Travel Frequency
-    ################# st.subheader("Business Travel Frequency")
-    ################# business_travel_counts = df['BusinessTravel'].value_counts()
-    ################# plt.figure(figsize=(8, 5))
-    ################# business_travel_counts.plot(kind='bar', color='lightcoral', edgecolor='black')
-    ################# plt.title('Business Travel Frequency')
-    ################# plt.xlabel('Business Travel Category')
-    ################# plt.ylabel('Number of Employees')
-    ################# plt.xticks(rotation=45)
-    ################# st.pyplot(plt)
-
-  ##############  # 10. Box Plot - Monthly Income by Job Role
-  ##############  st.subheader("Monthly Income by Job Role (Box Plot)")
-  ##############  plt.figure(figsize=(12, 8))
-  ##############  sns.boxplot(y='JobRole', x='MonthlyIncome', data=df)
-  ##############  plt.title('Distribution of Monthly Income by Job Role')
-  ##############  plt.xlabel('Monthly Income')
-  ##############  plt.ylabel('Job Role')
-  ##############  st.pyplot(plt)
-
-
-  ##############  st.subheader("Kernel Density Estimate Plot")
-   ############## plt.figure(figsize=(10, 6))
-  ##############  sns.kdeplot(data=df['MonthlyIncome'], fill=True, color='skyblue', alpha=0.5)
-  ##############  plt.title('Density Plot of Monthly Income')
-  ##############  plt.xlabel('Monthly Income')
-  ##############  plt.ylabel('Density')
-  ##############  st.pyplot(plt)
+   
     
     
     st.subheader("Joint Plot: Age vs. Monthly Income")
     fig = sns.jointplot(x='Age', y='MonthlyIncome', data=df, kind='reg', height=8, space=0.2)
     st.pyplot(fig)
     
-    
-    
-    
-##############    st.subheader("Grouped Bar Chart: Department vs. Business Travel")
- ##############   grouped_data = df.groupby(['Department', 'BusinessTravel']).size().unstack(fill_value=0)
- ##############   grouped_data.plot(kind='bar', figsize=(12, 6), stacked=False)
-  ##############  plt.title('Department vs. Business Travel')
- ##############   plt.xlabel('Department')
- ##############   plt.ylabel('Number of Employees')
- ##############   plt.xticks(rotation=45)
- ##############   st.pyplot(plt)
+
     
     
    
