@@ -29,9 +29,10 @@ if st.session_state.page == "Home":
     st.title("Welcome to the HR monitor!")
     st.write("This application provides you with in-depth analysis of your HR data in real time.")
     st.write("Choose a section to navigate to for different functionalities:")
-    st.write("- **Dashboard:** Check your HR dashboards.")
-    st.write("- **Machine Learning:** Leverage AI to make predictions about your workforce (Coming Soon).")
-    st.write("- **Backend:** Backend management and settings (Coming Soon).")
+    st.write("- **Dashboard:** Explore an interactive HR dashboard offering comprehensive insights into your workforce, helping you make data-driven decisions.")
+    st.write("- **Machine Learning:** Harness the power of AI to predict employee's income.")
+    st.write("- **Data Management:** Efficiently manage employee records by adding, editing, or deleting information with ease.")
+
 
     # Display navigation buttons under the explanation
     st.write("### Navigate to:")
