@@ -211,26 +211,26 @@ elif st.session_state.page == "Dashboard":
     #################
 
     # 4. Bar Chart - Distribution of Employees by Department
-    st.subheader("Distribution of Employees by Department")
-    plt.figure(figsize=(10, 6))
-    department_counts.plot(kind='bar', color='skyblue', edgecolor='black')
-    plt.title('Distribution of Employees by Department')
-    plt.xlabel('Department')
-    plt.ylabel('Number of Employees')
-    plt.xticks(rotation=45)
-    st.pyplot(plt)
+   ################# st.subheader("Distribution of Employees by Department")
+    ################# plt.figure(figsize=(10, 6))
+    ################# department_counts.plot(kind='bar', color='skyblue', edgecolor='black')
+    ################# plt.title('Distribution of Employees by Department')
+    ################# plt.xlabel('Department')
+    ################# plt.ylabel('Number of Employees')
+    ################# plt.xticks(rotation=45)
+    ################# st.pyplot(plt)
 
 
-    # 6. Business Travel Frequency
-    st.subheader("Business Travel Frequency")
-    business_travel_counts = df['BusinessTravel'].value_counts()
-    plt.figure(figsize=(8, 5))
-    business_travel_counts.plot(kind='bar', color='lightcoral', edgecolor='black')
-    plt.title('Business Travel Frequency')
-    plt.xlabel('Business Travel Category')
-    plt.ylabel('Number of Employees')
-    plt.xticks(rotation=45)
-    st.pyplot(plt)
+    ################# # 6. Business Travel Frequency
+    ################# st.subheader("Business Travel Frequency")
+    ################# business_travel_counts = df['BusinessTravel'].value_counts()
+    ################# plt.figure(figsize=(8, 5))
+    ################# business_travel_counts.plot(kind='bar', color='lightcoral', edgecolor='black')
+    ################# plt.title('Business Travel Frequency')
+    ################# plt.xlabel('Business Travel Category')
+    ################# plt.ylabel('Number of Employees')
+    ################# plt.xticks(rotation=45)
+    ################# st.pyplot(plt)
 
   ##############  # 10. Box Plot - Monthly Income by Job Role
   ##############  st.subheader("Monthly Income by Job Role (Box Plot)")
