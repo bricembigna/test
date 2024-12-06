@@ -145,6 +145,16 @@ elif st.session_state.page == "Dashboard":
     ax1.set_xlabel('Department')
     st.pyplot(fig1)
 
+    # Age Distribution
+    st.subheader("Age Distribution")
+    fig2, ax2 = plt.subplots(figsize=(8, 6))
+    sns.histplot(data['Age'], kde=True, bins=20, ax=ax2)
+    ax2.set_title('Age Distribution')
+    ax2.set_xlabel('Age')
+    ax2.set_ylabel('Frequency')
+    st.pyplot(fig2)
+
+
 
 # Machine Learning Page - Placeholder Content
 elif st.session_state.page == "Machine Learning":
