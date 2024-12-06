@@ -128,14 +128,6 @@ elif st.session_state.page == "Dashboard":
     plt.xticks(rotation=45)
     st.pyplot(plt)
 
-    # 7. Pie Chart - Business Travel Distribution
-    st.subheader("Business Travel Distribution")
-    plt.figure(figsize=(8, 8))
-    plt.pie(business_travel_counts, labels=business_travel_counts.index, autopct='%1.1f%%', startangle=140)
-    plt.title('Business Travel Distribution')
-    plt.axis('equal')
-    st.pyplot(plt)
-
     # 10. Box Plot - Monthly Income by Job Role
     st.subheader("Monthly Income by Job Role (Box Plot)")
     plt.figure(figsize=(12, 8))
