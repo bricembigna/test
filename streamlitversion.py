@@ -135,14 +135,18 @@ elif st.session_state.page == "Dashboard":
     plt.ylabel('Job Role')
     st.pyplot(plt)
 
-    # Correlation Heatmap
-    st.subheader("Correlation Heatmap")
-    numeric_cols = data.select_dtypes(include='number').columns
-    corr_matrix = data[numeric_cols].corr()
-    fig6, ax6 = plt.subplots(figsize=(10, 8))
-    sns.heatmap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', ax=ax6)
-    ax6.set_title('Correlation Heatmap')
-    st.pyplot(fig6)
+
+    st.subheader("Attrition Analysis by Department")
+    attrition_dept = data.groupby(['Department', 'Attrition']).size().unstack()
+    fig1, ax1 = plt.subplots(figsize=(8, 6))
+    attrition_dept.plot(kind='bar', stacked=True, ax=ax1)
+    ax1.set_title('Attrition by Department')
+    ax1.set_ylabel('Count')
+    ax1.set_xlabel('Department')
+    st.pyplot(fig1)
+    except Exception as e:
+    st.error(f"Error in generating Attrition Analysis: {e}")
+
 
 
 # Machine Learning Page - Placeholder Content
