@@ -438,57 +438,58 @@ elif st.session_state.page == "Backend":
 
 
 ######################################
-
+import streamlit as st
 from googleapiclient.discovery import build
 from google.oauth2.service_account import Credentials
-import streamlit as st
 
 # Define scopes
-scopes = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
-    "https://www.googleapis.com/auth/calendar"
-]
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 # Authenticate using Streamlit secrets
 credentials = Credentials.from_service_account_info(
-    st.secrets["google_credentials"],
-    scopes=scopes
+    st.secrets["google_credentials"],  # Use your Streamlit secrets for service account JSON
+    scopes=SCOPES,
+    subject="user@yourdomain.com"  # Replace with an actual email in your Workspace domain
 )
 service = build("calendar", "v3", credentials=credentials)
 
-# Function to create an event
-def create_event(summary, description, start_time, end_time, attendees=[]):
-    event = {
-        "summary": summary,
-        "description": description,
-        "start": {
-            "dateTime": start_time,
-            "timeZone": "UTC",
-        },
-        "end": {
-            "dateTime": end_time,
-            "timeZone": "UTC",
-        },
-        "attendees": [{"email": email} for email in attendees],
-    }
-    event_result = service.events().insert(calendarId="primary", body=event).execute()
-    return event_result
+# Function to create a calendar event
+def create_event(summary, description, start_time, end_time):
+    try:
+        event = {
+            "summary": summary,
+            "description": description,
+            "start": {
+                "dateTime": start_time,
+                "timeZone": "UTC",
+            },
+            "end": {
+                "dateTime": end_time,
+                "timeZone": "UTC",
+            },
+        }
+        event_result = service.events().insert(calendarId="primary", body=event).execute()
+        return event_result
+    except Exception as e:
+        st.error(f"Error creating event: {e}")
+        return None
 
-# Streamlit UI for scheduling events
+# Streamlit App UI
 st.title("Google Calendar Event Scheduler")
 
 st.subheader("Create a New Event")
-summary = st.text_input("Event Title", "HR Meeting")
-description = st.text_area("Event Description", "Discuss Q4 performance.")
-start_time = st.text_input("Start Time (YYYY-MM-DDTHH:MM:SS)", "2023-12-20T10:00:00")
-end_time = st.text_input("End Time (YYYY-MM-DDTHH:MM:SS)", "2023-12-20T11:00:00")
-attendees_input = st.text_input("Attendees (comma-separated emails)", "example1@gmail.com,example2@gmail.com")
+# Event details input
+event_summary = st.text_input("Event Title", "New Event")
+event_description = st.text_area("Event Description", "Enter event description here...")
+start_time = st.text_input("Start Time (YYYY-MM-DDTHH:MM:SS)", "2024-12-07T10:00:00")
+end_time = st.text_input("End Time (YYYY-MM-DDTHH:MM:SS)", "2024-12-07T11:00:00")
 
+# Schedule Event
 if st.button("Schedule Event"):
-    attendees = [email.strip() for email in attendees_input.split(",")]
-    try:
-        event = create_event(summary, description, start_time, end_time, attendees)
-        st.success(f"Event created successfully! [View Event]({event.get('htmlLink')})")
-    except Exception as e:
-        st.error(f"Error creating event: {e}")
+    if event_summary and start_time and end_time:
+        event = create_event(event_summary, event_description, start_time, end_time)
+        if event:
+            st.success(f"Event created successfully! [View Event]({event.get('htmlLink')})")
+    else:
+        st.warning("Please fill out all the required fields.")
+
