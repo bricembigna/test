@@ -438,72 +438,56 @@ elif st.session_state.page == "Backend":
 
 
 ##############
-
-
-
 import requests
-import pandas as pd
 import streamlit as st
-import matplotlib.pyplot as plt
+import pandas as pd
 
 # API Base URL
 BASE_URL = "https://dam-api.bfs.admin.ch/hub/api/dam/assets"
 
 # Fetch data from the DAM API
-def fetch_demographic_data():
+def fetch_metadata():
     params = {
-        "language": "en",  # Use 'en' for English
-        "topic": "population",  # Topic of interest
-        "contentType": "dataset",  # Fetch datasets
+        "language": "en",  # English response
+        "contentType": "dataset",  # Request dataset metadata
     }
     response = requests.get(BASE_URL, params=params)
+    
+    # Check if response is successful
     if response.status_code == 200:
-        return response.json()
+        # Try parsing as JSON
+        try:
+            return response.json()  # If JSON is provided
+        except requests.JSONDecodeError:
+            # Handle non-JSON response
+            st.warning("Response is not JSON. Displaying raw content:")
+            st.write(response.text)
+            return None
     else:
-        st.error("Failed to fetch data from FSO DAM API.")
+        st.error(f"API error: {response.status_code} - {response.reason}")
         return None
 
-# Parse API Response
-def parse_population_data(api_data):
-    data_list = []
-    for item in api_data.get("result", []):
-        data_list.append({
-            "Title": item.get("title", "N/A"),
-            "Date": item.get("publicationDate", "N/A"),
-            "URL": item.get("_links", {}).get("self", {}).get("href", "N/A")
-        })
-    return pd.DataFrame(data_list)
-
-# Visualization and Integration with Streamlit
+# Streamlit App
 def main():
-    st.title("Switzerland Population Statistics (FSO)")
+    st.title("Swiss Federal Statistical Office: DAM API")
     
-    # Fetch API Data
-    api_data = fetch_demographic_data()
+    st.subheader("Fetching Dataset Metadata")
+    metadata = fetch_metadata()
     
-    if api_data:
-        # Parse the Data
-        df = parse_population_data(api_data)
-        
-        st.subheader("Demographic Datasets")
+    if metadata:
+        # Display the metadata if JSON
+        datasets = [
+            {
+                "Title": item.get("title", "N/A"),
+                "Date": item.get("publicationDate", "N/A"),
+                "URL": item.get("_links", {}).get("self", {}).get("href", "N/A"),
+            }
+            for item in metadata.get("result", [])
+        ]
+        df = pd.DataFrame(datasets)
         st.dataframe(df)
-        
-        # Select a dataset and visualize its details
-        selected_dataset = st.selectbox("Choose a Dataset:", df["Title"])
-        selected_row = df[df["Title"] == selected_dataset]
-        dataset_url = selected_row.iloc[0]["URL"]
-        
-        st.write(f"Dataset URL: [View Dataset]({dataset_url})")
-        
-        # Example Visualization Placeholder (You can customize based on dataset content)
-        if "Age" in selected_dataset:
-            st.subheader("Example Visualization: Age Distribution")
-            # Example chart with dummy data
-            age_data = pd.DataFrame({
-                "Age Group": ["0-18", "19-35", "36-50", "51+"],
-                "Population": [1500000, 2000000, 1800000, 1200000]
-            })
-            st.bar_chart(age_data.set_index("Age Group"))
+        st.write("Click on the URLs to view or download datasets.")
 
+# Run Streamlit app
 if __name__ == "__main__":
     main()
