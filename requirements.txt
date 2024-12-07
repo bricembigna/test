@@ -7,3 +7,5 @@ gspread
 oauth2client
 scikit-learn
 google-api-python-client
+fpdf
+openai==0.28.0
