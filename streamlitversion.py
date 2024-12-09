@@ -358,20 +358,20 @@ elif st.session_state.page == "Employee Report":
             st.session_state.page = "Home"
         st.stop()
 
-    # Check if UID column is present
-    if "UID" not in df.columns:
-        st.error("The 'UID' column is missing from the Google Sheet Data.")
+    # Check if EmployeeNumber column is present
+    if "EmployeeNumber" not in df.columns:
+        st.error("The 'EmployeeNumber' column is missing from the Google Sheet Data.")
         if st.button("Homepage"):
             st.session_state.page = "Home"
         st.stop()
 
     # Employee selection
-    uid = st.selectbox("Choose Employee (UID)", df["UID"].unique())
+    employee_number = st.selectbox("Choose Employee (EmployeeNumber)", df["EmployeeNumber"].unique())
 
     # Filter data for selected employee
-    employee_data = df[df["UID"] == uid]
+    employee_data = df[df["EmployeeNumber"] == employee_number]
     if employee_data.empty:
-        st.error("The selected UID is not present in the data table.")
+        st.error("The selected EmployeeNumber is not present in the data table.")
         if st.button("Homepage"):
             st.session_state.page = "Home"
         st.stop()
@@ -382,11 +382,11 @@ elif st.session_state.page == "Employee Report":
         # Build the prompt
         prompt = (
             "Create a short, formal, and professional employee report in English using only the provided data. "
-            "The employee does not have a name, so please refer to them by their UID. "
+            "The employee does not have a name, so please refer to them by their EmployeeNumber. "
             "Do not add any information not present in the data. Present the information as a cohesive paragraph "
             "without additional speculation.\n\n"
             f"Data:\n"
-            f"UID: {employee['UID']}\n"
+            f"EmployeeNumber: {employee['EmployeeNumber']}\n"
             f"Age: {employee['Age']}\n"
             f"Department: {employee['Department']}\n"
             f"Job Role: {employee['JobRole']}\n"
@@ -422,7 +422,7 @@ elif st.session_state.page == "Employee Report":
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", "B", 16)
-        pdf.cell(0, 10, txt=f"Employee Report (UID: {employee['UID']})", ln=True, align="C")
+        pdf.cell(0, 10, txt=f"Employee Report (EmployeeNumber: {employee['EmployeeNumber']})", ln=True, align="C")
         pdf.ln(10)
         pdf.set_font("Arial", size=12)
         pdf.multi_cell(0, 10, txt=report)
@@ -439,7 +439,7 @@ elif st.session_state.page == "Employee Report":
             st.download_button(
                 label="📄 Download PDF",
                 data=pdf_bytes,
-                file_name=f"UID_{employee_data['UID']}_Report.pdf",
+                file_name=f"EmployeeNumber_{employee_data['EmployeeNumber']}_Report.pdf",
                 mime="application/pdf"
             )
 
@@ -451,3 +451,4 @@ elif st.session_state.page == "Employee Report":
     with col2:
         if st.button("Go to Dashboard"):
             st.session_state.page = "Dashboard"
+
