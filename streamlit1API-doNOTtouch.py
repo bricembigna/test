@@ -354,6 +354,8 @@ elif st.session_state.page == "Employee Report":
         openai.api_key = st.secrets["openai"]["api_key"]
     except KeyError:
         st.error("OpenAI API Key is missing. Please check your Streamlit secrets.")
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
         st.stop()
 
     # Check if UID column is present
@@ -441,5 +443,11 @@ elif st.session_state.page == "Employee Report":
                 mime="application/pdf"
             )
 
-    if st.button("Homepage"):
-        st.session_state.page = "Home"
+    # Add buttons for navigation
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
+    with col2:
+        if st.button("Go to Dashboard"):
+            st.session_state.page = "Dashboard"
