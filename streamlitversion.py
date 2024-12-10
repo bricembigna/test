@@ -47,8 +47,8 @@ if st.session_state.page == "Home":
         if st.button("Machine Learning"):
             st.session_state.page = "Machine Learning"
     with col3:
-        if st.button("Backend"):
-            st.session_state.page = "Backend"
+        if st.button("Data Management"):
+            st.session_state.page = "Data Management"
     with col4:
         if st.button("Employee Report"):
             st.session_state.page = "Employee Report"
