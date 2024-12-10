@@ -202,7 +202,7 @@ elif st.session_state.page == "Machine Learning":
     st.pyplot(fig)
 
 # Backend Page (Data Management)
-elif st.session_state.page == "Backend":
+elif st.session_state.page == "Data Management":
     st.title("Data Input Manager")
 
     spreadsheet_name = "Dataset"
