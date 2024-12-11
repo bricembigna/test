@@ -366,7 +366,7 @@ elif st.session_state.page == "Employee Report":
         st.stop()
 
     # Employee selection
-    employee_number = st.selectbox("Choose Employee (EmployeeNumber)", df["EmployeeNumber"])
+    employee_number = st.selectbox("Choose Employee (EmployeeNumber)", df["EmployeeNumber"].unique())
 
     # Filter data for selected employee
     employee_data = df[df["EmployeeNumber"] == employee_number]
@@ -376,7 +376,7 @@ elif st.session_state.page == "Employee Report":
             st.session_state.page = "Home"
         st.stop()
 
-    employee_data = employee_data[0]
+    employee_data = employee_data.iloc[0]
 
     def generate_report(employee):
         # Build the prompt
