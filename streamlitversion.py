@@ -153,46 +153,65 @@ elif st.session_state.page == "Dashboard":
     st.pyplot(fig)
 
 
-# Machine Learning Page
+# Machine Learning Page and title 
 elif st.session_state.page == "Machine Learning":
     st.title("Machine Learning")
+    # Button for the homepage
     if st.button("Homepage"):
+        # Updates the website back to home
         st.session_state.page = "Home"
 
-    # Import and model training
-    # (Die Daten liegen bereits in df vor)
+    # Trying to extract the necessary and relevant Data from the DataFrame
     try:
-        # Relevant columns for regression
+        # Relevant columns needed for the regression
         df_ml = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
+        # Error if the relevant columns are missing
     except KeyError as e:
-        st.error(f"Fehlende Spalten: {e}")
+        st.error(f"Missing columns: {e}")
+        # If you use the homebutton you will come back to the homepage and the currently executed code will  stop running
         st.stop()
+        
+    # Importing the necessary libraries for the ML 
+    from sklearn.model_selection import train_test_split # for splitting up the data into Trainings- and Testdata
+    from sklearn.linear_model import LinearRegression # The model, which is used for the regression
+    from sklearn.metrics import mean_squared_error, r2_score # This library was used to check if the Multiple regression is valid. You could delete this part, but it was left in to show that we have checked the model for its validity 
+    import numpy as np #for numerical calculations
 
-    from sklearn.model_selection import train_test_split
-    from sklearn.linear_model import LinearRegression
-    from sklearn.metrics import mean_squared_error, r2_score
-    import numpy as np
-
+    # Definition of the input for the regression total working years and job level
     X = df_ml[['TotalWorkingYears', 'JobLevel']]
+    # Definition of the outputfor the regression Monthly Income
     y = df_ml['MonthlyIncome']
 
+    # Splitting up the Traings- and Testdata, while having (automatically, since Tesdata is 30%) 70% Trainings data and 30% Testdata. The random_state ensures that reproducibility, by setting a fixed seed for the random number generator
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    # Initializing and training the model with our input and output data
     model = LinearRegression()
     model.fit(X_train, y_train)
-
+    
+    # Use the trained model to make predictions on the test dataset (X_test)
+    # ......
     y_pred = model.predict(X_test)
 
+    # Subheader for the MonthlyIncome prediction 
     st.subheader("Predict Monthly Income")
+    # Userinput of working years and Joblevel with defined minimum and maximum value and pre defined values in the selection, which the user can change
     user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
     user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
 
+    # Creating a data from for the user input of the working years and the job level
     user_input = pd.DataFrame({'TotalWorkingYears': [user_working_years], 'JobLevel': [user_job_level]})
+    # .....
     predicted_income = model.predict(user_input)[0]
+    # Showing the predicet Monthly income in $ with two decimal places
     st.write(f"Predicted Monthly Income: $ *{predicted_income:.2f}*")
-
+    # Visualizing the prediction with a scatterplot 
+    # Creating a figure and axis with the sizes 10x6 for a good Overview
     fig, ax = plt.subplots(figsize=(10, 6))
+    # 
     scatter = ax.scatter(X_test['TotalWorkingYears'], y_pred, c=X_test['JobLevel'], cmap='viridis', s=50, alpha=0.8)
+    # Labeling the x and y-axis 
     ax.set_xlabel("Total Working Years")
+    
     ax.set_ylabel("Predicted Monthly Income")
     ax.set_title("Predicted Monthly Income vs. Total Working Years (Color: Job Level)")
     cbar = plt.colorbar(scatter, ax=ax)
@@ -356,7 +375,9 @@ elif st.session_state.page == "Employee Report":
     # If this is not possible it shows the error down below
     except KeyError:
         st.error("OpenAI API Key is missing. Please check your Streamlit secrets.")
+        # Button for Homepage
         if st.button("Homepage"):
+            # Updates the website back to home
             st.session_state.page = "Home"
         # If you use the homebutton you will come back to the homepage and the try-except code will  stop running
         st.stop()
@@ -368,6 +389,7 @@ elif st.session_state.page == "Employee Report":
         # If the user uses the homebutton you will come back to the homepage and this part of the code will stop running    
         if st.button("Homepage"):
             st.session_state.page = "Home"
+        # If you use the homebutton you will come back to the homepage and the currently executed code will  stop running
         st.stop()
     # Creating a dropdown menu for the user to select an employee based on their EmployeeNumber.
     # The options in the dropdown are taken from the "EmployeeNumber" column of the DataFrame.
@@ -383,6 +405,7 @@ elif st.session_state.page == "Employee Report":
         # If the user uses the homebutton you will come back to the homepage and this part of the code will stop running    
         if st.button("Homepage"):
             st.session_state.page = "Home"
+        # If you use the homebutton you will come back to the homepage and the currently executed code will  stop running
         st.stop()
     # Extracting the selected entry from the filtered employee_data, while making sure that only the values from first row will be chosen via iloc[]
     employee_data = employee_data.iloc[0]
