@@ -345,27 +345,35 @@ elif st.session_state.page == "Data Management":
     elif st.session_state.Backend_subpage == "delete_employee":
         delete_employee_page()
 
-# Employee Report Page
+# Employee Report Page with title
 elif st.session_state.page == "Employee Report":
     st.title("Employee Report")
 
-    # Load OpenAI API Key
+    # Loads the OpenAI API Key from the secrets in Streamlit 
+    # As source on how to implement open AI API: https://www.youtube.com/watch?v=YVFWBJ1WVF8
     try:
         openai.api_key = st.secrets["openai"]["api_key"]
+    # If this is not possible it shows the error down below
     except KeyError:
         st.error("OpenAI API Key is missing. Please check your Streamlit secrets.")
         if st.button("Homepage"):
             st.session_state.page = "Home"
+        # If you use the homebutton you will come back to the homepage and the try-except code will  stop running
         st.stop()
 
-    # Check if EmployeeNumber column is present
+    # Checking if the EmployeeNumber column is present in the google sheets data from our API. 
+    # Although it is expected to always be present, this check is added for safety.
     if "EmployeeNumber" not in df.columns:
         st.error("The 'EmployeeNumber' column is missing from the Google Sheet Data.")
+        # If the user uses the homebutton you will come back to the homepage and this part of the code will stop running    
         if st.button("Homepage"):
             st.session_state.page = "Home"
         st.stop()
-
-    # Employee selection
+    # Creating a dropdown menu for the user to select an employee based on their EmployeeNumber.
+    # The options in the dropdown are taken from the "EmployeeNumber" column of the DataFrame. .unique makes sure that there is only one valid value. 
+    # The selected value is stored in the variable "employee_number" for further processing.
+    # Checking if the EmployeeNumber column is present in the google sheets data from our API. 
+    # The method.unique() makes sure that the dropdown contains only unique employee numbers.
     employee_number = st.selectbox("Choose Employee (EmployeeNumber)", df["EmployeeNumber"].unique())
 
     # Filter data for selected employee
