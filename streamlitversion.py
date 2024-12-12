@@ -417,7 +417,7 @@ elif st.session_state.page == "Employee Report":
     # Creating a dropdown menu for the user to select an employee based on their EmployeeNumber.
     # The options in the dropdown are taken from the "EmployeeNumber" column of the DataFrame.
     # The selected value is stored in the variable "employee_number" for further processing.
-    # The method.unique() makes sure that the dropdown contains only unique employee numbers.
+    # The method .unique() makes sure that the dropdown contains only unique employee numbers.
     employee_number = st.selectbox("Choose Employee (EmployeeNumber)", df["EmployeeNumber"].unique())
 
     # Filter data for selected employee from the user and using the selected employee data for the dataframe
@@ -434,6 +434,7 @@ elif st.session_state.page == "Employee Report":
     employee_data = employee_data.iloc[0]
 
     #Defining the function used for the report
+    # This function is responsible for creating a personalized report for an employee based on the provided data
     def generate_report(employee):
         # Build the prompt for the OpenAI API ChatGPT connection, while only using the given data
         prompt = (
@@ -487,6 +488,7 @@ elif st.session_state.page == "Employee Report":
             return None
 
     # Defines a function to create a PDF report for an employee
+    # This function generates a PDF document containing a formatted employee report using the FPDF library
     def create_pdf(report, employee):
         # Creating a new PDF document using the FPDF library assigning, source https://www.youtube.com/watch?v=q70xzDG6nls&list=PLjNQtX45f0dR9K2sMJ5ad9wVjqslNBIC0
         # This line creates a new instance of the FPDF class from the fpdf library, which represents a blank PDF document. The instance is assigned to the variable 'pdf'
