@@ -212,28 +212,38 @@ elif st.session_state.page == "Machine Learning":
     user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
     user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
 
-    # Creating a data from for the user input of the working years and the job level
+    # Creating a DataFrame for the user input of the working years and the job level via pandas
+    # The Total Working and the Job Level are the columns and the user inputs are the rows
     user_input = pd.DataFrame({'TotalWorkingYears': [user_working_years], 'JobLevel': [user_job_level]})
-    # ...
+    # The trained model is finally used to predict the Monthly income with the user input values
+    # The method .predict does always an Array even if there is just one prediction => [0] ensures that the first and in this case only value will be taken
     predicted_income = model.predict(user_input)[0]
     # Showing the predicet Monthly income in $ with two decimal places
     st.write(f"Predicted Monthly Income: $ *{predicted_income:.2f}*")
-    # Visualizing the prediction with a scatterplot 
     # Creating a figure and axis with the sizes 10x6 for a good Overview
+    # fig represent the entire figure and ax represents the specific subplot area within the same figure
     fig, ax = plt.subplots(figsize=(10, 6))
-    # ...
+    # Creating a scatterplot on the ax from above
+    # X-axis represents the total working years from the test data
+    # y-axis represents the prediction of the monthly income
+    # With virdis a clormap is provided and represents the Joblevels in different colors
+    # Virdis is easy to use compared to define our own colors
+    # S is the point size and alpha the transperancy
     scatter = ax.scatter(X_test['TotalWorkingYears'], y_pred, c=X_test['JobLevel'], cmap='viridis', s=50, alpha=0.8)
     # Labeling the x and y-axis 
     ax.set_xlabel("Total Working Years")
-    #...
     ax.set_ylabel("Predicted Monthly Income")
-    #...
-    ax.set_title("Predicted Monthly Income vs. Total Working Years (Color: Job Level)")
-    #...
+    # Title for scatterplot above the x-axis of the scatterplot 
+    ax.set_title("Predicted Monthly Income vs. Total Working Years and Job Level")
+    # Adding a color bar next to the scatterplot to show the job level with colormaping
     cbar = plt.colorbar(scatter, ax=ax)
+    # Labeling the colorbar with Job Level 
     cbar.set_label("Job Level")
+    # Showing a dot on the scatterplot with x-axis User input working years and y axis predicted monthly income 
+    # Color red size 100 and zorder of 5 so the dot is visible above the other dot
+    # Labeled as your input
     ax.scatter(user_working_years, predicted_income, color='red', s=100, label='Your Input', zorder=5)
-    ax.legend()
+    # Visualization of the scatterplot in streamlit
     st.pyplot(fig)
 
 # Backend Page (Data Management)
