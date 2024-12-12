@@ -9,9 +9,14 @@ from fpdf import FPDF
 import io
 
 # Define scopes
+# The 'scopes' variable defines the level of access the application has to Google Sheets and Drive.
+# These specific scopes allow the app to read and write data from Google Sheets and Drive, 
+# enabling secure, real-time interaction with HR-related datasets.
 scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
 # Authenticate using Streamlit secrets
+# This method uses a JSON configuration stored in Streamlit secrets for authentication.
+# It's a secure way to handle credentials, ensuring sensitive data is not hard-coded.
 credentials = Credentials.from_service_account_info(
     st.secrets["google_credentials"],
     scopes=scopes
@@ -19,16 +24,21 @@ credentials = Credentials.from_service_account_info(
 client = gspread.authorize(credentials)
 
 # Access Google Sheet
+# The application connects to a specific Google Sheet ('Dataset') containing HR data.
+# This sheet acts as a central storage point for the data, ensuring accessibility and scalability.
 sheet = client.open("Dataset").sheet1
 data = sheet.get_all_records()
-df = pd.DataFrame(data)
+df = pd.DataFrame(data)  # Converts the data into a Pandas DataFrame for easier manipulation and analysis.
 
 # Initialize session state for page tracking
+# Streamlit's session state is used to handle page navigation, ensuring a smooth and intuitive user experience.
 if "page" not in st.session_state:
     st.session_state.page = "Home"
 
 # Home Page
 if st.session_state.page == "Home":
+    # The Home page serves as an introduction and navigation hub for the application.
+    # It provides an overview of the application's features and guides users to specific sections.
     st.title("Welcome to the HR monitor!")
     st.write("This application provides you with in-depth analysis of your HR data in real time.")
     st.write("Choose a section to navigate to for different functionalities:")
@@ -38,6 +48,7 @@ if st.session_state.page == "Home":
     st.write("- **Employee Report:** Generate a professional report for a selected employee.")
 
     # Display navigation buttons under the explanation
+    # The buttons provide quick navigation to other sections of the application.
     st.write("### Navigate to:")
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     with col1:
@@ -53,16 +64,19 @@ if st.session_state.page == "Home":
         if st.button("Employee Report"):
             st.session_state.page = "Employee Report"
 
-
 # Dashboard Page
 elif st.session_state.page == "Dashboard":
+    # The Dashboard page provides detailed analysis of the HR dataset.
+    # It includes visualizations and statistical summaries, enabling HR teams to make informed decisions.
     st.title("Google Sheets Data Analysis")
 
-    # Display 'Homepage' button
+    # Button to navigate back to the Homepage.
+    # Simplifies navigation and improves user experience.
     if st.button("Homepage"):
         st.session_state.page = "Home"
 
-     # Income Statistics
+    # Income Statistics
+    # Basic statistical summaries are calculated to provide quick insights into the financial aspects of the workforce.
     st.subheader("Income Statistics")
     mean_income = df['MonthlyIncome'].mean()
     median_income = df['MonthlyIncome'].median()
@@ -71,6 +85,8 @@ elif st.session_state.page == "Dashboard":
     st.write(f"Median Monthly Income: ${median_income:.2f}")
     st.write(f"Standard Deviation of Monthly Income: ${std_income:.2f}")
 
+    # Multi-subplot visualizations for Age, Income, and Distance from Home.
+    # These visualizations help HR teams understand the distribution of key metrics.
     st.subheader("Multiple Subplots: Age, Income, and Distance from Home")
     fig, axs = plt.subplots(1, 3, figsize=(20, 6), sharey=False)
     sns.histplot(df['Age'], bins=20, kde=True, ax=axs[0], color='skyblue')
@@ -81,20 +97,25 @@ elif st.session_state.page == "Dashboard":
     axs[2].set_title('Distance from Home Distribution')
     st.pyplot(fig)
 
+    # Department, Gender, and Job Role Insights
+    # Pie charts, violin plots, and boxplots provide visual breakdowns of categorical data.
     st.subheader("Department, Gender, and Job Role Insights")
     fig, axs = plt.subplots(1, 3, figsize=(25, 8))
     
+    # Pie chart for department distribution.
     department_counts = df['Department'].value_counts()
     percentages = department_counts / department_counts.sum() * 100
     axs[0].pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
     axs[0].set_title('Employees by Department', fontsize=14)
     axs[0].axis('equal')
     
+    # Violin plot for age distribution by gender.
     sns.violinplot(x='Gender', y='Age', data=df, hue='Gender', split=True, ax=axs[1])
     axs[1].set_title('Age Distribution by Gender', fontsize=14)
     axs[1].set_xlabel('Gender')
     axs[1].set_ylabel('Age')
     
+    # Boxplot for monthly income by job role.
     sns.boxplot(y='JobRole', x='MonthlyIncome', data=df, ax=axs[2])
     axs[2].set_title('Monthly Income by Job Role', fontsize=14)
     axs[2].set_xlabel('Monthly Income')
@@ -104,6 +125,8 @@ elif st.session_state.page == "Dashboard":
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     st.pyplot(fig)
 
+    # Insights on Income, Age, and Department
+    # Density plots and scatter plots provide a deeper look into numerical relationships.
     st.subheader("Insights on Income, Age, and Department")
     fig, axs = plt.subplots(1, 3, figsize=(25, 8))
     
@@ -129,25 +152,8 @@ elif st.session_state.page == "Dashboard":
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     st.pyplot(fig)
 
-    st.subheader("Department and Business Travel Insights")
-    fig, axs = plt.subplots(1, 2, figsize=(20, 6))
-    
-    department_counts.plot(kind='bar', color='skyblue', edgecolor='black', ax=axs[0])
-    axs[0].set_title('Distribution of Employees by Department', fontsize=14)
-    axs[0].set_xlabel('Department')
-    axs[0].set_ylabel('Number of Employees')
-    axs[0].tick_params(axis='x', rotation=45)
-    
-    business_travel_counts = df['BusinessTravel'].value_counts()
-    business_travel_counts.plot(kind='bar', color='lightcoral', edgecolor='black', ax=axs[1])
-    axs[1].set_title('Business Travel Frequency', fontsize=14)
-    axs[1].set_xlabel('Business Travel Category')
-    axs[1].set_ylabel('Number of Employees')
-    axs[1].tick_params(axis='x', rotation=45)
-    
-    plt.tight_layout()
-    st.pyplot(fig)
-
+    # Joint plot for Age vs. Monthly Income
+    # Highlights the correlation between employee age and income levels.
     st.subheader("Joint Plot: Age vs. Monthly Income")
     fig = sns.jointplot(x='Age', y='MonthlyIncome', data=df, kind='reg', height=8, space=0.2)
     st.pyplot(fig)
