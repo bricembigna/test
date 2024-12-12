@@ -226,7 +226,7 @@ elif st.session_state.page == "Machine Learning":
     from sklearn.model_selection import train_test_split # for splitting up the data into Trainings- and Testdata
     from sklearn.linear_model import LinearRegression # The model, which is used for the regression
     from sklearn.metrics import mean_squared_error, r2_score # This library was used to check if the Multiple regression is valid. You could delete this part, but it was left in to show that we have checked the model for its validity 
-    
+    import numpy as np #for numerical calculations
 
     # Definition of the input for the regression total working years and job level
     X = df_ml[['TotalWorkingYears', 'JobLevel']]
