@@ -202,25 +202,28 @@ elif st.session_state.page == "Machine Learning":
     # Subheader for the MonthlyIncome prediction 
     st.subheader("Predict Monthly Income")
     # Userinput of working years and Joblevel with defined minimum and maximum value and pre selected values in the selection. The User can change the values in this range.
+    # Using number_input method for entering the values by the user
     user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
     user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
 
     # Creating a data from for the user input of the working years and the job level
     user_input = pd.DataFrame({'TotalWorkingYears': [user_working_years], 'JobLevel': [user_job_level]})
-    # .....
+    # ...
     predicted_income = model.predict(user_input)[0]
     # Showing the predicet Monthly income in $ with two decimal places
     st.write(f"Predicted Monthly Income: $ *{predicted_income:.2f}*")
     # Visualizing the prediction with a scatterplot 
     # Creating a figure and axis with the sizes 10x6 for a good Overview
     fig, ax = plt.subplots(figsize=(10, 6))
-    # 
+    # ...
     scatter = ax.scatter(X_test['TotalWorkingYears'], y_pred, c=X_test['JobLevel'], cmap='viridis', s=50, alpha=0.8)
     # Labeling the x and y-axis 
     ax.set_xlabel("Total Working Years")
-    
+    #...
     ax.set_ylabel("Predicted Monthly Income")
+    #...
     ax.set_title("Predicted Monthly Income vs. Total Working Years (Color: Job Level)")
+    #...
     cbar = plt.colorbar(scatter, ax=ax)
     cbar.set_label("Job Level")
     ax.scatter(user_working_years, predicted_income, color='red', s=100, label='Your Input', zorder=5)
