@@ -173,7 +173,6 @@ elif st.session_state.page == "Machine Learning":
         # 1. Dropna selects only the columns of the df
         # 2. Ensures that only rows will be used, which have all the values
         df_ml = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
-        
         # Key Error if any relevant column is missing, means Total Woriking years, Job Level, or Monthly Income
     except KeyError as e:
         # Shows the Missing columns
@@ -199,19 +198,17 @@ elif st.session_state.page == "Machine Learning":
     # With .fit the model "learns" from the data and produces the best fit plane
     # After this line of code the model is trained and the paramters are saved in the model
     model.fit(X_train, y_train)
-    
     # Use the trained model to make predictions with the test dataset (X_test)
     # It applies the learned parameters from above (X_train, y_train) to the input features in X_test to predict/calculate y_pred
     # This is the final step to predict the Monthly Income 
     y_pred = model.predict(X_test)
-
     # Subheader for the MonthlyIncome prediction 
     st.subheader("Predict Monthly Income")
+    
     # Userinput of working years and Joblevel with defined minimum and maximum value and pre selected values in the selection. The User can change the values in this range.
     # Using number_input method for entering the values by the user
     user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
     user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
-
     # Creating a DataFrame for the user input of the working years and the job level via pandas
     # The Total Working and the Job Level are the columns and the user inputs are the rows
     user_input = pd.DataFrame({'TotalWorkingYears': [user_working_years], 'JobLevel': [user_job_level]})
@@ -220,6 +217,7 @@ elif st.session_state.page == "Machine Learning":
     predicted_income = model.predict(user_input)[0]
     # Showing the predicet Monthly income in $ with two decimal places
     st.write(f"Predicted Monthly Income: $ *{predicted_income:.2f}*")
+    
     # Creating a figure and axis with the sizes 10x6 for a good Overview
     # fig represent the entire figure and ax represents the specific subplot area within the same figure
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -395,7 +393,6 @@ elif st.session_state.page == "Employee Report":
     st.title("Employee Report")
 
     # Loads the OpenAI API Key from the secrets in Streamlit 
-    # As source on how to implement open AI API: https://www.youtube.com/watch?v=YVFWBJ1WVF8
     try:
         openai.api_key = st.secrets["openai"]["api_key"]
     # If this is not possible it shows the error down below
