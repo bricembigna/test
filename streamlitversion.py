@@ -310,19 +310,21 @@ elif st.session_state.page == "Data Management":
     # Title for the data management page, emphasizing its purpose
     st.title("Data Input Manager")
 
-    # Define spreadsheet and worksheet details
+
+    # Defining spreadsheet and worksheet details
     # These variables ensure the application interacts with the correct Google Sheet and worksheet
     spreadsheet_name = "Dataset"
     worksheet = client.open(spreadsheet_name).sheet1
-    headers = worksheet.row_values(1)  # Retrieves the header row to identify column names
-    sheet_data = worksheet.get_all_values()  # Retrieves all data from the worksheet for manipulation
+    headers = worksheet.row_values(1)
+    sheet_data = worksheet.get_all_values()
+
 
     # Main Page Function
     # Acts as a hub for backend operations, offering options to add, update, or delete employee data
     def main_page():
         st.header("Main Page")
-        st.write("Choose an action:")
         # Navigational buttons to move between subpages or return to the homepage
+        st.write("Choose an action:")
         if st.button("Add New Employee Data"):
             st.session_state.Backend_subpage = "add_employee"
         if st.button("Change Employee Data"):
@@ -338,28 +340,28 @@ elif st.session_state.page == "Data Management":
         st.header("Add New Employee Data")
         st.write("Enter details for the new employee:")
 
-        # Calculate the next Employee Number by finding the max from existing numbers
+        # This section allows to calculate the next Employee Number by finding the max from the max from existing numbers
         employee_numbers = [
             int(row[headers.index("EmployeeNumber")])
-            for row in sheet_data[1:]  # Skip header row
+            for row in sheet_data[1:]
             if row[headers.index("EmployeeNumber")].isdigit()
         ]
         next_employee_number = max(employee_numbers) + 1
 
-        # Use a form for structured data input
+        # This section uses a form for structured data input
         with st.form("add_employee_form"):
             # Capture employee details through various input widgets
             # Widgets are chosen based on data type (e.g., `selectbox` for categories, `slider` for ranges)
-            age = st.selectbox("Age", list(range(18, 63)))  # Ensure employees are within working age
-            attrition = st.selectbox("Attrition", ["Yes", "No"])  # Binary option for leaving the company
+            age = st.selectbox("Age", list(range(18, 63)))
+            attrition = st.selectbox("Attrition", ["Yes", "No"])
             business_travel = st.selectbox("Business Travel", ["Travel_Rarely", "Travel_Frequently", "Non-Travel"])
             daily_rate = st.number_input("Daily Rate", min_value=0, step=1)
             department = st.selectbox("Department", ["Sales", "Research & Development", "Human Resources"])
             distance_from_home = st.number_input("Distance from Home (km)", min_value=0, step=1)
             education = st.slider("Education level", min_value=1, max_value=5)
-            education_field = st.selectbox("Education Field", ["Human Resources", "Life Sciences", "Marketing", "Medical", "Technical Degree", "Other"])
+            education_field = st.selectbox("Education Field", [ "Human Resources", "Life Sciences", "Marketing", "Medical", "Technical Degree", "Other"])
             employee_count = st.number_input("Employee Count", min_value=1, step=1)
-            employee_number = next_employee_number  # Automatically generated
+            employee_number = next_employee_number
             environment_satisfaction = st.slider("Environment Satisfaction", min_value=1, max_value=4)
             gender = st.selectbox("Gender", ["Male", "Female", "Other"])
             hourly_rate = st.number_input("Hourly Rate", min_value=0, step=1)
@@ -397,7 +399,7 @@ elif st.session_state.page == "Data Management":
                     total_working_years, training_times_last_year, work_life_balance, years_at_company,
                     years_in_current_role, years_since_last_promotion, years_with_curr_manager
                 ]
-                worksheet.append_row(new_employee)  # Appends new employee data to the worksheet
+                worksheet.append_row(new_employee)
                 st.success(f"Employee added successfully with Employee Number {employee_number}!")
 
         # Navigation buttons to return to the main page or homepage
@@ -417,8 +419,10 @@ elif st.session_state.page == "Data Management":
         selected_emp = st.selectbox("Select Employee Number", employee_numbers)
 
         if selected_emp:
-            emp_index = employee_numbers.index(selected_emp) + 1  # Locate the employee's row
-            current_data = sheet_data[emp_index]  # Fetch current data for the selected employee
+            # Locate the employee's row
+            emp_index = employee_numbers.index(selected_emp) + 1
+            # Fetch current data for the selected employee
+            current_data = sheet_data[emp_index]
 
             with st.form("change_employee_form"):
                 # Allow users to edit employee details by pre-filling current values
@@ -427,7 +431,8 @@ elif st.session_state.page == "Data Management":
                     for i in range(len(headers))
                 ]
                 if st.form_submit_button("Update"):
-                    worksheet.update(f"A{emp_index + 1}", [updated_employee])  # Update the row with new data
+                    # Update the row with new data
+                    worksheet.update(f"A{emp_index + 1}", [updated_employee])
                     st.success("Employee data updated successfully!")
 
         # Navigation buttons to return to the main page or homepage
@@ -435,6 +440,7 @@ elif st.session_state.page == "Data Management":
             st.session_state.Backend_subpage = "main"
         if st.button("Homepage"):
             st.session_state.page = "Home"
+
 
     # Delete Employee Page Function
     # Allows users to remove an employee's data from the dataset
@@ -447,9 +453,11 @@ elif st.session_state.page == "Data Management":
         selected_emp = st.selectbox("Select Employee Number to Delete", employee_numbers)
 
         if selected_emp:
-            emp_index = employee_numbers.index(selected_emp) + 1  # Locate the employee's row
+            # Locate the employee's row
+            emp_index = employee_numbers.index(selected_emp) + 1
             if st.button("Delete Employee"):
-                worksheet.delete_rows(emp_index + 1)  # Delete the row from the worksheet
+                # Delete the row from the worksheet
+                worksheet.delete_rows(emp_index + 1)
                 st.success(f"Employee {selected_emp} deleted successfully!")
 
         # Navigation buttons to return to the main page or homepage
@@ -458,9 +466,11 @@ elif st.session_state.page == "Data Management":
         if st.button("Homepage"):
             st.session_state.page = "Home"
 
+
     # Manage navigation between subpages for adding, updating, or deleting data
     if "Backend_subpage" not in st.session_state:
         st.session_state.Backend_subpage = "main"
+
 
     # Render the appropriate subpage based on user selection
     if st.session_state.Backend_subpage == "main":
