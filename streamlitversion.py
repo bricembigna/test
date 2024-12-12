@@ -85,7 +85,7 @@ if st.session_state.page == "Home":
     st.write("This application provides you with in-depth analysis of your HR data in real time.")
     st.write("Choose a section to navigate to for different functionalities:")
     st.write("- **Dashboard:** Explore an interactive HR dashboard offering comprehensive insights into your workforce, helping you make data-driven decisions.")
-    st.write("- **Machine Learning:** Harness the power of AI to predict employee's income.")
+    st.write("- **Machine Learning:** Harness the power of AI to predict employees' income.")
     st.write("- **Data Management:** Efficiently manage employee records by adding, editing, or deleting information with ease.")
     st.write("- **Employee Report:** Generate a professional report for a selected employee.")
 
