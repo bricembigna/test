@@ -163,10 +163,14 @@ elif st.session_state.page == "Machine Learning":
 
     # Trying to extract the necessary and relevant Data from the DataFrame
     try:
-        # Relevant columns needed for the regression
+        # Relevant columns needed for the regression via Dropna
+        # 1. Dropna selects only the columns of the df
+        # 2. Ensures that only rows will be used, which have all the values
         df_ml = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
-        # Error if the relevant columns are missing
+        
+        # Key Error if any relevant column is missing, means Total Woriking years, Job Level, or Monthly Income
     except KeyError as e:
+        # Shows the Missing columns
         st.error(f"Missing columns: {e}")
         # If you use the homebutton you will come back to the homepage and the currently executed code will  stop running
         st.stop()
@@ -179,22 +183,25 @@ elif st.session_state.page == "Machine Learning":
 
     # Definition of the input for the regression total working years and job level
     X = df_ml[['TotalWorkingYears', 'JobLevel']]
-    # Definition of the outputfor the regression Monthly Income
+    # Definition of the output for the regression Monthly Income
     y = df_ml['MonthlyIncome']
 
     # Splitting up the Traings- and Testdata, while having (automatically, since Tesdata is 30%) 70% Trainings data and 30% Testdata. The random_state ensures that reproducibility, by setting a fixed seed for the random number generator
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-    # Initializing and training the model with our input and output data
+    # Initializing the model 
     model = LinearRegression()
+    # With .fit the model "learns" from the data and produces the best fit plane
+    # After this line of code the model is trained and the paramters are saved in the model
     model.fit(X_train, y_train)
     
-    # Use the trained model to make predictions on the test dataset (X_test)
-    # ......
+    # Use the trained model to make predictions with the test dataset (X_test)
+    # It applies the learned parameters from above (X_train, y_train) to the input features in X_test to predict/calculate y_pred
+    # This is the final step to predict the Monthly Income 
     y_pred = model.predict(X_test)
 
     # Subheader for the MonthlyIncome prediction 
     st.subheader("Predict Monthly Income")
-    # Userinput of working years and Joblevel with defined minimum and maximum value and pre defined values in the selection, which the user can change
+    # Userinput of working years and Joblevel with defined minimum and maximum value and pre selected values in the selection. The User can change the values in this range.
     user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
     user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
 
