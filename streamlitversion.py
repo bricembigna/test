@@ -106,6 +106,11 @@ if st.session_state.page == "Home":
         if st.button("Employee Report"):
             st.session_state.page = "Employee Report"
 
+
+
+
+
+########################################### Dashboard Page ###########################################
 # Dashboard Page
 elif st.session_state.page == "Dashboard":
     # The Dashboard page provides detailed analysis of the HR dataset.
@@ -201,6 +206,15 @@ elif st.session_state.page == "Dashboard":
     st.pyplot(fig)
 
 
+
+
+########################################### ML Page ###########################################
+
+
+
+
+
+
 # Machine Learning Page and title 
 elif st.session_state.page == "Machine Learning":
     st.title("Machine Learning")
@@ -286,63 +300,54 @@ elif st.session_state.page == "Machine Learning":
     # Visualization of the scatterplot in streamlit
     st.pyplot(fig)
 
+
+
+########################################### Backend Page ###########################################
+
+
 # Backend Page (Data Management)
 elif st.session_state.page == "Data Management":
-    # The Data Management page is the backend interface where HR staff can manage employee records.
-    # It allows for three core operations: adding new employees, updating existing records, and deleting employees.
-    # This ensures that the HR database is kept accurate and up-to-date.
+    st.title("Data Input Manager")
 
-    st.title("Data Input Manager")  # Title clearly indicates the purpose of the page.
-
-    # Establishes a connection to the Google Sheets file serving as the central HR database.
     spreadsheet_name = "Dataset"
-    worksheet = client.open(spreadsheet_name).sheet1  # Access the first worksheet of the Google Sheet.
-    headers = worksheet.row_values(1)  # Extracts column headers for validation and data consistency.
-    sheet_data = worksheet.get_all_values()  # Retrieves all data, ensuring the backend always operates on the latest records.
+    worksheet = client.open(spreadsheet_name).sheet1
+    headers = worksheet.row_values(1)
+    sheet_data = worksheet.get_all_values()
 
-    # This is the main navigation page for the backend, guiding HR staff to specific operations.
     def main_page():
-        st.header("Main Page")  # Clear header for the main navigation interface.
-        st.write("Choose an action:")  # Instruction for HR staff to select an operation.
-
-        # Buttons allow the user to select an operation.
-        # These direct users to dedicated subpages for adding, modifying, or deleting employee data.
+        st.header("Main Page")
+        st.write("Choose an action:")
         if st.button("Add New Employee Data"):
-            st.session_state.Backend_subpage = "add_employee"  # Navigates to the 'Add Employee' subpage.
+            st.session_state.Backend_subpage = "add_employee"
         if st.button("Change Employee Data"):
-            st.session_state.Backend_subpage = "change_employee"  # Navigates to the 'Change Employee' subpage.
+            st.session_state.Backend_subpage = "change_employee"
         if st.button("Delete Employee Data"):
-            st.session_state.Backend_subpage = "delete_employee"  # Navigates to the 'Delete Employee' subpage.
+            st.session_state.Backend_subpage = "delete_employee"
         if st.button("Homepage"):
-            st.session_state.page = "Home"  # Returns to the application's home page.
+            st.session_state.page = "Home"
 
-    # This subpage allows HR staff to add new employee data.
     def add_employee_page():
-        st.header("Add New Employee Data")  # Header emphasizes the purpose of this page.
-        st.write("Enter details for the new employee:")  # Instruction for filling out the form.
+        st.header("Add New Employee Data")
+        st.write("Enter details for the new employee:")
 
-        # Automatically calculates the next available EmployeeNumber by finding the maximum number in the dataset.
         employee_numbers = [
             int(row[headers.index("EmployeeNumber")])
-            for row in sheet_data[1:]  # Skip the header row.
+            for row in sheet_data[1:]
             if row[headers.index("EmployeeNumber")].isdigit()
         ]
-        next_employee_number = max(employee_numbers) + 1  # Ensures unique EmployeeNumber assignment.
+        next_employee_number = max(employee_numbers) + 1
 
-        # Form to collect comprehensive data for the new employee.
         with st.form("add_employee_form"):
-            # These fields capture all necessary attributes for an employee, ensuring consistency with the dataset structure.
-            # Options such as dropdowns and sliders reduce the risk of input errors.
-            age = st.selectbox("Age", list(range(18, 63)))  # Restricts age to working-age individuals.
-            attrition = st.selectbox("Attrition", ["Yes", "No"])  # Captures whether the employee has left the company.
+            age = st.selectbox("Age", list(range(18, 63)))
+            attrition = st.selectbox("Attrition", ["Yes", "No"])
             business_travel = st.selectbox("Business Travel", ["Travel_Rarely", "Travel_Frequently", "Non-Travel"])
             daily_rate = st.number_input("Daily Rate", min_value=0, step=1)
             department = st.selectbox("Department", ["Sales", "Research & Development", "Human Resources"])
             distance_from_home = st.number_input("Distance from Home (km)", min_value=0, step=1)
             education = st.slider("Education level", min_value=1, max_value=5)
-            education_field = st.selectbox("Education Field", ["Human Resources", "Life Sciences", "Marketing", "Medical", "Technical Degree", "Other"])
+            education_field = st.selectbox("Education Field", [ "Human Resources", "Life Sciences", "Marketing", "Medical", "Technical Degree", "Other"])
             employee_count = st.number_input("Employee Count", min_value=1, step=1)
-            employee_number = next_employee_number  # Automatically assigned EmployeeNumber.
+            employee_number = next_employee_number
             environment_satisfaction = st.slider("Environment Satisfaction", min_value=1, max_value=4)
             gender = st.selectbox("Gender", ["Male", "Female", "Other"])
             hourly_rate = st.number_input("Hourly Rate", min_value=0, step=1)
@@ -369,7 +374,6 @@ elif st.session_state.page == "Data Management":
             years_since_last_promotion = st.number_input("Years Since Last Promotion", min_value=0, step=1)
             years_with_curr_manager = st.number_input("Years with Current Manager", min_value=0, step=1)
 
-            # Submit the form and append the new employee record to Google Sheets.
             if st.form_submit_button("Submit"):
                 new_employee = [
                     age, attrition, business_travel, daily_rate, department, distance_from_home,
@@ -380,26 +384,83 @@ elif st.session_state.page == "Data Management":
                     total_working_years, training_times_last_year, work_life_balance, years_at_company,
                     years_in_current_role, years_since_last_promotion, years_with_curr_manager
                 ]
-                worksheet.append_row(new_employee)  # Adds the record to the Google Sheet.
+                worksheet.append_row(new_employee)
                 st.success(f"Employee added successfully with Employee Number {employee_number}!")
 
-        # Navigation buttons for returning to the main page or homepage.
         if st.button("Previous Page"):
             st.session_state.Backend_subpage = "main"
         if st.button("Homepage"):
             st.session_state.page = "Home"
 
-    # Additional subpages (Change and Delete Employee) follow similar patterns and could be documented in the same style.
+    def change_employee_page():
+        st.header("Change Employee Data")
+        employee_numbers = [
+            row[headers.index("EmployeeNumber")] for row in sheet_data[1:]
+        ]
+        selected_emp = st.selectbox("Select Employee Number", employee_numbers)
 
-    # Tracks which subpage the user is currently on.
+        if selected_emp:
+            emp_index = employee_numbers.index(selected_emp) + 1
+            current_data = sheet_data[emp_index]
+
+            with st.form("change_employee_form"):
+                updated_employee = [
+                    st.text_input(headers[i], value=current_data[i])
+                    for i in range(len(headers))
+                ]
+                if st.form_submit_button("Update"):
+                    worksheet.update(f"A{emp_index + 1}", [updated_employee])
+                    st.success("Employee data updated successfully!")
+
+        if st.button("Previous Page"):
+            st.session_state.Backend_subpage = "main"
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
+
+
+    def delete_employee_page():
+        st.header("Delete Employee Data")
+        employee_numbers = [
+            row[headers.index("EmployeeNumber")] for row in sheet_data[1:]
+        ]
+        selected_emp = st.selectbox("Select Employee Number to Delete", employee_numbers)
+
+        if selected_emp:
+            emp_index = employee_numbers.index(selected_emp) + 1
+            if st.button("Delete Employee"):
+                worksheet.delete_rows(emp_index + 1)
+                st.success(f"Employee {selected_emp} deleted successfully!")
+
+        if st.button("Previous Page"):
+            st.session_state.Backend_subpage = "main"
+        if st.button("Homepage"):
+            st.session_state.page = "Home"
+
+
     if "Backend_subpage" not in st.session_state:
         st.session_state.Backend_subpage = "main"
 
-    # Directs the user to the appropriate subpage based on their selection.
     if st.session_state.Backend_subpage == "main":
         main_page()
     elif st.session_state.Backend_subpage == "add_employee":
         add_employee_page()
+    elif st.session_state.Backend_subpage == "change_employee":
+        change_employee_page()
+    elif st.session_state.Backend_subpage == "delete_employee":
+        delete_employee_page()
+
+
+
+
+
+
+########################################### PDF Report through GPT ###########################################
+
+
+
+
+
+
 # Employee Report Page with title
 elif st.session_state.page == "Employee Report":
     st.title("Employee Report")
