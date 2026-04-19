@@ -1,41 +1,4 @@
 ###################################################################################################################################
-# 
-# Dear Marc,
-# 
-# We hope this message finds you well. Please find below our completed assignment for the HR Monitoring Web Application. 
-# This project was a collaborative effort, and we have worked diligently to ensure it meets all the required criteria.
-# 
-# The assignment was completed by the following team members:
-### - Felix Guntrum
-### - Simon Kellmann
-### - Brice Mbigna Mbakop (You)
-### - Robin Schmid
-### - Simon Rummler
-# 
-# We have followed all the guidelines provided and added detailed comments throughout the code to explain its functionality, 
-# features, and how they align with the project requirements. Additionally, the submission includes:
-### - The full source code for the HR Monitoring Web Application
-### - A link to the hosted front-end interface for testing and demonstration
-# 
-# If there are any issues or further clarifications needed, please do not hesitate to contact us.
-# 
-# Thank you for the opportunity to work on this project. We look forward to your feedback.
-# 
-# Kind regards,  
-# Brice Mbigna Mbakop (on behalf of the team)  
-
-
-###################################################################################################################################
-################################################     Lint to Front-end     ########################################################
-###################################################################################################################################
-
-
-
-# https://helloworld-edbkbcvpdpksujjwdpf287.streamlit.app
-
-
-
-###################################################################################################################################
 ##################################################     Source Code      ###########################################################
 ###################################################################################################################################
 
@@ -133,7 +96,7 @@ if st.session_state.page == "Home":
             st.session_state.page = "Data Management"
     with col4:
         if st.button("Employee Report"):
-            st.session_state.page = "Employee Report"
+            st.session_state.page = "Division Report"
 
 
 
@@ -241,99 +204,17 @@ elif st.session_state.page == "Dashboard":
     ax.set_title("Age Distribution Split by Gender")
     
     st.pyplot(fig)
+
+
 ########################################### ML Page ###########################################
-
-
 
 
 
 
 # Machine Learning Page and title 
 elif st.session_state.page == "Machine Learning":
-    st.title("Machine Learning")
-    # Button for the homepage
-    if st.button("Homepage"):
-        # Updates the website back to home
-        st.session_state.page = "Home"
-
-    # Trying to extract the necessary and relevant Data from the DataFrame
-    try:
-        # Relevant columns needed for the regression via Dropna
-        # 1. Dropna selects only the columns of the df
-        # 2. Ensures that only rows will be used, which have all the values
-        df_ml = df[['TotalWorkingYears', 'JobLevel', 'MonthlyIncome']].dropna()
-        # Key Error if any relevant column is missing, means Total Woriking years, Job Level, or Monthly Income
-    except KeyError as e:
-        # Shows the Missing columns
-        st.error(f"Missing columns: {e}")
-        # If you use the homebutton you will come back to the homepage and the currently executed code will  stop running
-        st.stop()
-        
-    # Importing the necessary libraries for the ML 
-    from sklearn.model_selection import train_test_split # for splitting up the data into Trainings- and Testdata
-    from sklearn.linear_model import LinearRegression # The model, which is used for the regression
-    from sklearn.metrics import mean_squared_error, r2_score # This library was used to check if the Multiple regression is valid. You could delete this part, but it was left in to show that we have checked the model for its validity 
-    import numpy as np #for numerical calculations
-
-    # Definition of the input for the regression total working years and job level
-    X = df_ml[['TotalWorkingYears', 'JobLevel']]
-    # Definition of the output for the regression Monthly Income
-    y = df_ml['MonthlyIncome']
-
-    # Splitting up the Traings- and Testdata, while having (automatically, since Tesdata is 30%) 70% Trainings data and 30% Testdata. The random_state ensures that reproducibility, by setting a fixed seed for the random number generator
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-    # Initializing the model 
-    model = LinearRegression()
-    # With .fit the model "learns" from the data and produces the best fit plane
-    # After this line of code the model is trained and the paramters are saved in the model
-    model.fit(X_train, y_train)
-    # Use the trained model to make predictions with the test dataset (X_test)
-    # It applies the learned parameters from above (X_train, y_train) to the input features in X_test to predict/calculate y_pred
-    # This is the final step to predict the Monthly Income 
-    y_pred = model.predict(X_test)
-    # Subheader for the MonthlyIncome prediction 
-    st.subheader("Predict Monthly Income")
-    
-    # Userinput of working years and Joblevel with defined minimum and maximum value and pre selected values in the selection. The User can change the values in this range.
-    # Using number_input method for entering the values by the user
-    user_working_years = st.number_input("Enter Total Working Years:", min_value=0, max_value=40, step=1, value=10)
-    user_job_level = st.number_input("Enter Job Level:", min_value=1, max_value=5, step=1, value=2)
-    # Creating a DataFrame for the user input of the working years and the job level via pandas
-    # The Total Working and the Job Level are the columns and the user inputs are the rows
-    user_input = pd.DataFrame({'TotalWorkingYears': [user_working_years], 'JobLevel': [user_job_level]})
-    # The trained model is finally used to predict the Monthly income with the user input values
-    # The method .predict does always an Array even if there is just one prediction => [0] ensures that the first and in this case only value will be taken
-    predicted_income = model.predict(user_input)[0]
-    # Showing the predicet Monthly income in $ with two decimal places
-    st.write(f"Predicted Monthly Income: $ *{predicted_income:.2f}*")
-    
-    # Creating a figure and axis with the sizes 10x6 for a good Overview
-    # fig represent the entire figure and ax represents the specific subplot area within the same figure
-    fig, ax = plt.subplots(figsize=(10, 6))
-    # Creating a scatterplot on the ax from above
-    # X-axis represents the total working years from the test data
-    # y-axis represents the prediction of the monthly income
-    # With virdis a clormap is provided and represents the Joblevels in different colors
-    # Virdis is easy to use compared to define our own colors
-    # S is the point size and alpha the transperancy
-    scatter = ax.scatter(X_test['TotalWorkingYears'], y_pred, c=X_test['JobLevel'], cmap='viridis', s=50, alpha=0.8)
-    # Labeling the x and y-axis 
-    ax.set_xlabel("Total Working Years")
-    ax.set_ylabel("Predicted Monthly Income")
-    # Title for scatterplot above the x-axis of the scatterplot 
-    ax.set_title("Predicted Monthly Income vs. Total Working Years and Job Level")
-    # Adding a color bar next to the scatterplot to show the job level with colormaping
-    cbar = plt.colorbar(scatter, ax=ax)
-    # Labeling the colorbar with Job Level 
-    cbar.set_label("Job Level")
-    # Showing a dot on the scatterplot with x-axis User input working years and y axis predicted monthly income 
-    # Color red size 100 and zorder of 5 so the dot is visible above the other dot
-    # Labeled as your input
-    ax.scatter(user_working_years, predicted_income, color='red', s=100, label='Your Input', zorder=5)
-    # Visualization of the scatterplot in streamlit
-    st.pyplot(fig)
-
-
+    st.title("Machine Learning (page under construction)")
+   
 
 ########################################### Data Management Page ###########################################
 
@@ -341,7 +222,7 @@ elif st.session_state.page == "Machine Learning":
 # Backend Page (Data Management)
 elif st.session_state.page == "Data Management":
     # Title for the data management page, emphasizing its purpose
-    st.title("Data Input Manager")
+    st.title("Data Input Manager (page udner construction)")
 
 
     # Defining spreadsheet and worksheet details
