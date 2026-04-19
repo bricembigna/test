@@ -81,7 +81,7 @@ if "page" not in st.session_state:
 if st.session_state.page == "Home":
     # The Home page serves as an introduction and navigation hub for the application.
     # It provides an overview of the application's features and guides users to specific sections.
-    st.title("Welcome to the HR monitor!")
+    st.title("Welcme to the HR monitor!")
     st.write("This application provides you with in-depth analysis of your HR data in real time.")
     st.write("Choose a section to navigate to for different functionalities:")
     st.write("- **Dashboard:** Explore an interactive HR dashboard offering comprehensive insights into your workforce, helping you make data-driven decisions.")
