@@ -29,7 +29,7 @@ credentials = Credentials.from_service_account_info(
 client = gspread.authorize(credentials)
 
 # Access Google Sheet
-# The application connects to a specific Google Sheet ('Dataset') containing HR data.
+# The application connects to a specific Google Sheet ('Dataset') containing HR data
 # This sheet acts as a central storage point for the data, ensuring accessibility and scalability.
 sheet = client.open("Dataset").sheet1
 data = sheet.get_all_records()
