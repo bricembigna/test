@@ -79,15 +79,44 @@ if "page" not in st.session_state:
 
 # Home Page
 if st.session_state.page == "Home":
-    # The Home page serves as an introduction and navigation hub for the application.
-    # It provides an overview of the application's features and guides users to specific sections.
-    st.title("Welcme to the HR monitor!")
-    st.write("This application provides you with in-depth analysis of your HR data in real time.")
-    st.write("Choose a section to navigate to for different functionalities:")
-    st.write("- **Dashboard:** Explore an interactive HR dashboard offering comprehensive insights into your workforce, helping you make data-driven decisions.")
-    st.write("- **Machine Learning:** Harness the power of AI to predict employees' income.")
-    st.write("- **Data Management:** Efficiently manage employee records by adding, editing, or deleting information with ease.")
-    st.write("- **Employee Report:** Generate a professional report for a selected employee.")
+    # The Home page introduces the football analytics application
+    # and serves as the main navigation hub.
+
+    st.title("⚽ Football Club Performance Monitor")
+
+    st.write(
+        "This application provides a comprehensive overview of player performance, "
+        "training engagement, and squad composition across all divisions of the club."
+    )
+
+    st.write("### Navigate through the application:")
+    
+    st.write(
+        "- **Dashboard:** Explore interactive visualizations of player data, including performance metrics, "
+        "attendance trends, positional analysis, and injury distribution."
+    )
+
+    st.write(
+        "- **Machine Learning:** Use predictive models to estimate player performance based on key indicators "
+        "such as training attendance, match involvement, and physical condition."
+    )
+
+    st.write(
+        "- **Data Management:** Manage player records efficiently by adding, updating, or removing data "
+        "across all divisions."
+    )
+
+    st.write(
+        "- **Player Report:** Generate a detailed report for individual players, including performance, "
+        "fitness, and development insights."
+    )
+
+    st.write("---")
+
+    st.write(
+        "This tool is designed to support coaches and club managers in making informed, data-driven decisions "
+        "to optimize player development and team performance."
+    )
 
     # Display navigation buttons under the explanation
     # The buttons provide quick navigation to other sections of the application.
