@@ -223,14 +223,24 @@ elif st.session_state.page == "Dashboard":
     # -------------------------------
     # Violin Plot Age Distribution by Gender
     # -------------------------------
-
-    st.subheader("Age Distribution by Gender")
-
+    st.subheader("Age Distribution (Male vs Female)")
+    
     fig, ax = plt.subplots()
-    sns.violinplot(x="Gender", y="Age", data=df, ax=ax)
-    ax.set_title("Age Distribution (Male vs Female)")
+    
+    sns.violinplot(
+        x=["All"] * len(df),   # forces a single category
+        y="Age",
+        hue="Gender",
+        data=df,
+        split=True,
+        inner="quartile",
+        ax=ax
+    )
+    
+    ax.set_xlabel("")
+    ax.set_title("Age Distribution Split by Gender")
+    
     st.pyplot(fig)
-
 ########################################### ML Page ###########################################
 
 
