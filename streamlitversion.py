@@ -95,8 +95,8 @@ if st.session_state.page == "Home":
         if st.button("Data Management"):
             st.session_state.page = "Data Management"
     with col4:
-        if st.button("Employee Report"):
-            st.session_state.page = "Division Report"
+        if st.button("Division Report"):
+            st.session_state.page = "Employee Report"
 
 
 
