@@ -220,6 +220,17 @@ elif st.session_state.page == "Dashboard":
     ax.set_title("Injury Status")
     st.pyplot(fig)
 
+    # -------------------------------
+    # Violin Plot Age Distribution by Gender
+    # -------------------------------
+
+    st.subheader("Age Distribution by Gender")
+
+    fig, ax = plt.subplots()
+    sns.violinplot(x="Gender", y="Age", data=df, ax=ax)
+    ax.set_title("Age Distribution (Male vs Female)")
+    st.pyplot(fig)
+
 ########################################### ML Page ###########################################
 
 
