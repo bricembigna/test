@@ -28,7 +28,7 @@ if "page" not in st.session_state:
 
 # Home Page
 if st.session_state.page == "Home":
-    st.title("Welcme to the HR monitor!")
+    st.title("WelcOme to the HR monitor!")
     st.write("This application provides you with in-depth analysis of your HR data in real time.")
     st.write("Choose a section to navigate to for different functionalities:")
     st.write("- **Dashboard:** Check your HR dashboards.")
