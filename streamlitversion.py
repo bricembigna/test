@@ -141,99 +141,84 @@ if st.session_state.page == "Home":
 
 ########################################### Dashboard Page ###########################################
 # Dashboard Page
-elif st.session_state.page == "Dashboard":
-    # The Dashboard page provides detailed analysis of the HR dataset.
-    # It includes visualizations and statistical summaries, enabling HR teams to make informed decisions.
-    st.title("Google Sheets Data Analysis")
 
-    # Button to navigate back to the Homepage.
-    # Simplifies navigation and improves user experience.
+
+elif st.session_state.page == "Dashboard":
+
+    st.title("⚽ Player Performance Dashboard")
+
     if st.button("Homepage"):
         st.session_state.page = "Home"
 
-    # Income Statistics
-    # Basic statistical summaries are calculated to provide quick insights into the financial aspects of the workforce.
-    st.subheader("Income Statistics")
-    mean_income = df['MonthlyIncome'].mean()
-    median_income = df['MonthlyIncome'].median()
-    std_income = df['MonthlyIncome'].std()
-    st.write(f"Mean Monthly Income: ${mean_income:.2f}")
-    st.write(f"Median Monthly Income: ${median_income:.2f}")
-    st.write(f"Standard Deviation of Monthly Income: ${std_income:.2f}")
+    # -------------------------------
+    # Key Metrics
+    # -------------------------------
+    st.subheader("Club Overview")
 
-    # Multi-subplot visualizations for Age, Income, and Distance from Home.
-    # These visualizations help HR teams understand the distribution of key metrics.
-    st.subheader("Multiple Subplots: Age, Income, and Distance from Home")
-    fig, axs = plt.subplots(1, 3, figsize=(20, 6), sharey=False)
-    sns.histplot(df['Age'], bins=20, kde=True, ax=axs[0], color='skyblue')
-    axs[0].set_title('Age Distribution')
-    sns.histplot(df['MonthlyIncome'], bins=20, kde=True, ax=axs[1], color='green')
-    axs[1].set_title('Monthly Income Distribution')
-    sns.histplot(df['DistanceFromHome'], bins=20, kde=True, ax=axs[2], color='orange')
-    axs[2].set_title('Distance from Home Distribution')
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Players", len(df))
+    col2.metric("Avg Performance", round(df["PerformanceScore"].mean(), 1))
+    col3.metric("Avg Attendance", f"{round(df['TrainingAttendanceRate'].mean(),1)}%")
+
+    # -------------------------------
+    # Age Distribution
+    # -------------------------------
+    st.subheader("Age Distribution")
+    fig, ax = plt.subplots()
+    sns.histplot(df['Age'], bins=20, kde=True, ax=ax, color='skyblue')
+    ax.set_title("Age Distribution")
     st.pyplot(fig)
 
-    # Department, Gender, and Job Role Insights
-    # Pie charts, violin plots, and boxplots provide visual breakdowns of categorical data.
-    st.subheader("Department, Gender, and Job Role Insights")
-    fig, axs = plt.subplots(1, 3, figsize=(25, 8))
-    
-    # Pie chart for department distribution.
-    department_counts = df['Department'].value_counts()
-    percentages = department_counts / department_counts.sum() * 100
-    axs[0].pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
-    axs[0].set_title('Employees by Department', fontsize=14)
-    axs[0].axis('equal')
-    
-    # Violin plot for age distribution by gender.
-    sns.violinplot(x='Gender', y='Age', data=df, hue='Gender', split=True, ax=axs[1])
-    axs[1].set_title('Age Distribution by Gender', fontsize=14)
-    axs[1].set_xlabel('Gender')
-    axs[1].set_ylabel('Age')
-    
-    # Boxplot for monthly income by job role.
-    sns.boxplot(y='JobRole', x='MonthlyIncome', data=df, ax=axs[2])
-    axs[2].set_title('Monthly Income by Job Role', fontsize=14)
-    axs[2].set_xlabel('Monthly Income')
-    axs[2].set_ylabel('Job Role')
-    
-    fig.suptitle('Key HR Insights', fontsize=16)
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    # -------------------------------
+    # Position Distribution
+    # -------------------------------
+    st.subheader("Player Distribution by Position")
+    position_counts = df['Position'].value_counts()
+    fig, ax = plt.subplots()
+    position_counts.plot(kind='bar', ax=ax, color='lightblue')
+    ax.set_title("Players by Position")
+    ax.set_xlabel("Position")
+    ax.set_ylabel("Count")
     st.pyplot(fig)
 
-    # Insights on Income, Age, and Department
-    # Density plots and scatter plots provide a deeper look into numerical relationships.
-    st.subheader("Insights on Income, Age, and Department")
-    fig, axs = plt.subplots(1, 3, figsize=(25, 8))
-    
-    sns.kdeplot(data=df['MonthlyIncome'], fill=True, color='skyblue', alpha=0.5, ax=axs[0])
-    axs[0].set_title('Density Plot of Monthly Income', fontsize=14)
-    axs[0].set_xlabel('Monthly Income')
-    axs[0].set_ylabel('Density')
-    
-    sns.scatterplot(x=df['Age'], y=df['MonthlyIncome'], ax=axs[1], alpha=0.6, color='blue')
-    sns.regplot(x='Age', y='MonthlyIncome', data=df, ax=axs[1], scatter=False, color='red')
-    axs[1].set_title('Age vs. Monthly Income', fontsize=14)
-    axs[1].set_xlabel('Age')
-    axs[1].set_ylabel('Monthly Income')
-    
-    grouped_data = df.groupby(['Department', 'BusinessTravel']).size().unstack(fill_value=0)
-    grouped_data.plot(kind='bar', ax=axs[2], stacked=False, color=['lightblue', 'orange', 'green'])
-    axs[2].set_title('Department vs. Business Travel', fontsize=14)
-    axs[2].set_xlabel('Department')
-    axs[2].set_ylabel('Number of Employees')
-    axs[2].tick_params(axis='x', rotation=45)
-    
-    fig.suptitle('Key Insights: Income, Age, and Department', fontsize=16)
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    # -------------------------------
+    # Goals by Position
+    # -------------------------------
+    st.subheader("Goals by Position")
+    fig, ax = plt.subplots()
+    sns.boxplot(x='Position', y='Goals', data=df, ax=ax)
+    ax.set_title("Goals Distribution by Position")
     st.pyplot(fig)
 
-    # Joint plot for Age vs. Monthly Income
-    # Highlights the correlation between employee age and income levels.
-    st.subheader("Joint Plot: Age vs. Monthly Income")
-    fig = sns.jointplot(x='Age', y='MonthlyIncome', data=df, kind='reg', height=8, space=0.2)
+    # -------------------------------
+    # Performance vs Attendance
+    # -------------------------------
+    st.subheader("Performance vs Training Attendance")
+    fig, ax = plt.subplots()
+    sns.scatterplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax)
+    sns.regplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax, scatter=False, color='red')
+    ax.set_title("Performance vs Attendance")
     st.pyplot(fig)
 
+    # -------------------------------
+    # Fitness vs Age
+    # -------------------------------
+    st.subheader("Fitness vs Age")
+    fig, ax = plt.subplots()
+    sns.scatterplot(x='Age', y='FitnessScore', data=df, ax=ax)
+    sns.regplot(x='Age', y='FitnessScore', data=df, ax=ax, scatter=False, color='red')
+    ax.set_title("Fitness vs Age")
+    st.pyplot(fig)
+
+    # -------------------------------
+    # Injury Status Distribution
+    # -------------------------------
+    st.subheader("Injury Status Distribution")
+    injury_counts = df['InjuryStatus'].value_counts()
+    fig, ax = plt.subplots()
+    injury_counts.plot(kind='bar', ax=ax, color='salmon')
+    ax.set_title("Injury Status")
+    st.pyplot(fig)
 
 
 
