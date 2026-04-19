@@ -86,7 +86,7 @@ if st.session_state.page == "Home":
 
     st.write(
         "This application provides a comprehensive overview of player performance, "
-        "training engagement, and squad composition across all divisions of the club."
+        "training engagement, and team composition across all divisions of the club."
     )
 
     st.write("### Navigate through the application:")
