@@ -33,7 +33,7 @@ if st.session_state.page == "Home":
     st.write("Choose a section to navigate to for different functionalities:")
     st.write("- **Dashboard:** Check your HR dashboards.")
     st.write("- **Machine Learning:** Leverage AI to make predictions about your workforce (Coming Soon).")
-    st.write("- **Backend:** Backend management and settings (Coming Soon).")
+    st.writ("- **Backend:** Backend management and settings (Coming Soon).")
 
     # Display navigation buttons under the explanation
     st.write("### Navigate to:")
