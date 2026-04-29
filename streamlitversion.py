@@ -45,7 +45,7 @@ if st.session_state.page == "Home":
     # The Home page introduces the football analytics application
     # and serves as the main navigation hub.
 
-    st.title("⚽ Football Club Performance Monitor")
+    st.title("⚽ Football Club Performance MOnitor")
 
     st.write(
         "This application provides a comprehensive overview of player performance, "
