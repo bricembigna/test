@@ -1,195 +1,332 @@
-###################################################################################################################################
-##################################################     Source Code      ###########################################################
-###################################################################################################################################
-
-
 import streamlit as st
 import gspread
 from google.oauth2.service_account import Credentials
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import openai
-from fpdf import FPDF
-import io
 
-# Define scopes
-# The 'scopes' variable defines the level of access the application has to Google Sheets and Drive.
-# These specific scopes allow the app to read and write data from Google Sheets and Drive, 
-# enabling secure, real-time interaction with HR-related datasets.
-scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+# --------------------------------------------------
+# PAGE CONFIG
+# --------------------------------------------------
+st.set_page_config(
+    page_title="Football Club Performance Monitor",
+    page_icon="⚽",
+    layout="wide"
+)
 
-# Authenticate using Streamlit secrets
-# This method uses a JSON configuration stored in Streamlit secrets for authentication.
-# It's a secure way to handle credentials, ensuring sensitive data is not hard-coded.
+# --------------------------------------------------
+# GLOBAL STYLE — TACTICAL BOARD THEME
+# --------------------------------------------------
+st.markdown("""
+<style>
+.stApp {
+    background: linear-gradient(135deg, #07140d 0%, #0e1f16 45%, #111827 100%);
+    color: white;
+}
+
+h1, h2, h3 {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+p, li, span {
+    color: #d1d5db;
+}
+
+[data-testid="metric-container"] {
+    background-color: rgba(17, 24, 39, 0.95);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0px 4px 18px rgba(0,0,0,0.35);
+}
+
+.stButton > button {
+    background-color: #14532d;
+    color: white;
+    border: 1px solid #22c55e;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+}
+
+.stButton > button:hover {
+    background-color: #16a34a;
+    color: white;
+}
+
+.block-container {
+    padding-top: 2rem;
+}
+
+section[data-testid="stSidebar"] {
+    background-color: #07140d;
+}
+
+hr {
+    border-color: rgba(34, 197, 94, 0.35);
+}
+</style>
+""", unsafe_allow_html=True)
+
+# --------------------------------------------------
+# GOOGLE SHEETS CONNECTION
+# --------------------------------------------------
+scopes = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
 credentials = Credentials.from_service_account_info(
     st.secrets["google_credentials"],
     scopes=scopes
 )
+
 client = gspread.authorize(credentials)
 
-# Access Google Sheet
 sheet = client.open("Dataset").sheet1
 data = sheet.get_all_records()
-df = pd.DataFrame(data)  # Converts the data into a Pandas DataFrame for easier manipulation and analysis.
+df = pd.DataFrame(data)
 
-# Initialize session state for page tracking
-# Streamlit's session state is used to handle page navigation, ensuring a smooth and intuitive user experience.
-if "page" not in st.session_state:
-    st.session_state.page = "Home"
+# --------------------------------------------------
+# SIDEBAR NAVIGATION
+# --------------------------------------------------
+st.sidebar.title("⚽ Navigation")
 
-# Home Page
-if st.session_state.page == "Home":
-    # The Home page introduces the football analytics application
-    # and serves as the main navigation hub.
+page = st.sidebar.radio(
+    "Go to",
+    ["Home", "Dashboard", "Machine Learning", "Data Management"]
+)
 
-    st.title("⚽ Football Club Performance MOnitor")
+# --------------------------------------------------
+# HOME PAGE
+# --------------------------------------------------
+if page == "Home":
 
-    st.write(
-        "This application provides a comprehensive overview of player performance, "
-        "training engagement, and team composition across all divisions of the club."
-    )
+    st.title("⚽ Football Club Performance Monitor")
+    st.caption("A tactical analytics platform for squad performance, training, and player development.")
 
-    st.write("### Navigate through the application:")
-    
-    st.write(
-        "- **Dashboard:** Explore interactive visualizations of player data, including performance metrics, "
-        "attendance trends, positional analysis, and injury distribution."
-    )
+    st.divider()
 
-    st.write(
-        "- **Machine Learning:** Use predictive models to estimate player performance based on key indicators "
-        "such as training attendance, match involvement, and physical condition."
-    )
+    col1, col2 = st.columns([1.3, 1])
 
-    st.write(
-        "- **Data Management:** Manage player records efficiently by adding, updating, or removing data "
-        "across all divisions."
-    )
-
-    st.write(
-        "- **Player Report:** Generate a detailed report for individual players, including performance, "
-        "fitness, and development insights."
-    )
-
-    st.write("---")
-
-    st.write(
-        "This tool is designed to support coaches and club managers in making informed, data-driven decisions "
-        "to optimize player development and team performance."
-    )
-
-    # Display navigation buttons under the explanation
-    # The buttons provide quick navigation to other sections of the application.
-    st.write("### Navigate to:")
-    col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     with col1:
-        if st.button("Dashboard"):
-            st.session_state.page = "Dashboard"
+        st.markdown("## Welcome to the Club Intelligence Hub")
+
+        st.write(
+            "This application provides a clear overview of player performance, "
+            "training engagement, fitness indicators, and team composition across the club."
+        )
+
+        st.write(
+            "The goal is to support coaches and club managers with data-driven insights "
+            "to improve player development, tactical planning, and squad monitoring."
+        )
+
     with col2:
-        if st.button("Machine Learning"):
-            st.session_state.page = "Machine Learning"
-    with col3:
-        if st.button("Data Management"):
-            st.session_state.page = "Data Management"
-    with col4:
-        if st.button("Division Report"):
-            st.session_state.page = "Employee Report"
+        st.markdown("## Key Functionalities")
 
+        st.write("**Dashboard** — Visual analysis of squad performance and player data.")
+        st.write("**Machine Learning** — Predictive tools for future player performance.")
+        st.write("**Data Management** — Add, update, and manage player records.")
+        st.write("**Reports** — Generate individual or divisional performance summaries.")
 
+    st.divider()
 
-
-
-########################################### Dashboard Page ###########################################
-# Dashboard Page
-
-
-elif st.session_state.page == "Dashboard":
-
-    st.title("⚽ Player Performance Dashboard")
-
-    if st.button("Homepage"):
-        st.session_state.page = "Home"
-
-    # -------------------------------
-    # Key Metrics
-    # -------------------------------
-    st.subheader("Club Overview")
+    st.markdown("## Tactical Overview")
 
     col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric("Total Players", len(df))
+
+    with col2:
+        st.metric("Average Performance", round(df["PerformanceScore"].mean(), 1))
+
+    with col3:
+        st.metric("Average Attendance", f"{round(df['TrainingAttendanceRate'].mean(), 1)}%")
+
+# --------------------------------------------------
+# DASHBOARD PAGE
+# --------------------------------------------------
+elif page == "Dashboard":
+
+    st.title("⚽ Football Analytics Dashboard")
+    st.caption("Real-time squad insights built for coaches, analysts, and club decision-makers.")
+
+    st.divider()
+
+    # -------------------------------
+    # KPI SECTION
+    # -------------------------------
+    st.markdown("## Club Overview")
+
+    col1, col2, col3, col4 = st.columns(4)
+
     col1.metric("Total Players", len(df))
     col2.metric("Avg Performance", round(df["PerformanceScore"].mean(), 1))
-    col3.metric("Avg Attendance", f"{round(df['TrainingAttendanceRate'].mean(),1)}%")
+    col3.metric("Avg Attendance", f"{round(df['TrainingAttendanceRate'].mean(), 1)}%")
+    col4.metric("Avg Fitness", round(df["FitnessScore"].mean(), 1))
+
+    st.divider()
 
     # -------------------------------
-    # Age Distribution
+    # PERFORMANCE ANALYSIS
     # -------------------------------
-    st.subheader("Age Distribution")
-    fig, ax = plt.subplots()
-    sns.histplot(df['Age'], bins=20, kde=True, ax=ax, color='skyblue')
-    ax.set_title("Age Distribution")
-    st.pyplot(fig)
+    st.markdown("## Performance Analysis")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("### Performance vs Training Attendance")
+
+        fig, ax = plt.subplots(figsize=(7, 4))
+        sns.scatterplot(
+            x="TrainingAttendanceRate",
+            y="PerformanceScore",
+            data=df,
+            ax=ax
+        )
+        sns.regplot(
+            x="TrainingAttendanceRate",
+            y="PerformanceScore",
+            data=df,
+            ax=ax,
+            scatter=False,
+            color="red"
+        )
+
+        ax.set_title("Performance vs Attendance")
+        ax.set_xlabel("Training Attendance Rate (%)")
+        ax.set_ylabel("Performance Score")
+
+        st.pyplot(fig)
+        st.caption("This chart shows whether players with higher training attendance also tend to perform better.")
+
+    with col2:
+        st.markdown("### Goals by Position")
+
+        fig, ax = plt.subplots(figsize=(7, 4))
+        sns.boxplot(
+            x="Position",
+            y="Goals",
+            data=df,
+            ax=ax
+        )
+
+        ax.set_title("Goals Distribution by Position")
+        ax.set_xlabel("Position")
+        ax.set_ylabel("Goals")
+        ax.tick_params(axis="x", rotation=30)
+
+        st.pyplot(fig)
+        st.caption("This helps identify which positions contribute most to goal production.")
+
+    st.divider()
 
     # -------------------------------
-    # Position Distribution
+    # FITNESS & AGE
     # -------------------------------
-    st.subheader("Player Distribution by Position")
-    position_counts = df['Position'].value_counts()
-    fig, ax = plt.subplots()
-    position_counts.plot(kind='bar', ax=ax, color='lightblue')
-    ax.set_title("Players by Position")
-    ax.set_xlabel("Position")
-    ax.set_ylabel("Count")
-    st.pyplot(fig)
+    st.markdown("## Fitness & Player Profile")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("### Fitness vs Age")
+
+        fig, ax = plt.subplots(figsize=(7, 4))
+        sns.scatterplot(
+            x="Age",
+            y="FitnessScore",
+            data=df,
+            ax=ax
+        )
+        sns.regplot(
+            x="Age",
+            y="FitnessScore",
+            data=df,
+            ax=ax,
+            scatter=False,
+            color="red"
+        )
+
+        ax.set_title("Fitness vs Age")
+        ax.set_xlabel("Age")
+        ax.set_ylabel("Fitness Score")
+
+        st.pyplot(fig)
+        st.caption("This visualization highlights how fitness levels vary across player age groups.")
+
+    with col2:
+        st.markdown("### Age Distribution")
+
+        fig, ax = plt.subplots(figsize=(7, 4))
+        sns.histplot(
+            df["Age"],
+            bins=20,
+            kde=True,
+            ax=ax
+        )
+
+        ax.set_title("Age Distribution")
+        ax.set_xlabel("Age")
+        ax.set_ylabel("Number of Players")
+
+        st.pyplot(fig)
+        st.caption("This gives a quick view of the squad’s age structure.")
+
+    st.divider()
 
     # -------------------------------
-    # Goals by Position
+    # TEAM COMPOSITION
     # -------------------------------
-    st.subheader("Goals by Position")
-    fig, ax = plt.subplots()
-    sns.boxplot(x='Position', y='Goals', data=df, ax=ax)
-    ax.set_title("Goals Distribution by Position")
-    st.pyplot(fig)
+    st.markdown("## Team Composition")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("### Player Distribution by Position")
+
+        position_counts = df["Position"].value_counts()
+
+        fig, ax = plt.subplots(figsize=(7, 4))
+        position_counts.plot(kind="bar", ax=ax)
+
+        ax.set_title("Players by Position")
+        ax.set_xlabel("Position")
+        ax.set_ylabel("Number of Players")
+        ax.tick_params(axis="x", rotation=30)
+
+        st.pyplot(fig)
+        st.caption("This shows whether the squad is balanced across positions.")
+
+    with col2:
+        st.markdown("### Injury Status Distribution")
+
+        injury_counts = df["InjuryStatus"].value_counts()
+
+        fig, ax = plt.subplots(figsize=(7, 4))
+        injury_counts.plot(kind="bar", ax=ax)
+
+        ax.set_title("Injury Status")
+        ax.set_xlabel("Status")
+        ax.set_ylabel("Number of Players")
+        ax.tick_params(axis="x", rotation=30)
+
+        st.pyplot(fig)
+        st.caption("This helps monitor squad availability and injury risk.")
+
+    st.divider()
 
     # -------------------------------
-    # Performance vs Attendance
+    # GENDER / AGE ANALYSIS
     # -------------------------------
-    st.subheader("Performance vs Training Attendance")
-    fig, ax = plt.subplots()
-    sns.scatterplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax)
-    sns.regplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax, scatter=False, color='red')
-    ax.set_title("Performance vs Attendance")
-    st.pyplot(fig)
+    st.markdown("## Demographic Analysis")
 
-    # -------------------------------
-    # Fitness vs Age
-    # -------------------------------
-    st.subheader("Fitness vs Age")
-    fig, ax = plt.subplots()
-    sns.scatterplot(x='Age', y='FitnessScore', data=df, ax=ax)
-    sns.regplot(x='Age', y='FitnessScore', data=df, ax=ax, scatter=False, color='red')
-    ax.set_title("Fitness vs Age")
-    st.pyplot(fig)
+    fig, ax = plt.subplots(figsize=(9, 5))
 
-    # -------------------------------
-    # Injury Status Distribution
-    # -------------------------------
-    st.subheader("Injury Status Distribution")
-    injury_counts = df['InjuryStatus'].value_counts()
-    fig, ax = plt.subplots()
-    injury_counts.plot(kind='bar', ax=ax, color='salmon')
-    ax.set_title("Injury Status")
-    st.pyplot(fig)
-
-    # -------------------------------
-    # Violin Plot Age Distribution by Gender
-    # -------------------------------
-    st.subheader("Age Distribution (Male vs Female)")
-    
-    fig, ax = plt.subplots()
-    
     sns.violinplot(
-        x=["All"] * len(df),   # forces a single category
+        x=["Squad"] * len(df),
         y="Age",
         hue="Gender",
         data=df,
@@ -197,28 +334,41 @@ elif st.session_state.page == "Dashboard":
         inner="quartile",
         ax=ax
     )
-    
+
+    ax.set_title("Age Distribution by Gender")
     ax.set_xlabel("")
-    ax.set_title("Age Distribution Split by Gender")
-    
+    ax.set_ylabel("Age")
+
     st.pyplot(fig)
+    st.caption("This compares age distribution between male and female players.")
 
+# --------------------------------------------------
+# MACHINE LEARNING PAGE
+# --------------------------------------------------
+elif page == "Machine Learning":
 
-########################################### ML Page ###########################################
+    st.title("Machine Learning")
+    st.caption("Predictive performance tools for player development.")
 
+    st.divider()
 
+    st.info(
+        "This page is currently under construction. "
+        "It will later include predictive models estimating player performance based on training attendance, "
+        "fitness score, match involvement, and other indicators."
+    )
 
+# --------------------------------------------------
+# DATA MANAGEMENT PAGE
+# --------------------------------------------------
+elif page == "Data Management":
 
-# Machine Learning Page and title 
-elif st.session_state.page == "Machine Learning":
-    st.title("Machine Learning (page under construction)")
-   
+    st.title("Data Input Manager")
+    st.caption("Centralized player record management.")
 
-########################################### Data Management Page ###########################################
+    st.divider()
 
-
-# Backend Page (Data Management)
-elif st.session_state.page == "Data Management":
-    # Title for the data management page, emphasizing its purpose
-    st.title("Data Input Manager (page udner construction)")
-
+    st.info(
+        "This page is currently under construction. "
+        "It will later allow users to add, update, and remove player records from the club dataset."
+    )
