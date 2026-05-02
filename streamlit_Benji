@@ -77,16 +77,16 @@ scopes = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-credentials = Credentials.from_service_account_info(
-    st.secrets["google_credentials"],
-    scopes=scopes
-)
-
-client = gspread.authorize(credentials)
-
-sheet = client.open("Dataset").sheet1
-data = sheet.get_all_records()
-df = pd.DataFrame(data)
+df = pd.DataFrame({
+    "PerformanceScore": [60,75,82,90,68,55,77,84,91,73,66,79],
+    "TrainingAttendanceRate": [70,85,90,95,60,50,88,92,97,80,65,89],
+    "FitnessScore": [65,78,85,88,70,60,82,86,90,75,68,83],
+    "Age": [20,24,28,22,26,30,23,27,21,25,29,24],
+    "Position": ["Forward","Midfielder","Defender","Forward","Goalkeeper","Defender","Midfielder","Forward","Forward","Midfielder","Defender","Forward"],
+    "Goals": [10,5,2,12,0,1,6,11,13,7,3,9],
+    "InjuryStatus": ["Fit","Fit","Injured","Fit","Fit","Injured","Fit","Fit","Fit","Fit","Injured","Fit"],
+    "Gender": ["M","M","F","M","F","M","F","M","M","F","M","F"]
+})
 
 # --------------------------------------------------
 # SIDEBAR NAVIGATION
@@ -340,35 +340,64 @@ elif page == "Dashboard":
     ax.set_ylabel("Age")
 
     st.pyplot(fig)
-    st.caption("This compares age distribution between male and female players.")
 
-# --------------------------------------------------
-# MACHINE LEARNING PAGE
-# --------------------------------------------------
+    st.caption("This compares age distribution between male and female players.")
 elif page == "Machine Learning":
 
-    st.title("Machine Learning")
-    st.caption("Predictive performance tools for player development.")
+    st.title("⚽ Player Performance Predictor")
+    st.caption("Machine learning model for predicting and classifying player performance.")
 
     st.divider()
 
-    st.info(
-        "This page is currently under construction. "
-        "It will later include predictive models estimating player performance based on training attendance, "
-        "fitness score, match involvement, and other indicators."
-    )
+    FEATURES = ["Age", "TrainingAttendanceRate", "FitnessScore", "Goals"]
+    TARGET = "PerformanceScore"
 
-# --------------------------------------------------
-# DATA MANAGEMENT PAGE
-# --------------------------------------------------
-elif page == "Data Management":
+    ml_df = df[FEATURES + [TARGET]].dropna()
 
-    st.title("Data Input Manager")
-    st.caption("Centralized player record management.")
+    if len(ml_df) < 10:
+        st.warning("Not enough data to train the model.")
+        st.stop()
+
+    X = ml_df[FEATURES]
+    y = ml_df[TARGET]
+
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    from sklearn.neighbors import KNeighborsRegressor
+    model = KNeighborsRegressor(n_neighbors=5)
+    model.fit(X_train_scaled, y_train)
+
+    y_pred = model.predict(X_test_scaled)
+
+    from sklearn.metrics import r2_score, mean_absolute_error
+    r2 = r2_score(y_test, y_pred)
+    mae = mean_absolute_error(y_test, y_pred)
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Training Rows", len(X_train))
+    col2.metric("R² Score", f"{r2:.2f}")
+    col3.metric("Error", f"{mae:.1f}")
 
     st.divider()
 
-    st.info(
-        "This page is currently under construction. "
-        "It will later allow users to add, update, and remove player records from the club dataset."
-    )
+    st.subheader("Try Prediction")
+
+    import numpy as np
+
+    input_age = st.slider("Age", 16, 40, 25)
+    input_attendance = st.slider("Attendance", 0.0, 100.0, 80.0)
+    input_fitness = st.slider("Fitness", 0.0, 100.0, 75.0)
+    input_goals = st.slider("Goals", 0, 30, 5)
+
+    input_array = np.array([[input_age, input_attendance, input_fitness, input_goals]])
+    input_scaled = scaler.transform(input_array)
+
+    prediction = model.predict(input_scaled)[0]
+
+    st.success(f"Predicted Score: {prediction:.1f}")
