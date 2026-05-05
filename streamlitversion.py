@@ -217,8 +217,95 @@ elif st.session_state.page == "Machine Learning":
 ########################################### Data Management Page ###########################################
 
 
+# ─────────────────────────────────────────────────────────────────
+# AI Usage Declaration – Data Management Page
+# Author: [dein Name]
+# This section was developed with the support of Claude (Anthropic).
+# Claude was used as a coding assistant to help write the
+# Data Management page including the add, edit and delete functions.
+# Reference: Claude (Anthropic), claude.ai, May 2026
+# ─────────────────────────────────────────────────────────────────
+
 # Backend Page (Data Management)
 elif st.session_state.page == "Data Management":
-    # Title for the data management page, emphasizing its purpose
-    st.title("Data Input Manager (page udner construction)")
+    st.title("⚽ Player Data Manager")
+
+    if st.button("Homepage"):
+        st.session_state.page = "Home"
+
+    worksheet = client.open("Dataset").sheet1
+
+    if "dm_subpage" not in st.session_state:
+        st.session_state.dm_subpage = "main"
+
+    if st.session_state.dm_subpage == "main":
+        st.subheader("What would you like to do?")
+        if st.button("➕ Add New Player"):
+            st.session_state.dm_subpage = "add"
+        if st.button("✏️ Edit Player"):
+            st.session_state.dm_subpage = "edit"
+        if st.button("🗑️ Delete Player"):
+            st.session_state.dm_subpage = "delete"
+
+    elif st.session_state.dm_subpage == "add":
+        st.subheader("➕ Add New Player")
+        with st.form("add_form"):
+            age = st.number_input("Age", min_value=15, max_value=50, step=1)
+            position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"])
+            goals = st.number_input("Goals", min_value=0, step=1)
+            fitness = st.slider("Fitness Score", 0, 100, 75)
+            injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
+            gender = st.selectbox("Gender", ["Male", "Female"])
+            performance = st.slider("Performance Score", 0, 100, 75)
+            attendance = st.slider("Training Attendance Rate (%)", 0, 100, 85)
+            submitted = st.form_submit_button("Add Player")
+            if submitted:
+                worksheet.append_row([age, position, goals, fitness, injury, gender, performance, attendance])
+                st.success("✅ Player added successfully!")
+        if st.button("Back"):
+            st.session_state.dm_subpage = "main"
+
+    elif st.session_state.dm_subpage == "edit":
+        st.subheader("✏️ Edit Player")
+        all_data = worksheet.get_all_values()
+        rows = all_data[1:]
+        if rows:
+            row_labels = [f"Row {i+2}: {rows[i]}" for i in range(len(rows))]
+            selected = st.selectbox("Select a player to edit", row_labels)
+            idx = row_labels.index(selected)
+            current = rows[idx]
+            with st.form("edit_form"):
+                age = st.number_input("Age", value=int(current[0]) if current[0] else 20, min_value=15, max_value=50)
+                position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"])
+                goals = st.number_input("Goals", value=int(current[2]) if current[2] else 0, min_value=0)
+                fitness = st.slider("Fitness Score", 0, 100, int(current[3]) if current[3] else 75)
+                injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
+                gender = st.selectbox("Gender", ["Male", "Female"])
+                performance = st.slider("Performance Score", 0, 100, int(current[6]) if current[6] else 75)
+                attendance = st.slider("Training Attendance Rate (%)", 0, 100, int(current[7]) if current[7] else 85)
+                if st.form_submit_button("Save Changes"):
+                    row_number = idx + 2
+                    worksheet.update(f"A{row_number}:H{row_number}", [[age, position, goals, fitness, injury, gender, performance, attendance]])
+                    st.success("✅ Player updated successfully!")
+        else:
+            st.warning("No players found in the sheet.")
+        if st.button("Back"):
+            st.session_state.dm_subpage = "main"
+
+    elif st.session_state.dm_subpage == "delete":
+        st.subheader("🗑️ Delete Player")
+        all_data = worksheet.get_all_values()
+        rows = all_data[1:]
+        if rows:
+            row_labels = [f"Row {i+2}: {rows[i]}" for i in range(len(rows))]
+            selected = st.selectbox("Select a player to delete", row_labels)
+            idx = row_labels.index(selected)
+            if st.button("🗑️ Confirm Delete"):
+                worksheet.delete_rows(idx + 2)
+                st.success("✅ Player deleted successfully!")
+        else:
+            st.warning("No players found in the sheet.")
+        if st.button("Back"):
+            st.session_state.dm_subpage = "main"
+
 
