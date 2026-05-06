@@ -11,7 +11,7 @@ import seaborn as sns
 from fpdf import FPDF
 import io
 
-# ML imports — scikit-learn is listed in requirements.txt so Streamlit Cloud installs it automatically
+# ML imports – scikit-learn is listed in requirements.txt so Streamlit Cloud installs it automatically
 
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeClassifier, plot_tree
@@ -232,7 +232,7 @@ if st.button("Homepage"):
     st.session_state.page = "Home"
 
 # -----------------------------------------------------------------------
-# STEP 1 — Encode categorical variables
+# STEP 1 -- Encode categorical variables
 # InjuryStatus, Position and Gender are text columns (categorical).
 # ML models only understand numbers, so we convert them using Label Encoding:
 #   - Each unique category gets mapped to an integer (e.g. "Fit"→0, "Injured"→1)
@@ -263,37 +263,37 @@ X = ml_df[FEATURES]
 y = ml_df[TARGET]
 
 # -----------------------------------------------------------------------
-# STEP 2 — Train / Test Split (80% train, 20% test)
+# STEP 2 -- Train / Test Split (80% train, 20% test)
 # -----------------------------------------------------------------------
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
 # -----------------------------------------------------------------------
-# STEP 3 — Feature Scaling
+# STEP 3 -- Feature Scaling
 # All 7 features are now numeric. StandardScaler normalises them so
 # KNN distance calculations are not dominated by large-range columns
-# (e.g. TrainingAttendanceRate 0–100 vs Goals 0–30).
+# (e.g. TrainingAttendanceRate 0-100 vs Goals 0-30).
 # -----------------------------------------------------------------------
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled  = scaler.transform(X_test)
 
 # -----------------------------------------------------------------------
-# STEP 4 — Train KNN Regressor
+# STEP 4 -- Train KNN Regressor
 # -----------------------------------------------------------------------
 model = KNeighborsRegressor(n_neighbors=5)
 model.fit(X_train_scaled, y_train)
 
 # -----------------------------------------------------------------------
-# STEP 5 — Evaluate
+# STEP 5 -- Evaluate
 # -----------------------------------------------------------------------
 y_pred = model.predict(X_test_scaled)
 r2  = r2_score(y_test, y_pred)
 mae = mean_absolute_error(y_test, y_pred)
 
 # -----------------------------------------------------------------------
-# DISPLAY A — Model accuracy metrics
+# DISPLAY A -- Model accuracy metrics
 # -----------------------------------------------------------------------
 st.subheader("📊 Model Accuracy")
 st.write(
@@ -306,7 +306,7 @@ col2.metric("R² Score",       f"{r2:.2f}")
 col3.metric("Avg Error (MAE)", f"{mae:.1f} pts")
 
 # -----------------------------------------------------------------------
-# DISPLAY B — Actual vs Predicted scatter plot
+# DISPLAY B -- Actual vs Predicted scatter plot
 # -----------------------------------------------------------------------
 st.subheader("📈 Actual vs. Predicted Performance Score")
 st.write("Each dot is a player from the test set. The red line shows a perfect prediction.")
@@ -322,7 +322,7 @@ ax.legend()
 st.pyplot(fig)
 
 # -----------------------------------------------------------------------
-# DISPLAY C — Interactive Predictor (7 inputs)
+# DISPLAY C -- Interactive Predictor (7 inputs)
 # Numerical features → sliders (same as before)
 # Categorical features → selectboxes (new) using the original labels
 # -----------------------------------------------------------------------
@@ -358,7 +358,7 @@ with col1:
         value=int(df["Goals"].median()),
     )
 with col2:
-    # Categorical inputs — show original labels to the user,
+    # Categorical inputs -- show original labels to the user,
     # then encode them exactly as the model was trained.
     input_injury_label   = st.selectbox("Injury Status",
                                         encoders["InjuryStatus"].classes_.tolist())
@@ -381,20 +381,20 @@ prediction   = model.predict(input_scaled)[0]
 st.success(f"**Predicted Performance Score: {prediction:.1f} / 100**")
 
 if prediction >= 75:
-    st.info("🌟 Outstanding level — top performer profile.")
+    st.info("🌟 Outstanding level -- top performer profile.")
 elif prediction >= 50:
-    st.info("👍 Good level — solid player with development potential.")
+    st.info("👍 Good level -- solid player with development potential.")
 else:
-    st.info("⚠️ Below average — may benefit from increased training or fitness work.")
+    st.info("⚠️ Below average -- may benefit from increased training or fitness work.")
 
 # =======================================================================
-# DECISION TREE SECTION — Classification (High / Medium / Low)
+# DECISION TREE SECTION -- Classification (High / Medium / Low)
 # =======================================================================
 st.markdown("---")
 st.subheader("🌳 Player Performance Classification")
 st.write(
     "Beyond the numeric score, this Decision Tree classifies each player into a "
-    "performance category — **High**, **Medium**, or **Low** — based on all 7 indicators. "
+    "performance category -- **High**, **Medium**, or **Low** -- based on all 7 indicators. "
     "The tree learns which thresholds matter most from the data."
 )
 
@@ -437,7 +437,7 @@ plot_tree(
     fontsize=9,
     ax=ax
 )
-ax.set_title("Decision Tree — Player Performance Classification (7 Features)", fontsize=14)
+ax.set_title("Decision Tree -- Player Performance Classification (7 Features)", fontsize=14)
 st.pyplot(fig)
 
 # Feature importance
@@ -450,7 +450,7 @@ importance_df = pd.DataFrame({
 
 fig, ax = plt.subplots()
 sns.barplot(x="Importance", y="Feature", data=importance_df, ax=ax, palette="Blues_r")
-ax.set_title("Feature Importance — Decision Tree (7 Features)")
+ax.set_title("Feature Importance -- Decision Tree (7 Features)")
 ax.set_xlabel("Importance Score")
 st.pyplot(fig)
 
@@ -563,7 +563,7 @@ else:
 
 # ── Player selector ───────────────────────────────────────────
 # Build a display label: row index + position + age so coach can identify player
-# (dataset has no player name column — using index as unique ID)
+# (dataset has no player name column -- using index as unique ID)
 if "PlayerName" in df.columns:
     player_labels = df["PlayerName"].astype(str).tolist()
     id_col = "PlayerName"
@@ -578,7 +578,7 @@ player         = df.iloc[selected_idx]
 st.markdown("---")
 
 # ── SECTION 1 : Key Stats ─────────────────────────────────────
-st.subheader(f"📊 Stats Overview — {selected_label}")
+st.subheader(f"📊 Stats Overview -- {selected_label}")
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Performance Score", f"{player.get('PerformanceScore', 'N/A')}")
@@ -708,7 +708,7 @@ if st.button("Generate PDF Report"):
         pdf.set_fill_color(20, 83, 45)   # dark green
         pdf.set_text_color(255, 255, 255)
         pdf.set_font("Arial", "B", 18)
-        pdf.cell(0, 14, "Football Club — Player Report", ln=True, fill=True, align="C")
+        pdf.cell(0, 14, "Football Club -- Player Report", ln=True, fill=True, align="C")
         pdf.ln(4)
 
         # Player identity
@@ -759,7 +759,7 @@ if st.button("Generate PDF Report"):
                 pdf.cell(0, 7, "ML prediction not available for this player.", ln=True)
             pdf.ln(4)
 
-        # Comparison chart — save to temp file and embed
+        # Comparison chart -- save to temp file and embed
         fig_pdf, ax_pdf = plt.subplots(figsize=(7, 3))
         ax_pdf.bar(np.arange(len(available)) - 0.175, player_vals, 0.35,
                    label="This Player", color="steelblue")
@@ -798,5 +798,3 @@ if st.button("Generate PDF Report"):
     except Exception as e:
         st.error(f"PDF generation failed: {e}")
 ```
-
-
