@@ -227,6 +227,7 @@ elif st.session_state.page == "Machine Learning":
 # ─────────────────────────────────────────────────────────────────
 
 # Backend Page (Data Management)
+# Backend Page (Data Management)
 elif st.session_state.page == "Data Management":
     st.title("⚽ Player Data Manager")
 
@@ -250,17 +251,24 @@ elif st.session_state.page == "Data Management":
     elif st.session_state.dm_subpage == "add":
         st.subheader("➕ Add New Player")
         with st.form("add_form"):
+            player_id = st.text_input("Player ID (e.g. P0100)")
+            name = st.text_input("Name")
+            gender = st.selectbox("Gender", ["Male", "Female"])
             age = st.number_input("Age", min_value=15, max_value=50, step=1)
+            division = st.text_input("Division (e.g. U11, U17)")
             position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"])
+            attendance = st.slider("Training Attendance Rate (%)", 0, 100, 85)
+            matches = st.number_input("Matches Played", min_value=0, step=1)
+            sessions = st.number_input("Training Sessions", min_value=0, step=1)
             goals = st.number_input("Goals", min_value=0, step=1)
+            assists = st.number_input("Assists", min_value=0, step=1)
+            performance = st.slider("Performance Score", 0, 100, 75)
             fitness = st.slider("Fitness Score", 0, 100, 75)
             injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
-            gender = st.selectbox("Gender", ["Male", "Female"])
-            performance = st.slider("Performance Score", 0, 100, 75)
-            attendance = st.slider("Training Attendance Rate (%)", 0, 100, 85)
+            years = st.number_input("Years at Club", min_value=0, step=1)
             submitted = st.form_submit_button("Add Player")
             if submitted:
-                worksheet.append_row([age, position, goals, fitness, injury, gender, performance, attendance])
+                worksheet.append_row([player_id, name, gender, age, division, position, attendance, matches, sessions, goals, assists, performance, fitness, injury, years])
                 st.success("✅ Player added successfully!")
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
@@ -270,22 +278,29 @@ elif st.session_state.page == "Data Management":
         all_data = worksheet.get_all_values()
         rows = all_data[1:]
         if rows:
-            row_labels = [f"Row {i+2}: {rows[i]}" for i in range(len(rows))]
+            row_labels = [f"{rows[i][0]} - {rows[i][1]}" for i in range(len(rows))]
             selected = st.selectbox("Select a player to edit", row_labels)
             idx = row_labels.index(selected)
             current = rows[idx]
             with st.form("edit_form"):
-                age = st.number_input("Age", value=int(current[0]) if current[0] else 20, min_value=15, max_value=50)
-                position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"])
-                goals = st.number_input("Goals", value=int(current[2]) if current[2] else 0, min_value=0)
-                fitness = st.slider("Fitness Score", 0, 100, int(current[3]) if current[3] else 75)
-                injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
-                gender = st.selectbox("Gender", ["Male", "Female"])
-                performance = st.slider("Performance Score", 0, 100, int(current[6]) if current[6] else 75)
-                attendance = st.slider("Training Attendance Rate (%)", 0, 100, int(current[7]) if current[7] else 85)
+                player_id = st.text_input("Player ID", value=current[0])
+                name = st.text_input("Name", value=current[1])
+                gender = st.selectbox("Gender", ["Male", "Female"], index=0 if current[2] == "Male" else 1)
+                age = st.number_input("Age", value=int(current[3]) if current[3] else 20, min_value=15, max_value=50)
+                division = st.text_input("Division", value=current[4])
+                position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"], index=["Goalkeeper", "Defender", "Midfielder", "Forward"].index(current[5]) if current[5] in ["Goalkeeper", "Defender", "Midfielder", "Forward"] else 0)
+                attendance = st.slider("Training Attendance Rate (%)", 0, 100, int(current[6]) if current[6] else 85)
+                matches = st.number_input("Matches Played", value=int(current[7]) if current[7] else 0, min_value=0)
+                sessions = st.number_input("Training Sessions", value=int(current[8]) if current[8] else 0, min_value=0)
+                goals = st.number_input("Goals", value=int(current[9]) if current[9] else 0, min_value=0)
+                assists = st.number_input("Assists", value=int(current[10]) if current[10] else 0, min_value=0)
+                performance = st.slider("Performance Score", 0, 100, int(current[11]) if current[11] else 75)
+                fitness = st.slider("Fitness Score", 0, 100, int(current[12]) if current[12] else 75)
+                injury = st.selectbox("Injury Status", ["Healthy", "Injured"], index=0 if current[13] == "Healthy" else 1)
+                years = st.number_input("Years at Club", value=int(current[14]) if current[14] else 0, min_value=0)
                 if st.form_submit_button("Save Changes"):
                     row_number = idx + 2
-                    worksheet.update(f"A{row_number}:H{row_number}", [[age, position, goals, fitness, injury, gender, performance, attendance]])
+                    worksheet.update(f"A{row_number}:O{row_number}", [[player_id, name, gender, age, division, position, attendance, matches, sessions, goals, assists, performance, fitness, injury, years]])
                     st.success("✅ Player updated successfully!")
         else:
             st.warning("No players found in the sheet.")
@@ -297,7 +312,7 @@ elif st.session_state.page == "Data Management":
         all_data = worksheet.get_all_values()
         rows = all_data[1:]
         if rows:
-            row_labels = [f"Row {i+2}: {rows[i]}" for i in range(len(rows))]
+            row_labels = [f"{rows[i][0]} - {rows[i][1]}" for i in range(len(rows))]
             selected = st.selectbox("Select a player to delete", row_labels)
             idx = row_labels.index(selected)
             if st.button("🗑️ Confirm Delete"):
