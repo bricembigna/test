@@ -286,7 +286,7 @@ elif st.session_state.page == "Data Management":
                 player_id = st.text_input("Player ID", value=current[0])
                 name = st.text_input("Name", value=current[1])
                 gender = st.selectbox("Gender", ["Male", "Female"], index=0 if current[2] == "Male" else 1)
-                age = st.number_input("Age", value=int(current[3]) if current[3] else 20, min_value=15, max_value=50)
+                age = st.number_input("Age", value=max(15, int(current[3])) if current[3] else 20, min_value=15, max_value=50)
                 division = st.text_input("Division", value=current[4])
                 position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"], index=["Goalkeeper", "Defender", "Midfielder", "Forward"].index(current[5]) if current[5] in ["Goalkeeper", "Defender", "Midfielder", "Forward"] else 0)
                 attendance = st.slider("Training Attendance Rate (%)", 0, 100, int(current[6]) if current[6] else 85)
