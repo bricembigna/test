@@ -457,7 +457,7 @@ elif st.session_state.page == "Data Management":
             fitness = st.slider("Fitness Score", 0, 100, 75)
             injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
             gender = st.selectbox("Gender", ["Male", "Female"])
-            performance = st.slider("Performance Score", 0, 100, 75)
+            performance = st.slider("Performance Score", 0, 400, 75)
             attendance = st.slider("Training Attendance Rate (%)", 0, 100, 85)
             submitted = st.form_submit_button("Add Player")
             if submitted:
