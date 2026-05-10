@@ -441,10 +441,13 @@ elif st.session_state.page == "Data Management":
 
     if st.session_state.dm_subpage == "main":
         st.subheader("What would you like to do?")
+
         if st.button("➕ Add New Player"):
             st.session_state.dm_subpage = "add"
+
         if st.button("✏️ Edit Player"):
             st.session_state.dm_subpage = "edit"
+
         if st.button("🗑️ Delete Player"):
             st.session_state.dm_subpage = "delete"
 
@@ -466,74 +469,38 @@ elif st.session_state.page == "Data Management":
             fitness = st.slider("Fitness Score", 0, 100, 75)
             injury = st.selectbox("Injury Status", ["Healthy", "Minor Injury", "Injured"])
             years = st.number_input("Years At Club", min_value=0, step=1)
+
             submitted = st.form_submit_button("Add Player")
+
             if submitted:
                 all_data = worksheet.get_all_values()
                 last_player_id = all_data[-1][0]
                 last_number = int(last_player_id.replace("P", ""))
                 new_player_id = f"P{last_number + 1:04d}"
-                worksheet.append_row([
-                    new_player_id,
-                    name,
-                    gender,
-                    age,
-                    division,
-                    position,
-                    attendance,
-                    matches,
-                    sessions,
-                    goals,
-                    assists,
-                    performance,
-                    fitness,
-                    injury,
-                    years
-                ])
-    
+
+                worksheet.append_row([new_player_id, name, gender, age, division, position, attendance, matches, sessions, goals, assists, performance, fitness, injury, years])
+
                 st.success(f"✅ Player {new_player_id} added successfully!")
 
-    if st.button("Back"):
-        st.session_state.dm_subpage = "main"
-
-    elif st.session_state.dm_subpage == "edit":
-        st.subheader("✏️ Edit Player")
-        all_data = worksheet.get_all_values()
-        rows = all_data[1:]
-        if rows:
-            row_labels = [f"Row {i+2}: {rows[i]}" for i in range(len(rows))]
-            selected = st.selectbox("Select a player to edit", row_labels)
-            idx = row_labels.index(selected)
-            current = rows[idx]
-            with st.form("edit_form"):
-                age = st.number_input("Age", value=int(current[3]) if current[3] else 20, min_value=8, max_value=50)
-                position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"])
-                goals = st.number_input("Goals", value=int(current[9]) if current[9] else 0, min_value=0)
-                fitness = st.slider("Fitness Score", 0, 100, int(current[12]) if current[12] else 75)
-                injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
-                gender = st.selectbox("Gender", ["Male", "Female"])
-                performance = st.slider("Performance Score", 0, 400, int(current[11]) if current[11] else 75)
-                attendance = st.slider("Training Attendance Rate (%)", 0, 100, int(current[7]) if current[7] else 85)
-                if st.form_submit_button("Save Changes"):
-                    row_number = idx + 2
-                    worksheet.update(f"A{row_number}:H{row_number}", [[age, position, goals, fitness, injury, gender, performance, attendance]])
-                    st.success("✅ Player updated successfully!")
-        else:
-            st.warning("No players found in the sheet.")
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
 
     elif st.session_state.dm_subpage == "delete":
         st.subheader("🗑️ Delete Player")
+
         all_data = worksheet.get_all_values()
         rows = all_data[1:]
+
         if rows:
-            row_labels = [f"Row {i+2}: {rows[i]}" for i in range(len(rows))]
+            row_labels = [f"{row[0]} - {row[1]}" for row in rows]
             selected = st.selectbox("Select a player to delete", row_labels)
             idx = row_labels.index(selected)
+
             if st.button("🗑️ Confirm Delete"):
                 worksheet.delete_rows(idx + 2)
                 st.success("✅ Player deleted successfully!")
         else:
             st.warning("No players found in the sheet.")
+
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
