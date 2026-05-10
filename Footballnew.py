@@ -448,50 +448,21 @@ elif st.session_state.page == "Data Management":
         if st.button("🗑️ Delete Player"):
             st.session_state.dm_subpage = "delete"
 
-    elif st.session_state.dm_subpage == "add":
-    st.subheader("➕ Add New Player")
-
-    with st.form("add_form"):
-        player_id = st.text_input("Player ID")
-        name = st.text_input("Name")
-        gender = st.selectbox("Gender", ["M", "F"])
-        age = st.number_input("Age", min_value=8, max_value=50, step=1)
-        division = st.selectbox("Division", ["U11", "U19", "Senior", "Veteran"])
-        position = st.selectbox("Position", ["GK", "DF", "MF", "FW"])
-
-        attendance = st.slider("Training Attendance Rate (%)", 0, 100, 85)
-        matches = st.number_input("Matches Played", min_value=0, step=1)
-        sessions = st.number_input("Training Sessions", min_value=0, step=1)
-        goals = st.number_input("Goals", min_value=0, step=1)
-        assists = st.number_input("Assists", min_value=0, step=1)
-
-        performance = st.number_input("Performance Score", min_value=0, max_value=400, value=75, step=1)
-        fitness = st.slider("Fitness Score", 0, 100, 75)
-        injury = st.selectbox("Injury Status", ["Healthy", "Minor Injury", "Injured"])
-        years = st.number_input("Years At Club", min_value=0, step=1)
-
-        submitted = st.form_submit_button("Add Player")
-
-        if submitted:
-            worksheet.append_row([
-                player_id,
-                name,
-                gender,
-                age,
-                division,
-                position,
-                attendance,
-                matches,
-                sessions,
-                goals,
-                assists,
-                performance,
-                fitness,
-                injury,
-                years
-            ])
-
-            st.success("✅ Player added successfully!")
+        elif st.session_state.dm_subpage == "add":
+        st.subheader("➕ Add New Player")
+        with st.form("add_form"):
+            age = st.number_input("Age", min_value=8, max_value=50, step=1)
+            position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"])
+            goals = st.number_input("Goals", min_value=0, step=1)
+            fitness = st.slider("Fitness Score", 0, 100, 75)
+            injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
+            gender = st.selectbox("Gender", ["Male", "Female"])
+            performance = st.slider("Performance Score", 0, 400, 75)
+            attendance = st.slider("Training Attendance Rate (%)", 0, 100, 85)
+            submitted = st.form_submit_button("Add Player")
+            if submitted:
+                worksheet.append_row([age, position, goals, fitness, injury, gender, performance, attendance])
+                st.success("✅ Player added successfully!")
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
 
