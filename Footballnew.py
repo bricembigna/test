@@ -13,6 +13,114 @@ import openai
 from fpdf import FPDF
 import io
 
+# --------------------------------------------------
+# PAGE CONFIG
+# --------------------------------------------------
+st.set_page_config(
+    page_title="Football Club Performance Monitor",
+    page_icon="⚽",
+    layout="wide"
+)
+
+# --------------------------------------------------
+# GLOBAL STYLE — TACTICAL FOOTBALL DASHBOARD THEME
+# --------------------------------------------------
+st.markdown("""
+<style>
+.stApp {
+    background: linear-gradient(135deg, #07140d 0%, #0e1f16 45%, #111827 100%);
+    color: white;
+}
+
+h1, h2, h3 {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+p, li, span, div {
+    color: #d1d5db;
+}
+
+[data-testid="stMarkdownContainer"] {
+    color: #d1d5db;
+}
+
+[data-testid="metric-container"] {
+    background-color: rgba(17, 24, 39, 0.95);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0px 4px 18px rgba(0,0,0,0.35);
+}
+
+[data-testid="metric-container"] label {
+    color: #a7f3d0 !important;
+}
+
+[data-testid="metric-container"] div {
+    color: #ffffff !important;
+}
+
+.stButton > button {
+    background-color: #14532d;
+    color: white;
+    border: 1px solid #22c55e;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+}
+
+.stButton > button:hover {
+    background-color: #16a34a;
+    color: white;
+    border: 1px solid #86efac;
+}
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+hr {
+    border-color: rgba(34, 197, 94, 0.35);
+}
+
+[data-testid="stHeader"] {
+    background: rgba(7, 20, 13, 0);
+}
+
+[data-testid="stToolbar"] {
+    color: white;
+}
+
+.stSlider label,
+.stSelectbox label,
+.stNumberInput label {
+    color: #d1d5db !important;
+    font-weight: 600;
+}
+
+div[data-baseweb="select"] > div {
+    background-color: #111827;
+    color: white;
+    border-color: #22c55e;
+}
+
+input {
+    background-color: #111827 !important;
+    color: white !important;
+    border-color: #22c55e !important;
+}
+
+.stAlert {
+    border-radius: 12px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+
+
 # Define scopes
 # The 'scopes' variable defines the level of access the application has to Google Sheets and Drive.
 # These specific scopes allow the app to read and write data from Google Sheets and Drive, 
