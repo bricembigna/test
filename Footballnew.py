@@ -420,7 +420,7 @@ elif st.session_state.page == "Machine Learning":
 
 # ─────────────────────────────────────────────────────────────────
 # AI Usage Declaration – Data Management Page
-# Author: [dein Name]
+# Author: Fabian
 # This section was developed with the support of Claude (Anthropic).
 # Claude was used as a coding assistant to help write the
 # Data Management page including the add, edit and delete functions.
@@ -482,7 +482,7 @@ elif st.session_state.page == "Data Management":
                 fitness = st.slider("Fitness Score", 0, 100, int(current[12]) if current[12] else 75)
                 injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
                 gender = st.selectbox("Gender", ["Male", "Female"])
-                performance = st.slider("Performance Score", 0, 100, int(current[11]) if current[11] else 75)
+                performance = st.slider("Performance Score", 0, 400, int(current[11]) if current[11] else 75)
                 attendance = st.slider("Training Attendance Rate (%)", 0, 100, int(current[7]) if current[7] else 85)
                 if st.form_submit_button("Save Changes"):
                     row_number = idx + 2
