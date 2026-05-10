@@ -448,7 +448,7 @@ elif st.session_state.page == "Data Management":
         if st.button("🗑️ Delete Player"):
             st.session_state.dm_subpage = "delete"
 
-        elif st.session_state.dm_subpage == "add":
+    elif st.session_state.dm_subpage == "add":
         st.subheader("➕ Add New Player")
         with st.form("add_form"):
             age = st.number_input("Age", min_value=8, max_value=50, step=1)
