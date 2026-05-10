@@ -210,8 +210,101 @@ elif st.session_state.page == "Dashboard":
 
 
 # Machine Learning Page and title 
+# Machine Learning Page
 elif st.session_state.page == "Machine Learning":
-    st.title("Machine Learning (page under construction)")
+
+    st.title("⚽ Player Performance Predictor")
+
+    if st.button("Homepage"):
+        st.session_state.page = "Home"
+
+    st.write(
+        "This section uses live player data from Google Sheets to predict a player's "
+        "performance score based on age, training attendance, fitness score, and goals."
+    )
+
+    # Required columns for machine learning
+    FEATURES = ["Age", "TrainingAttendanceRate", "FitnessScore", "Goals"]
+    TARGET = "PerformanceScore"
+
+    required_columns = FEATURES + [TARGET]
+
+    # Check whether all required columns exist
+    missing_columns = [col for col in required_columns if col not in df.columns]
+
+    if missing_columns:
+        st.error(f"Missing columns in Google Sheet: {missing_columns}")
+        st.stop()
+
+    # Prepare ML dataset from live Google Sheets data
+    ml_df = df[required_columns].copy()
+
+    # Convert values to numeric, in case Google Sheets imported them as text
+    for col in required_columns:
+        ml_df[col] = pd.to_numeric(ml_df[col], errors="coerce")
+
+    # Remove rows with missing or invalid values
+    ml_df = ml_df.dropna()
+
+    if len(ml_df) < 10:
+        st.warning("Not enough valid data to train the model. Please add more player records.")
+        st.stop()
+
+    X = ml_df[FEATURES]
+    y = ml_df[TARGET]
+
+    # Import machine learning libraries
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.neighbors import KNeighborsRegressor
+    from sklearn.metrics import r2_score, mean_absolute_error
+    import numpy as np
+
+    # Split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.2,
+        random_state=42
+    )
+
+    # Standardise the input variables
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    # Train KNN regression model
+    model = KNeighborsRegressor(n_neighbors=5)
+    model.fit(X_train_scaled, y_train)
+
+    # Evaluate model
+    y_pred = model.predict(X_test_scaled)
+
+    r2 = r2_score(y_test, y_pred)
+    mae = mean_absolute_error(y_test, y_pred)
+
+    st.subheader("Model Performance")
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Training Rows", len(X_train))
+    col2.metric("R² Score", f"{r2:.2f}")
+    col3.metric("Error", f"{mae:.1f}")
+
+    st.write("---")
+
+    st.subheader("Try Prediction")
+
+    input_age = st.slider("Age", 15, 50, 25)
+    input_attendance = st.slider("Training Attendance Rate (%)", 0.0, 100.0, 80.0)
+    input_fitness = st.slider("Fitness Score", 0.0, 100.0, 75.0)
+    input_goals = st.slider("Goals", 0, 50, 5)
+
+    input_array = np.array([[input_age, input_attendance, input_fitness, input_goals]])
+    input_scaled = scaler.transform(input_array)
+
+    prediction = model.predict(input_scaled)[0]
+
+    st.success(f"Predicted Performance Score: {prediction:.1f}")
    
 
 ########################################### Data Management Page ###########################################
