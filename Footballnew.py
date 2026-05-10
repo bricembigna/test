@@ -485,6 +485,46 @@ elif st.session_state.page == "Data Management":
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
 
+
+    elif st.session_state.dm_subpage == "edit":
+        st.subheader("✏️ Edit Player")
+    
+        all_data = worksheet.get_all_values()
+        rows = all_data[1:]
+    
+        if rows:
+            row_labels = [f"{row[0]} - {row[1]}" for row in rows]
+            selected = st.selectbox("Select a player to edit", row_labels)
+            idx = row_labels.index(selected)
+            current = rows[idx]
+    
+            with st.form("edit_form"):
+                player_id = current[0]
+                name = st.text_input("Name", value=current[1])
+                gender = st.selectbox("Gender", ["M", "F"], index=["M", "F"].index(current[2]) if current[2] in ["M", "F"] else 0)
+                age = st.number_input("Age", min_value=8, max_value=50, value=int(current[3]) if current[3] else 20, step=1)
+                division = st.selectbox("Division", ["U11", "U15", "U19", "Senior", "Veteran"], index=["U11", "U15", "U19", "Senior", "Veteran"].index(current[4]) if current[4] in ["U11", "U15", "U19", "Senior", "Veteran"] else 0)
+                position = st.selectbox("Position", ["GK", "DF", "MF", "FW"], index=["GK", "DF", "MF", "FW"].index(current[5]) if current[5] in ["GK", "DF", "MF", "FW"] else 0)
+                attendance = st.slider("Training Attendance Rate (%)", 0, 100, int(current[6]) if current[6] else 85)
+                matches = st.number_input("Matches Played", min_value=0, max_value=28, value=int(current[7]) if current[7] else 0, step=1)
+                sessions = st.number_input("Training Sessions", min_value=0, max_value=85, value=int(current[8]) if current[8] else 0, step=1)
+                goals = st.number_input("Goals", min_value=0, value=int(current[9]) if current[9] else 0, step=1)
+                assists = st.number_input("Assists", min_value=0, value=int(current[10]) if current[10] else 0, step=1)
+                performance = st.number_input("Performance Score", min_value=0, max_value=400, value=int(current[11]) if current[11] else 75, step=1)
+                fitness = st.slider("Fitness Score", 0, 100, int(current[12]) if current[12] else 75)
+                injury = st.selectbox("Injury Status", ["Healthy", "Minor Injury", "Injured"], index=["Healthy", "Minor Injury", "Injured"].index(current[13]) if current[13] in ["Healthy", "Minor Injury", "Injured"] else 0)
+                years = st.number_input("Years At Club", min_value=0, value=int(current[14]) if current[14] else 0, step=1)
+                if st.form_submit_button("Save Changes"):
+                    row_number = idx + 2
+                    worksheet.update(f"A{row_number}:O{row_number}", [[player_id, name, gender, age, division, position, attendance, matches, sessions, goals, assists, performance, fitness, injury, years]])
+                    st.success("✅ Player updated successfully!")
+    
+        else:
+            st.warning("No players found in the sheet.")
+    
+        if st.button("Back"):
+            st.session_state.dm_subpage = "main"
+
     elif st.session_state.dm_subpage == "delete":
         st.subheader("🗑️ Delete Player")
 
