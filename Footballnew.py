@@ -451,7 +451,7 @@ elif st.session_state.page == "Data Management":
     elif st.session_state.dm_subpage == "add":
         st.subheader("➕ Add New Player")
         with st.form("add_form"):
-            age = st.number_input("Age", min_value=15, max_value=50, step=1)
+            age = st.number_input("Age", min_value=8, max_value=50, step=1)
             position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"])
             goals = st.number_input("Goals", min_value=0, step=1)
             fitness = st.slider("Fitness Score", 0, 100, 75)
@@ -476,13 +476,13 @@ elif st.session_state.page == "Data Management":
             idx = row_labels.index(selected)
             current = rows[idx]
             with st.form("edit_form"):
-                age = st.number_input("Age", value=int(current[0]) if current[0] else 20, min_value=15, max_value=50)
+                age = st.number_input("Age", value=int(current[3]) if current[3] else 20, min_value=8, max_value=50)
                 position = st.selectbox("Position", ["Goalkeeper", "Defender", "Midfielder", "Forward"])
-                goals = st.number_input("Goals", value=int(current[2]) if current[2] else 0, min_value=0)
-                fitness = st.slider("Fitness Score", 0, 100, int(current[3]) if current[3] else 75)
+                goals = st.number_input("Goals", value=int(current[9]) if current[9] else 0, min_value=0)
+                fitness = st.slider("Fitness Score", 0, 100, int(current[12]) if current[12] else 75)
                 injury = st.selectbox("Injury Status", ["Healthy", "Injured"])
                 gender = st.selectbox("Gender", ["Male", "Female"])
-                performance = st.slider("Performance Score", 0, 100, int(current[6]) if current[6] else 75)
+                performance = st.slider("Performance Score", 0, 100, int(current[11]) if current[11] else 75)
                 attendance = st.slider("Training Attendance Rate (%)", 0, 100, int(current[7]) if current[7] else 85)
                 if st.form_submit_button("Save Changes"):
                     row_number = idx + 2
