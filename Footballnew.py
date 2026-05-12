@@ -77,18 +77,18 @@ p, li, span, div {
 }
 
 .stDownloadButton > button {
-    background-color: white;
-    color: #14532d !important;
-    border: 1px solid #22c55e;
+    background-color: #14532d;
+    color: white !important;
+    border: 1px solid #86efac;
     border-radius: 10px;
     padding: 0.6rem 1rem;
     font-weight: 600;
 }
 
 .stDownloadButton > button:hover {
-    background-color: #14532d;
-    color: white !important;
-    border: 1px solid #86efac;
+    background-color: white;
+    color: #14532d !important;
+    border: 1px solid #22c55e;
 }
 
 .block-container {
