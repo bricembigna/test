@@ -209,6 +209,7 @@ if st.session_state.page == "Home":
 
 
 ########################################### Dashboard Page ###########################################
+# Dashboard Page
 
 elif st.session_state.page == "Dashboard":
 
@@ -227,187 +228,86 @@ elif st.session_state.page == "Dashboard":
     col2.metric("Avg Performance", round(df["PerformanceScore"].mean(), 1))
     col3.metric("Avg Attendance", f"{round(df['TrainingAttendanceRate'].mean(),1)}%")
 
-    # -------------------------------
-    # Overall Dashboard
-    # -------------------------------
-    st.markdown("---")
-    st.title("📊 Overall Player Dashboard")
+    # ==================================================
+    # ROW 1 → 3 PLOTS
+    # ==================================================
 
     col1, col2, col3 = st.columns(3)
 
+    # -------------------------------
+    # Age Distribution
+    # -------------------------------
     with col1:
         st.markdown("#### Age Distribution")
-        fig, ax = plt.subplots(figsize=(5,4))
+        fig, ax = plt.subplots()
         sns.histplot(df['Age'], bins=20, kde=True, ax=ax, color='skyblue')
         ax.set_title("Age Distribution")
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(fig)
 
+    # -------------------------------
+    # Position Distribution
+    # -------------------------------
     with col2:
-        st.markdown("#### Position Distribution")
+        st.markdown("#### Player Distribution by Position")
         position_counts = df['Position'].value_counts()
-        fig, ax = plt.subplots(figsize=(5,4))
+        fig, ax = plt.subplots()
         position_counts.plot(kind='bar', ax=ax, color='lightblue')
         ax.set_title("Players by Position")
-        st.pyplot(fig, use_container_width=True)
+        ax.set_xlabel("Position")
+        ax.set_ylabel("Count")
+        st.pyplot(fig)
 
+    # -------------------------------
+    # Goals by Position
+    # -------------------------------
     with col3:
         st.markdown("#### Goals by Position")
-        fig, ax = plt.subplots(figsize=(5,4))
+        fig, ax = plt.subplots()
         sns.boxplot(x='Position', y='Goals', data=df, ax=ax)
-        ax.set_title("Goals by Position")
-        st.pyplot(fig, use_container_width=True)
+        ax.set_title("Goals Distribution by Position")
+        st.pyplot(fig)
+
+    # ==================================================
+    # ROW 2 → 3 PLOTS
+    # ==================================================
 
     col4, col5, col6 = st.columns(3)
 
+    # -------------------------------
+    # Performance vs Attendance
+    # -------------------------------
     with col4:
-        st.markdown("#### Performance vs Attendance")
-        fig, ax = plt.subplots(figsize=(5,4))
+        st.markdown("#### Performance vs Training Attendance")
+        fig, ax = plt.subplots()
         sns.scatterplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax)
         sns.regplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax, scatter=False, color='red')
         ax.set_title("Performance vs Attendance")
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(fig)
 
+    # -------------------------------
+    # Fitness vs Age
+    # -------------------------------
     with col5:
         st.markdown("#### Fitness vs Age")
-        fig, ax = plt.subplots(figsize=(5,4))
+        fig, ax = plt.subplots()
         sns.scatterplot(x='Age', y='FitnessScore', data=df, ax=ax)
         sns.regplot(x='Age', y='FitnessScore', data=df, ax=ax, scatter=False, color='red')
         ax.set_title("Fitness vs Age")
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(fig)
 
+    # -------------------------------
+    # Injury Status Distribution
+    # -------------------------------
     with col6:
-        st.markdown("#### Injury Status")
+        st.markdown("#### Injury Status Distribution")
         injury_counts = df['InjuryStatus'].value_counts()
-        fig, ax = plt.subplots(figsize=(5,4))
+        fig, ax = plt.subplots()
         injury_counts.plot(kind='bar', ax=ax, color='salmon')
         ax.set_title("Injury Status")
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(fig)
 
-    # -------------------------------
-    # Female Dashboard
-    # -------------------------------
-    female_df = df[df["Gender"] == "Female"]
-
-    st.markdown("---")
-    st.title("👩 Female Player Dashboard")
-
-    fcol1, fcol2, fcol3 = st.columns(3)
-    fcol1.metric("Total Female Players", len(female_df))
-    fcol2.metric("Avg Female Performance", round(female_df["PerformanceScore"].mean(), 1))
-    fcol3.metric("Avg Female Attendance", f"{round(female_df['TrainingAttendanceRate'].mean(),1)}%")
-
-    f1, f2, f3 = st.columns(3)
-
-    with f1:
-        st.markdown("#### Age Distribution")
-        fig, ax = plt.subplots(figsize=(5,4))
-        sns.histplot(female_df['Age'], bins=20, kde=True, ax=ax, color='skyblue')
-        ax.set_title("Age Distribution")
-        st.pyplot(fig, use_container_width=True)
-
-    with f2:
-        st.markdown("#### Position Distribution")
-        position_counts = female_df['Position'].value_counts()
-        fig, ax = plt.subplots(figsize=(5,4))
-        position_counts.plot(kind='bar', ax=ax, color='lightblue')
-        ax.set_title("Players by Position")
-        st.pyplot(fig, use_container_width=True)
-
-    with f3:
-        st.markdown("#### Goals by Position")
-        fig, ax = plt.subplots(figsize=(5,4))
-        sns.boxplot(x='Position', y='Goals', data=female_df, ax=ax)
-        ax.set_title("Goals by Position")
-        st.pyplot(fig, use_container_width=True)
-
-    f4, f5, f6 = st.columns(3)
-
-    with f4:
-        st.markdown("#### Performance vs Attendance")
-        fig, ax = plt.subplots(figsize=(5,4))
-        sns.scatterplot(x='TrainingAttendanceRate', y='PerformanceScore', data=female_df, ax=ax)
-        sns.regplot(x='TrainingAttendanceRate', y='PerformanceScore', data=female_df, ax=ax, scatter=False, color='red')
-        ax.set_title("Performance vs Attendance")
-        st.pyplot(fig, use_container_width=True)
-
-    with f5:
-        st.markdown("#### Fitness vs Age")
-        fig, ax = plt.subplots(figsize=(5,4))
-        sns.scatterplot(x='Age', y='FitnessScore', data=female_df, ax=ax)
-        sns.regplot(x='Age', y='FitnessScore', data=female_df, ax=ax, scatter=False, color='red')
-        ax.set_title("Fitness vs Age")
-        st.pyplot(fig, use_container_width=True)
-
-    with f6:
-        st.markdown("#### Injury Status")
-        injury_counts = female_df['InjuryStatus'].value_counts()
-        fig, ax = plt.subplots(figsize=(5,4))
-        injury_counts.plot(kind='bar', ax=ax, color='salmon')
-        ax.set_title("Injury Status")
-        st.pyplot(fig, use_container_width=True)
-
-    # -------------------------------
-    # Male Dashboard
-    # -------------------------------
-    male_df = df[df["Gender"] == "Male"]
-
-    st.markdown("---")
-    st.title("👨 Male Player Dashboard")
-
-    mcol1, mcol2, mcol3 = st.columns(3)
-    mcol1.metric("Total Male Players", len(male_df))
-    mcol2.metric("Avg Male Performance", round(male_df["PerformanceScore"].mean(), 1))
-    mcol3.metric("Avg Male Attendance", f"{round(male_df['TrainingAttendanceRate'].mean(),1)}%")
-
-    m1, m2, m3 = st.columns(3)
-
-    with m1:
-        st.markdown("#### Age Distribution")
-        fig, ax = plt.subplots(figsize=(5,4))
-        sns.histplot(male_df['Age'], bins=20, kde=True, ax=ax, color='skyblue')
-        ax.set_title("Age Distribution")
-        st.pyplot(fig, use_container_width=True)
-
-    with m2:
-        st.markdown("#### Position Distribution")
-        position_counts = male_df['Position'].value_counts()
-        fig, ax = plt.subplots(figsize=(5,4))
-        position_counts.plot(kind='bar', ax=ax, color='lightblue')
-        ax.set_title("Players by Position")
-        st.pyplot(fig, use_container_width=True)
-
-    with m3:
-        st.markdown("#### Goals by Position")
-        fig, ax = plt.subplots(figsize=(5,4))
-        sns.boxplot(x='Position', y='Goals', data=male_df, ax=ax)
-        ax.set_title("Goals by Position")
-        st.pyplot(fig, use_container_width=True)
-
-    m4, m5, m6 = st.columns(3)
-
-    with m4:
-        st.markdown("#### Performance vs Attendance")
-        fig, ax = plt.subplots(figsize=(5,4))
-        sns.scatterplot(x='TrainingAttendanceRate', y='PerformanceScore', data=male_df, ax=ax)
-        sns.regplot(x='TrainingAttendanceRate', y='PerformanceScore', data=male_df, ax=ax, scatter=False, color='red')
-        ax.set_title("Performance vs Attendance")
-        st.pyplot(fig, use_container_width=True)
-
-    with m5:
-        st.markdown("#### Fitness vs Age")
-        fig, ax = plt.subplots(figsize=(5,4))
-        sns.scatterplot(x='Age', y='FitnessScore', data=male_df, ax=ax)
-        sns.regplot(x='Age', y='FitnessScore', data=male_df, ax=ax, scatter=False, color='red')
-        ax.set_title("Fitness vs Age")
-        st.pyplot(fig, use_container_width=True)
-
-    with m6:
-        st.markdown("#### Injury Status")
-        injury_counts = male_df['InjuryStatus'].value_counts()
-        fig, ax = plt.subplots(figsize=(5,4))
-        injury_counts.plot(kind='bar', ax=ax, color='salmon')
-        ax.set_title("Injury Status")
-        st.pyplot(fig, use_container_width=True)
+    st.subheader("Female Division")
+    st.subheader("Male Division")
 
 
 ########################################### ML Page ###########################################
