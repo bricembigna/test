@@ -168,14 +168,10 @@ if st.session_state.page == "Home":
 
     st.title("⚽ Football Club Performance Monitor")
 
-    st.title("⚽ Football Club Performance Monitor")
-
     st.markdown("""
     ### Turning Football Data into Performance Insights
     
     Track player development, monitor squad dynamics, and analyse club performance through a unified analytics environment built for modern football operations.
-    
-    ---
     
     📊 **Visual Analytics**  
     Interactive dashboards for performance, fitness, attendance, injuries, and positional trends.
@@ -188,8 +184,6 @@ if st.session_state.page == "Home":
     
     📄 **Professional Reporting**  
     Export downloadable PDF reports for the full squad and individual divisions.
-    
-    ---
     
     Built to support smarter coaching decisions and a deeper understanding of player progression across the club.
     """)
