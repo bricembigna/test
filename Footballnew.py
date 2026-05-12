@@ -568,10 +568,17 @@ elif st.session_state.page == "Division Report":
     if st.button("Homepage"):
         st.session_state.page = "Home"
 
-    st.write(
-        "Download PDF dashboard reports for the overall team, female division, and male division."
-    )
+    st.markdown("""
+### 📊 Club Performance Reports
 
+Generate professional PDF dashboard reports containing:
+- Player performance analytics
+- Attendance and fitness insights
+- Positional and injury analysis
+- Division-specific breakdowns
+
+Select a report below to export the latest club data.
+""")
     from matplotlib.backends.backend_pdf import PdfPages
 
     def create_dashboard_pdf(dataframe, report_title):
