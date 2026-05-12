@@ -168,48 +168,39 @@ if st.session_state.page == "Home":
 
     st.title("⚽ Football Club Performance Monitor")
 
-st.markdown("""
-### Modern Football Analytics for Data-Driven Clubs
+    st.write(
+        "This application provides a comprehensive overview of player performance, "
+        "training engagement, and team composition across all divisions of the club."
+    )
 
-Monitor player development, evaluate performance trends, and generate actionable insights across every division of the club through a centralized analytics platform.
+    st.write("### Navigate through the application:")
+    
+    st.write(
+        "- **Dashboard:** Explore interactive visualizations of player data, including performance metrics, "
+        "attendance trends, positional analysis, and injury distribution."
+    )
 
-This application combines performance tracking, squad analytics, machine learning, and reporting capabilities into a single operational dashboard designed for coaches, analysts, and club management.
+    st.write(
+        "- **Machine Learning:** Use predictive models to estimate player performance based on key indicators "
+        "such as training attendance, match involvement, and physical condition."
+    )
 
----
+    st.write(
+        "- **Data Management:** Manage player records efficiently by adding, updating, or removing data "
+        "across all divisions."
+    )
 
-### Platform Capabilities
+    st.write(
+        "- **Player Report:** Generate a detailed report for individual players, including performance, "
+        "fitness, and development insights."
+    )
 
-#### 📊 Interactive Analytics Dashboard
-Explore real-time visualizations covering:
-- Player performance trends
-- Training attendance patterns
-- Positional distributions
-- Fitness and injury monitoring
-- Division-level comparisons
+    st.write("---")
 
-#### 🤖 Machine Learning Predictions
-Estimate player performance scores using predictive modelling based on:
-- Attendance consistency
-- Physical fitness
-- Match participation
-- Offensive contribution
-
-#### ⚙️ Player Data Management
-Maintain and update club records efficiently through:
-- Player creation and editing
-- Squad database management
-- Live synchronization with Google Sheets
-
-#### 📄 Automated PDF Reporting
-Generate downloadable professional reports for:
-- Overall squad performance
-- Female division analytics
-- Male division analytics
-
----
-
-This platform is designed to support evidence-based decision making and provide a clearer understanding of player progression, squad dynamics, and overall club performance.
-""")
+    st.write(
+        "This tool is designed to support coaches and club managers in making informed, data-driven decisions "
+        "to optimize player development and team performance."
+    )
 
     # Display navigation buttons under the explanation
     # The buttons provide quick navigation to other sections of the application.
