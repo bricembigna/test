@@ -62,18 +62,18 @@ p, li, span, div {
 }
 
 .stButton > button {
-    background-color: #16a34a;
+    background-color: #14532d;
     color: white;
-    border: 1px solid #86efac;
+    border: 1px solid #22c55e;
     border-radius: 10px;
     padding: 0.6rem 1rem;
     font-weight: 600;
 }
 
 .stButton > button:hover {
-    background-color: #14532d;
+    background-color: #16a34a;
     color: white;
-    border: 1px solid #22c55e;
+    border: 1px solid #86efac;
 }
 
 .stDownloadButton > button {
