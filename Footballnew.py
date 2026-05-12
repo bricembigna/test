@@ -238,7 +238,7 @@ elif st.session_state.page == "Dashboard":
     # Age Distribution
     # -------------------------------
     with col1:
-        st.subheader("Age Distribution")
+        st.markdown("#### Age Distribution")
         fig, ax = plt.subplots()
         sns.histplot(df['Age'], bins=20, kde=True, ax=ax, color='skyblue')
         ax.set_title("Age Distribution")
@@ -248,7 +248,7 @@ elif st.session_state.page == "Dashboard":
     # Position Distribution
     # -------------------------------
     with col2:
-        st.subheader("Player Distribution by Position")
+        st.markdown("#### Player Distribution by Position")
         position_counts = df['Position'].value_counts()
         fig, ax = plt.subplots()
         position_counts.plot(kind='bar', ax=ax, color='lightblue')
@@ -261,7 +261,7 @@ elif st.session_state.page == "Dashboard":
     # Goals by Position
     # -------------------------------
     with col3:
-        st.subheader("Goals by Position")
+        st.markdown("#### Goals by Position")
         fig, ax = plt.subplots()
         sns.boxplot(x='Position', y='Goals', data=df, ax=ax)
         ax.set_title("Goals Distribution by Position")
@@ -277,7 +277,7 @@ elif st.session_state.page == "Dashboard":
     # Performance vs Attendance
     # -------------------------------
     with col4:
-        st.subheader("Performance vs Training Attendance")
+        st.markdown("#### Performance vs Training Attendance")
         fig, ax = plt.subplots()
         sns.scatterplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax)
         sns.regplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax, scatter=False, color='red')
@@ -288,7 +288,7 @@ elif st.session_state.page == "Dashboard":
     # Fitness vs Age
     # -------------------------------
     with col5:
-        st.subheader("Fitness vs Age")
+        st.markdown("#### Fitness vs Age")
         fig, ax = plt.subplots()
         sns.scatterplot(x='Age', y='FitnessScore', data=df, ax=ax)
         sns.regplot(x='Age', y='FitnessScore', data=df, ax=ax, scatter=False, color='red')
@@ -299,7 +299,7 @@ elif st.session_state.page == "Dashboard":
     # Injury Status Distribution
     # -------------------------------
     with col6:
-        st.subheader("Injury Status Distribution")
+       st.markdown("#### Injury Status Distribution")
         injury_counts = df['InjuryStatus'].value_counts()
         fig, ax = plt.subplots()
         injury_counts.plot(kind='bar', ax=ax, color='salmon')
