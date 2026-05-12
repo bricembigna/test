@@ -168,48 +168,32 @@ if st.session_state.page == "Home":
 
     st.title("⚽ Football Club Performance Monitor")
 
+    st.title("⚽ Football Club Performance Monitor")
+
     st.markdown("""
-### Modern Football Analytics for Data-Driven Clubs
-
-Monitor player development, evaluate performance trends, and generate actionable insights across every division of the club through a centralized analytics platform.
-
-This application combines performance tracking, squad analytics, machine learning, and reporting capabilities into a single operational dashboard designed for coaches, analysts, and club management.
-
-### Platform Capabilities
-
-#### 📊 Interactive Analytics Dashboard
-Explore real-time visualizations covering:
-- Player performance trends
-- Training attendance patterns
-- Positional distributions
-- Fitness and injury monitoring
-- Division-level comparisons
-
-#### 🤖 Machine Learning Predictions
-Estimate player performance scores using predictive modelling based on:
-- Attendance consistency
-- Physical fitness
-- Match participation
-- Offensive contribution
-
-#### ⚙️ Player Data Management
-Maintain and update club records efficiently through:
-- Player creation and editing
-- Squad database management
-- Live synchronization with Google Sheets
-
-#### 📄 Automated PDF Reporting
-Generate downloadable professional reports for:
-- Overall squad performance
-- Female division analytics
-- Male division analytics
-
----
-
-This platform is designed to support evidence-based decision making and provide a clearer understanding of player progression, squad dynamics, and overall club performance.
-""")
-
+    ### Turning Football Data into Performance Insights
     
+    Track player development, monitor squad dynamics, and analyse club performance through a unified analytics environment built for modern football operations.
+    
+    ---
+    
+    📊 **Visual Analytics**  
+    Interactive dashboards for performance, fitness, attendance, injuries, and positional trends.
+    
+    🤖 **Performance Prediction**  
+    Machine learning models designed to estimate player performance based on live club data.
+    
+    ⚙️ **Squad Management**  
+    Create, update, and maintain player records through an integrated database system.
+    
+    📄 **Professional Reporting**  
+    Export downloadable PDF reports for the full squad and individual divisions.
+    
+    ---
+    
+    Built to support smarter coaching decisions and a deeper understanding of player progression across the club.
+    """)
+
     
     # Display navigation buttons under the explanation
     # The buttons provide quick navigation to other sections of the application.
