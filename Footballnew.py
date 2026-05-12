@@ -77,9 +77,9 @@ p, li, span, div {
 }
 
 .stDownloadButton > button {
-    background-color: #16a34a;
-    color: #ffffff !important;
-    border: 1px solid #86efac;
+    background-color: white;
+    color: #14532d !important;
+    border: 1px solid #22c55e;
     border-radius: 10px;
     padding: 0.6rem 1rem;
     font-weight: 600;
@@ -87,8 +87,8 @@ p, li, span, div {
 
 .stDownloadButton > button:hover {
     background-color: #14532d;
-    color: #ffffff !important;
-    border: 1px solid #22c55e;
+    color: white !important;
+    border: 1px solid #86efac;
 }
 
 .block-container {
