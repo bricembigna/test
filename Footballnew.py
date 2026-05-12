@@ -546,7 +546,7 @@ elif st.session_state.page == "Data Management":
 
 ########################################### Division Report Page ###########################################
 
-elif st.session_state.page == "Employee Report":
+elif st.session_state.page == "Division Report":
 
     st.title("📄 Division Report Downloads")
 
