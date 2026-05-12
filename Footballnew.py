@@ -76,6 +76,21 @@ p, li, span, div {
     border: 1px solid #22c55e;
 }
 
+.stDownloadButton > button {
+    background-color: #16a34a;
+    color: #ffffff !important;
+    border: 1px solid #86efac;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+}
+
+.stDownloadButton > button:hover {
+    background-color: #14532d;
+    color: #ffffff !important;
+    border: 1px solid #22c55e;
+}
+
 .block-container {
     padding-top: 2rem;
     padding-bottom: 3rem;
