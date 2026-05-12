@@ -299,7 +299,7 @@ elif st.session_state.page == "Dashboard":
     # Injury Status Distribution
     # -------------------------------
     with col6:
-       st.markdown("#### Injury Status Distribution")
+        st.markdown("#### Injury Status Distribution")
         injury_counts = df['InjuryStatus'].value_counts()
         fig, ax = plt.subplots()
         injury_counts.plot(kind='bar', ax=ax, color='salmon')
