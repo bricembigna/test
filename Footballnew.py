@@ -202,7 +202,7 @@ if st.session_state.page == "Home":
             st.session_state.page = "Data Management"
     with col4:
         if st.button("Division Report"):
-            st.session_state.page = "Employee Report"
+            st.session_state.page = "Division Report"
 
 
 
@@ -541,3 +541,143 @@ elif st.session_state.page == "Data Management":
 
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
+
+
+
+########################################### Division Report Page ###########################################
+
+elif st.session_state.page == "Employee Report":
+
+    st.title("📄 Division Report Downloads")
+
+    if st.button("Homepage"):
+        st.session_state.page = "Home"
+
+    st.write(
+        "Download PDF dashboard reports for the overall team, female division, and male division."
+    )
+
+    from matplotlib.backends.backend_pdf import PdfPages
+
+    def create_dashboard_pdf(dataframe, report_title):
+
+        pdf_buffer = io.BytesIO()
+
+        with PdfPages(pdf_buffer) as pdf:
+
+            # -------------------------------
+            # Cover Page
+            # -------------------------------
+            fig, ax = plt.subplots(figsize=(11, 8.5))
+            ax.axis("off")
+
+            ax.text(0.5, 0.72, report_title, ha="center", fontsize=24, fontweight="bold")
+            ax.text(0.5, 0.60, f"Total Players: {len(dataframe)}", ha="center", fontsize=16)
+
+            if not dataframe.empty:
+                ax.text(0.5, 0.52, f"Average Performance: {round(dataframe['PerformanceScore'].mean(), 1)}", ha="center", fontsize=14)
+                ax.text(0.5, 0.46, f"Average Attendance: {round(dataframe['TrainingAttendanceRate'].mean(), 1)}%", ha="center", fontsize=14)
+
+            pdf.savefig(fig)
+            plt.close(fig)
+
+            if dataframe.empty:
+                return pdf_buffer.getvalue()
+
+            # -------------------------------
+            # Plot 1 - Age Distribution
+            # -------------------------------
+            fig, ax = plt.subplots(figsize=(11, 8.5))
+            sns.histplot(dataframe["Age"], bins=20, kde=True, ax=ax, color="skyblue")
+            ax.set_title("Age Distribution")
+            pdf.savefig(fig)
+            plt.close(fig)
+
+            # -------------------------------
+            # Plot 2 - Position Distribution
+            # -------------------------------
+            fig, ax = plt.subplots(figsize=(11, 8.5))
+            position_counts = dataframe["Position"].value_counts()
+            position_counts.plot(kind="bar", ax=ax, color="lightblue")
+            ax.set_title("Players by Position")
+            ax.set_xlabel("Position")
+            ax.set_ylabel("Count")
+            pdf.savefig(fig)
+            plt.close(fig)
+
+            # -------------------------------
+            # Plot 3 - Goals by Position
+            # -------------------------------
+            fig, ax = plt.subplots(figsize=(11, 8.5))
+            sns.boxplot(x="Position", y="Goals", data=dataframe, ax=ax)
+            ax.set_title("Goals by Position")
+            pdf.savefig(fig)
+            plt.close(fig)
+
+            # -------------------------------
+            # Plot 4 - Performance vs Attendance
+            # -------------------------------
+            fig, ax = plt.subplots(figsize=(11, 8.5))
+            sns.scatterplot(x="TrainingAttendanceRate", y="PerformanceScore", data=dataframe, ax=ax)
+            if len(dataframe) >= 2:
+                sns.regplot(x="TrainingAttendanceRate", y="PerformanceScore", data=dataframe, ax=ax, scatter=False, color="red")
+            ax.set_title("Performance vs Attendance")
+            pdf.savefig(fig)
+            plt.close(fig)
+
+            # -------------------------------
+            # Plot 5 - Fitness vs Age
+            # -------------------------------
+            fig, ax = plt.subplots(figsize=(11, 8.5))
+            sns.scatterplot(x="Age", y="FitnessScore", data=dataframe, ax=ax)
+            if len(dataframe) >= 2:
+                sns.regplot(x="Age", y="FitnessScore", data=dataframe, ax=ax, scatter=False, color="red")
+            ax.set_title("Fitness vs Age")
+            pdf.savefig(fig)
+            plt.close(fig)
+
+            # -------------------------------
+            # Plot 6 - Injury Status
+            # -------------------------------
+            fig, ax = plt.subplots(figsize=(11, 8.5))
+            injury_counts = dataframe["InjuryStatus"].value_counts()
+            injury_counts.plot(kind="bar", ax=ax, color="salmon")
+            ax.set_title("Injury Status")
+            pdf.savefig(fig)
+            plt.close(fig)
+
+        pdf_buffer.seek(0)
+        return pdf_buffer.getvalue()
+
+    female_df = df[df["Gender"] == "F"]
+    male_df = df[df["Gender"] == "M"]
+
+    overall_pdf = create_dashboard_pdf(df, "Overall Team Dashboard Report")
+    female_pdf = create_dashboard_pdf(female_df, "Female Division Dashboard Report")
+    male_pdf = create_dashboard_pdf(male_df, "Male Division Dashboard Report")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.download_button(
+            label="⬇️ Download Overall Team PDF",
+            data=overall_pdf,
+            file_name="overall_team_dashboard.pdf",
+            mime="application/pdf"
+        )
+
+    with col2:
+        st.download_button(
+            label="⬇️ Download Female Division PDF",
+            data=female_pdf,
+            file_name="female_division_dashboard.pdf",
+            mime="application/pdf"
+        )
+
+    with col3:
+        st.download_button(
+            label="⬇️ Download Male Division PDF",
+            data=male_pdf,
+            file_name="male_division_dashboard.pdf",
+            mime="application/pdf"
+        )
