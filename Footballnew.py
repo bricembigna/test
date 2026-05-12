@@ -211,7 +211,6 @@ if st.session_state.page == "Home":
 ########################################### Dashboard Page ###########################################
 # Dashboard Page
 
-
 elif st.session_state.page == "Dashboard":
 
     st.title("⚽ Player Performance Dashboard")
@@ -229,66 +228,83 @@ elif st.session_state.page == "Dashboard":
     col2.metric("Avg Performance", round(df["PerformanceScore"].mean(), 1))
     col3.metric("Avg Attendance", f"{round(df['TrainingAttendanceRate'].mean(),1)}%")
 
+    # ==================================================
+    # ROW 1 → 3 PLOTS
+    # ==================================================
+
+    col1, col2, col3 = st.columns(3)
+
     # -------------------------------
     # Age Distribution
     # -------------------------------
-    st.subheader("Age Distribution")
-    fig, ax = plt.subplots()
-    sns.histplot(df['Age'], bins=20, kde=True, ax=ax, color='skyblue')
-    ax.set_title("Age Distribution")
-    st.pyplot(fig)
+    with col1:
+        st.subheader("Age Distribution")
+        fig, ax = plt.subplots()
+        sns.histplot(df['Age'], bins=20, kde=True, ax=ax, color='skyblue')
+        ax.set_title("Age Distribution")
+        st.pyplot(fig)
 
     # -------------------------------
     # Position Distribution
     # -------------------------------
-    st.subheader("Player Distribution by Position")
-    position_counts = df['Position'].value_counts()
-    fig, ax = plt.subplots()
-    position_counts.plot(kind='bar', ax=ax, color='lightblue')
-    ax.set_title("Players by Position")
-    ax.set_xlabel("Position")
-    ax.set_ylabel("Count")
-    st.pyplot(fig)
+    with col2:
+        st.subheader("Player Distribution by Position")
+        position_counts = df['Position'].value_counts()
+        fig, ax = plt.subplots()
+        position_counts.plot(kind='bar', ax=ax, color='lightblue')
+        ax.set_title("Players by Position")
+        ax.set_xlabel("Position")
+        ax.set_ylabel("Count")
+        st.pyplot(fig)
 
     # -------------------------------
     # Goals by Position
     # -------------------------------
-    st.subheader("Goals by Position")
-    fig, ax = plt.subplots()
-    sns.boxplot(x='Position', y='Goals', data=df, ax=ax)
-    ax.set_title("Goals Distribution by Position")
-    st.pyplot(fig)
+    with col3:
+        st.subheader("Goals by Position")
+        fig, ax = plt.subplots()
+        sns.boxplot(x='Position', y='Goals', data=df, ax=ax)
+        ax.set_title("Goals Distribution by Position")
+        st.pyplot(fig)
+
+    # ==================================================
+    # ROW 2 → 3 PLOTS
+    # ==================================================
+
+    col4, col5, col6 = st.columns(3)
 
     # -------------------------------
     # Performance vs Attendance
     # -------------------------------
-    st.subheader("Performance vs Training Attendance")
-    fig, ax = plt.subplots()
-    sns.scatterplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax)
-    sns.regplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax, scatter=False, color='red')
-    ax.set_title("Performance vs Attendance")
-    st.pyplot(fig)
+    with col4:
+        st.subheader("Performance vs Training Attendance")
+        fig, ax = plt.subplots()
+        sns.scatterplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax)
+        sns.regplot(x='TrainingAttendanceRate', y='PerformanceScore', data=df, ax=ax, scatter=False, color='red')
+        ax.set_title("Performance vs Attendance")
+        st.pyplot(fig)
 
     # -------------------------------
     # Fitness vs Age
     # -------------------------------
-    st.subheader("Fitness vs Age")
-    fig, ax = plt.subplots()
-    sns.scatterplot(x='Age', y='FitnessScore', data=df, ax=ax)
-    sns.regplot(x='Age', y='FitnessScore', data=df, ax=ax, scatter=False, color='red')
-    ax.set_title("Fitness vs Age")
-    st.pyplot(fig)
+    with col5:
+        st.subheader("Fitness vs Age")
+        fig, ax = plt.subplots()
+        sns.scatterplot(x='Age', y='FitnessScore', data=df, ax=ax)
+        sns.regplot(x='Age', y='FitnessScore', data=df, ax=ax, scatter=False, color='red')
+        ax.set_title("Fitness vs Age")
+        st.pyplot(fig)
 
     # -------------------------------
     # Injury Status Distribution
     # -------------------------------
-    st.subheader("Injury Status Distribution")
-    injury_counts = df['InjuryStatus'].value_counts()
-    fig, ax = plt.subplots()
-    injury_counts.plot(kind='bar', ax=ax, color='salmon')
-    ax.set_title("Injury Status")
-    st.pyplot(fig)
-
+    with col6:
+        st.subheader("Injury Status Distribution")
+        injury_counts = df['InjuryStatus'].value_counts()
+        fig, ax = plt.subplots()
+        injury_counts.plot(kind='bar', ax=ax, color='salmon')
+        ax.set_title("Injury Status")
+        st.pyplot(fig)
     
 
 
