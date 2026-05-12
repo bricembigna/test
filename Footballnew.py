@@ -175,8 +175,6 @@ Monitor player development, evaluate performance trends, and generate actionable
 
 This application combines performance tracking, squad analytics, machine learning, and reporting capabilities into a single operational dashboard designed for coaches, analysts, and club management.
 
----
-
 ### Platform Capabilities
 
 #### 📊 Interactive Analytics Dashboard
