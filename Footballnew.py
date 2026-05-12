@@ -305,7 +305,9 @@ elif st.session_state.page == "Dashboard":
         injury_counts.plot(kind='bar', ax=ax, color='salmon')
         ax.set_title("Injury Status")
         st.pyplot(fig)
-    
+
+    st.subheader("Female Division")
+    st.subheader("Male Division")
 
 
 ########################################### ML Page ###########################################
