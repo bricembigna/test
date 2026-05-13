@@ -2,6 +2,10 @@
 ##################################################     Source Code      ###########################################################
 ###################################################################################################################################
 
+# ======================================================================================================================
+# 1. IMPORTS
+# ======================================================================================================================
+
 
 import streamlit as st
 import gspread
@@ -13,18 +17,20 @@ import openai
 from fpdf import FPDF
 import io
 
-# --------------------------------------------------
-# PAGE CONFIG
-# --------------------------------------------------
+# ======================================================================================================================
+# 2. STREAMLIT PAGE CONFIGURATION
+# ======================================================================================================================
+
 st.set_page_config(
     page_title="Football Club Performance Monitor",
     page_icon="⚽",
     layout="wide"
 )
 
-# --------------------------------------------------
-# GLOBAL STYLE — TACTICAL FOOTBALL DASHBOARD THEME
-# --------------------------------------------------
+# ======================================================================================================================
+# 3. GLOBAL APPLICATION STYLING
+# ======================================================================================================================
+
 st.markdown("""
 <style>
 .stApp {
@@ -133,33 +139,32 @@ input {
 </style>
 """, unsafe_allow_html=True)
 
+# ======================================================================================================================
+# 4. GOOGLE SHEETS AUTHENTICATION AND DATA LOADING
+# ======================================================================================================================
 
-
-
-# Define scopes
-# The 'scopes' variable defines the level of access the application has to Google Sheets and Drive.
-# These specific scopes allow the app to read and write data from Google Sheets and Drive, 
-# enabling secure, real-time interaction with HR-related datasets.
 scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
-# Authenticate using Streamlit secrets
-# This method uses a JSON configuration stored in Streamlit secrets for authentication.
-# It's a secure way to handle credentials, ensuring sensitive data is not hard-coded.
 credentials = Credentials.from_service_account_info(
     st.secrets["google_credentials"],
     scopes=scopes
 )
 client = gspread.authorize(credentials)
 
-# Access Google Sheet
 sheet = client.open("Dataset").sheet1
 data = sheet.get_all_records()
-df = pd.DataFrame(data)  # Converts the data into a Pandas DataFrame for easier manipulation and analysis.
+df = pd.DataFrame(data)
 
-# Initialize session state for page tracking
-# Streamlit's session state is used to handle page navigation, ensuring a smooth and intuitive user experience.
+# ======================================================================================================================
+# 5. SESSION STATE INITIALISATION
+# ======================================================================================================================
+
 if "page" not in st.session_state:
     st.session_state.page = "Home"
+
+# ======================================================================================================================
+# 6. HOME PAGE
+# ======================================================================================================================
 
 # Home Page
 if st.session_state.page == "Home":
@@ -189,8 +194,6 @@ if st.session_state.page == "Home":
     """)
 
     
-    # Display navigation buttons under the explanation
-    # The buttons provide quick navigation to other sections of the application.
     st.write("### Navigate to:")
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     with col1:
@@ -208,10 +211,10 @@ if st.session_state.page == "Home":
 
 
 
+# ======================================================================================================================
+# 7. DASHBOARD PAGE
+# ======================================================================================================================
 
-
-########################################### Dashboard Page ###########################################
-# Dashboard Page
 
 elif st.session_state.page == "Dashboard":
 
