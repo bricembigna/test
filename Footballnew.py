@@ -1,11 +1,11 @@
-###################################################################################################################################
-##################################################     Source Code      ###########################################################
-###################################################################################################################################
+#########################################################################################################################
+#############################################     Source Code      ######################################################
+#########################################################################################################################
+
 
 # ======================================================================================================================
 # 1. IMPORTS
 # ======================================================================================================================
-
 
 import streamlit as st
 import gspread
@@ -17,15 +17,12 @@ import openai
 from fpdf import FPDF
 import io
 
+
 # ======================================================================================================================
 # 2. STREAMLIT PAGE CONFIGURATION
 # ======================================================================================================================
 
-st.set_page_config(
-    page_title="Football Club Performance Monitor",
-    page_icon="⚽",
-    layout="wide"
-)
+st.set_page_config(page_title="Football Club Performance Monitor", page_icon="⚽", layout="wide")
 
 # ======================================================================================================================
 # 3. GLOBAL APPLICATION STYLING
@@ -33,109 +30,25 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-.stApp {
-    background: linear-gradient(135deg, #07140d 0%, #0e1f16 45%, #111827 100%);
-    color: white;
-}
-
-h1, h2, h3 {
-    color: #ffffff;
-    font-weight: 700;
-}
-
-p, li, span, div {
-    color: #d1d5db;
-}
-
-[data-testid="stMarkdownContainer"] {
-    color: #d1d5db;
-}
-
-[data-testid="metric-container"] {
-    background-color: rgba(17, 24, 39, 0.95);
-    border: 1px solid rgba(34, 197, 94, 0.35);
-    border-radius: 16px;
-    padding: 18px;
-    box-shadow: 0px 4px 18px rgba(0,0,0,0.35);
-}
-
-[data-testid="metric-container"] label {
-    color: #a7f3d0 !important;
-}
-
-[data-testid="metric-container"] div {
-    color: #ffffff !important;
-}
-
-.stButton > button {
-    background-color: #14532d;
-    color: white;
-    border: 1px solid #22c55e;
-    border-radius: 10px;
-    padding: 0.6rem 1rem;
-    font-weight: 600;
-}
-
-.stButton > button:hover {
-    background-color: #16a34a;
-    color: white;
-    border: 1px solid #86efac;
-}
-
-.stDownloadButton > button {
-    background-color: #14532d;
-    color: white !important;
-    border: 1px solid #86efac;
-    border-radius: 10px;
-    padding: 0.6rem 1rem;
-    font-weight: 600;
-}
-
-.stDownloadButton > button:hover {
-    background-color: white;
-    color: #14532d !important;
-    border: 1px solid #22c55e;
-}
-
-.block-container {
-    padding-top: 2rem;
-    padding-bottom: 3rem;
-}
-
-hr {
-    border-color: rgba(34, 197, 94, 0.35);
-}
-
-[data-testid="stHeader"] {
-    background: rgba(7, 20, 13, 0);
-}
-
-[data-testid="stToolbar"] {
-    color: white;
-}
-
-.stSlider label,
-.stSelectbox label,
-.stNumberInput label {
-    color: #d1d5db !important;
-    font-weight: 600;
-}
-
-div[data-baseweb="select"] > div {
-    background-color: #111827;
-    color: white;
-    border-color: #22c55e;
-}
-
-input {
-    background-color: #111827 !important;
-    color: white !important;
-    border-color: #22c55e !important;
-}
-
-.stAlert {
-    border-radius: 12px;
-}
+.stApp { background: linear-gradient(135deg, #07140d 0%, #0e1f16 45%, #111827 100%); color: white; }
+h1, h2, h3 { color: #ffffff; font-weight: 700; }
+p, li, span, div { color: #d1d5db; }
+[data-testid="stMarkdownContainer"] { color: #d1d5db; }
+[data-testid="metric-container"] { background-color: rgba(17, 24, 39, 0.95); border: 1px solid rgba(34, 197, 94, 0.35); border-radius: 16px; padding: 18px; box-shadow: 0px 4px 18px rgba(0,0,0,0.35); }
+[data-testid="metric-container"] label { color: #a7f3d0 !important; }
+[data-testid="metric-container"] div { color: #ffffff !important; }
+.stButton > button { background-color: #14532d; color: white; border: 1px solid #22c55e; border-radius: 10px; padding: 0.6rem 1rem; font-weight: 600; }
+.stButton > button:hover { background-color: #16a34a; color: white; border: 1px solid #86efac; }
+.stDownloadButton > button { background-color: #14532d; color: white !important; border: 1px solid #86efac; border-radius: 10px; padding: 0.6rem 1rem; font-weight: 600; }
+.stDownloadButton > button:hover { background-color: white; color: #14532d !important; border: 1px solid #22c55e; }
+.block-container { padding-top: 2rem; padding-bottom: 3rem; }
+hr { border-color: rgba(34, 197, 94, 0.35); }
+[data-testid="stHeader"] { background: rgba(7, 20, 13, 0); }
+[data-testid="stToolbar"] { color: white; }
+.stSlider label, .stSelectbox label, .stNumberInput label { color: #d1d5db !important; font-weight: 600; }
+div[data-baseweb="select"] > div { background-color: #111827; color: white; border-color: #22c55e; }
+input { background-color: #111827 !important; color: white !important; border-color: #22c55e !important; }
+.stAlert { border-radius: 12px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -145,22 +58,26 @@ input {
 
 scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
-credentials = Credentials.from_service_account_info(
-    st.secrets["google_credentials"],
-    scopes=scopes
-)
+credentials = Credentials.from_service_account_info(st.secrets["google_credentials"], scopes=scopes)
+
 client = gspread.authorize(credentials)
 
 sheet = client.open("Dataset").sheet1
+
 data = sheet.get_all_records()
-df = pd.DataFrame(data)
+
+df = pd.DataFrame(data)  # Converts the data into a Pandas DataFrame for easier manipulation and analysis.
+
 
 # ======================================================================================================================
 # 5. SESSION STATE INITIALISATION
 # ======================================================================================================================
 
+# Initialize session state for page tracking
+# Streamlit's session state is used to handle page navigation, ensuring a smooth and intuitive user experience.
 if "page" not in st.session_state:
     st.session_state.page = "Home"
+
 
 # ======================================================================================================================
 # 6. HOME PAGE
@@ -194,6 +111,10 @@ if st.session_state.page == "Home":
     """)
 
     
+    # --------------------------------------------------------------------------------------------------------------
+    # 6.1 HOME PAGE NAVIGATION BUTTONS
+    # --------------------------------------------------------------------------------------------------------------
+
     st.write("### Navigate to:")
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     with col1:
@@ -210,11 +131,9 @@ if st.session_state.page == "Home":
             st.session_state.page = "Division Report"
 
 
-
 # ======================================================================================================================
 # 7. DASHBOARD PAGE
 # ======================================================================================================================
-
 
 elif st.session_state.page == "Dashboard":
 
@@ -223,9 +142,10 @@ elif st.session_state.page == "Dashboard":
     if st.button("Homepage"):
         st.session_state.page = "Home"
 
-    # -------------------------------
-    # Helper function for dashboards
-    # -------------------------------
+    # --------------------------------------------------------------------------------------------------------------
+    # 7.1 DASHBOARD HELPER FUNCTION
+    # --------------------------------------------------------------------------------------------------------------
+
     def plot_dashboard(dataframe, title):
 
         st.markdown("---")
@@ -294,33 +214,31 @@ elif st.session_state.page == "Dashboard":
             ax.set_title("Injury Status")
             st.pyplot(fig, use_container_width=True)
 
-    # -------------------------------
-    # Overall Dashboard
-    # -------------------------------
+    # --------------------------------------------------------------------------------------------------------------
+    # 7.2 OVERALL PLAYER DASHBOARD
+    # --------------------------------------------------------------------------------------------------------------
+
     plot_dashboard(df, "📊 Overall Player Dashboard")
 
-    # -------------------------------
-    # Female Dashboard
-    # Your sheet uses F, not Female
-    # -------------------------------
+    # --------------------------------------------------------------------------------------------------------------
+    # 7.3 FEMALE PLAYER DASHBOARD
+    # --------------------------------------------------------------------------------------------------------------
+
     female_df = df[df["Gender"] == "F"]
     plot_dashboard(female_df, "👩 Female Player Dashboard")
 
-    # -------------------------------
-    # Male Dashboard
-    # Your sheet uses M, not Male
-    # -------------------------------
+    # --------------------------------------------------------------------------------------------------------------
+    # 7.4 MALE PLAYER DASHBOARD
+    # --------------------------------------------------------------------------------------------------------------
+
     male_df = df[df["Gender"] == "M"]
     plot_dashboard(male_df, "👨 Male Player Dashboard")
 
 
-########################################### ML Page ###########################################
+# ======================================================================================================================
+# 8. MACHINE LEARNING PAGE
+# ======================================================================================================================
 
-
-
-
-# Machine Learning Page and title 
-# Machine Learning Page
 elif st.session_state.page == "Machine Learning":
 
     st.title("⚽ Player Performance Predictor")
@@ -333,27 +251,31 @@ elif st.session_state.page == "Machine Learning":
         "performance score based on age, training attendance, fitness score, and goals."
     )
 
+    # --------------------------------------------------------------------------------------------------------------
+    # 8.1 DEFINE MODEL INPUTS AND TARGET
+    # --------------------------------------------------------------------------------------------------------------
+
     # Required columns for machine learning
     FEATURES = ["Age", "TrainingAttendanceRate", "FitnessScore", "Goals"]
     TARGET = "PerformanceScore"
 
     required_columns = FEATURES + [TARGET]
 
-    # Check whether all required columns exist
+    # --------------------------------------------------------------------------------------------------------------
+    # 8.2 VALIDATE AND PREPARE DATASET
+    # --------------------------------------------------------------------------------------------------------------
+
     missing_columns = [col for col in required_columns if col not in df.columns]
 
     if missing_columns:
         st.error(f"Missing columns in Google Sheet: {missing_columns}")
         st.stop()
 
-    # Prepare ML dataset from live Google Sheets data
     ml_df = df[required_columns].copy()
 
-    # Convert values to numeric, in case Google Sheets imported them as text
     for col in required_columns:
         ml_df[col] = pd.to_numeric(ml_df[col], errors="coerce")
 
-    # Remove rows with missing or invalid values
     ml_df = ml_df.dropna()
 
     if len(ml_df) < 10:
@@ -363,35 +285,33 @@ elif st.session_state.page == "Machine Learning":
     X = ml_df[FEATURES]
     y = ml_df[TARGET]
 
-    # Import machine learning libraries
+    # --------------------------------------------------------------------------------------------------------------
+    # 8.3 TRAIN MACHINE LEARNING MODEL
+    # --------------------------------------------------------------------------------------------------------------
+
     from sklearn.model_selection import train_test_split
     from sklearn.preprocessing import StandardScaler
     from sklearn.neighbors import KNeighborsRegressor
     from sklearn.metrics import r2_score, mean_absolute_error
     import numpy as np
 
-    # Split data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.2,
-        random_state=42
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Standardise the input variables
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    # Train KNN regression model
     model = KNeighborsRegressor(n_neighbors=5)
     model.fit(X_train_scaled, y_train)
 
-    # Evaluate model
     y_pred = model.predict(X_test_scaled)
 
     r2 = r2_score(y_test, y_pred)
     mae = mean_absolute_error(y_test, y_pred)
+
+    # --------------------------------------------------------------------------------------------------------------
+    # 8.4 DISPLAY MODEL PERFORMANCE
+    # --------------------------------------------------------------------------------------------------------------
 
     st.subheader("Model Performance")
 
@@ -401,6 +321,10 @@ elif st.session_state.page == "Machine Learning":
     col3.metric("Error", f"{mae:.1f}")
 
     st.write("---")
+
+    # --------------------------------------------------------------------------------------------------------------
+    # 8.5 USER INPUT PREDICTION TOOL
+    # --------------------------------------------------------------------------------------------------------------
 
     st.subheader("Try Prediction")
 
@@ -417,7 +341,9 @@ elif st.session_state.page == "Machine Learning":
     st.success(f"Predicted Performance Score: {prediction:.1f}")
    
 
-########################################### Data Management Page ###########################################
+# ======================================================================================================================
+# 9. DATA MANAGEMENT PAGE
+# ======================================================================================================================
 
 
 # ─────────────────────────────────────────────────────────────────
@@ -441,6 +367,10 @@ elif st.session_state.page == "Data Management":
     if "dm_subpage" not in st.session_state:
         st.session_state.dm_subpage = "main"
 
+    # --------------------------------------------------------------------------------------------------------------
+    # 9.1 DATA MANAGEMENT MAIN MENU
+    # --------------------------------------------------------------------------------------------------------------
+
     if st.session_state.dm_subpage == "main":
         st.subheader("What would you like to do?")
 
@@ -452,6 +382,10 @@ elif st.session_state.page == "Data Management":
 
         if st.button("🗑️ Delete Player"):
             st.session_state.dm_subpage = "delete"
+
+    # --------------------------------------------------------------------------------------------------------------
+    # 9.2 ADD NEW PLAYER
+    # --------------------------------------------------------------------------------------------------------------
 
     elif st.session_state.dm_subpage == "add":
         st.subheader("➕ Add New Player")
@@ -487,6 +421,10 @@ elif st.session_state.page == "Data Management":
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
 
+
+    # --------------------------------------------------------------------------------------------------------------
+    # 9.3 EDIT EXISTING PLAYER
+    # --------------------------------------------------------------------------------------------------------------
 
     elif st.session_state.dm_subpage == "edit":
         st.subheader("✏️ Edit Player")
@@ -527,6 +465,10 @@ elif st.session_state.page == "Data Management":
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
 
+    # --------------------------------------------------------------------------------------------------------------
+    # 9.4 DELETE PLAYER
+    # --------------------------------------------------------------------------------------------------------------
+
     elif st.session_state.dm_subpage == "delete":
         st.subheader("🗑️ Delete Player")
 
@@ -549,7 +491,9 @@ elif st.session_state.page == "Data Management":
 
 
 
-########################################### Division Report Page ###########################################
+# ======================================================================================================================
+# 10. DIVISION REPORT PAGE
+# ======================================================================================================================
 
 elif st.session_state.page == "Division Report":
 
@@ -557,6 +501,10 @@ elif st.session_state.page == "Division Report":
 
     if st.button("Homepage"):
         st.session_state.page = "Home"
+
+    # --------------------------------------------------------------------------------------------------------------
+    # 10.1 REPORT PAGE INTRODUCTION
+    # --------------------------------------------------------------------------------------------------------------
 
     st.markdown("""
 ### 📊 Club Performance Reports
@@ -569,7 +517,12 @@ Generate professional PDF dashboard reports containing:
 
 Select a report below to export the latest club data.
 """)
+
     from matplotlib.backends.backend_pdf import PdfPages
+
+    # --------------------------------------------------------------------------------------------------------------
+    # 10.2 PDF DASHBOARD GENERATION FUNCTION
+    # --------------------------------------------------------------------------------------------------------------
 
     def create_dashboard_pdf(dataframe, report_title):
 
@@ -577,9 +530,10 @@ Select a report below to export the latest club data.
 
         with PdfPages(pdf_buffer) as pdf:
 
-            # -------------------------------
-            # Cover Page
-            # -------------------------------
+            # ------------------------------------------------------------------------------------------------------
+            # 10.2.1 COVER PAGE
+            # ------------------------------------------------------------------------------------------------------
+
             fig, ax = plt.subplots(figsize=(11, 8.5))
             ax.axis("off")
 
@@ -596,18 +550,20 @@ Select a report below to export the latest club data.
             if dataframe.empty:
                 return pdf_buffer.getvalue()
 
-            # -------------------------------
-            # Plot 1 - Age Distribution
-            # -------------------------------
+            # ------------------------------------------------------------------------------------------------------
+            # 10.2.2 AGE DISTRIBUTION CHART
+            # ------------------------------------------------------------------------------------------------------
+
             fig, ax = plt.subplots(figsize=(11, 8.5))
             sns.histplot(dataframe["Age"], bins=20, kde=True, ax=ax, color="skyblue")
             ax.set_title("Age Distribution")
             pdf.savefig(fig)
             plt.close(fig)
 
-            # -------------------------------
-            # Plot 2 - Position Distribution
-            # -------------------------------
+            # ------------------------------------------------------------------------------------------------------
+            # 10.2.3 POSITION DISTRIBUTION CHART
+            # ------------------------------------------------------------------------------------------------------
+
             fig, ax = plt.subplots(figsize=(11, 8.5))
             position_counts = dataframe["Position"].value_counts()
             position_counts.plot(kind="bar", ax=ax, color="lightblue")
@@ -617,18 +573,20 @@ Select a report below to export the latest club data.
             pdf.savefig(fig)
             plt.close(fig)
 
-            # -------------------------------
-            # Plot 3 - Goals by Position
-            # -------------------------------
+            # ------------------------------------------------------------------------------------------------------
+            # 10.2.4 GOALS BY POSITION CHART
+            # ------------------------------------------------------------------------------------------------------
+
             fig, ax = plt.subplots(figsize=(11, 8.5))
             sns.boxplot(x="Position", y="Goals", data=dataframe, ax=ax)
             ax.set_title("Goals by Position")
             pdf.savefig(fig)
             plt.close(fig)
 
-            # -------------------------------
-            # Plot 4 - Performance vs Attendance
-            # -------------------------------
+            # ------------------------------------------------------------------------------------------------------
+            # 10.2.5 PERFORMANCE VS ATTENDANCE CHART
+            # ------------------------------------------------------------------------------------------------------
+
             fig, ax = plt.subplots(figsize=(11, 8.5))
             sns.scatterplot(x="TrainingAttendanceRate", y="PerformanceScore", data=dataframe, ax=ax)
             if len(dataframe) >= 2:
@@ -637,9 +595,10 @@ Select a report below to export the latest club data.
             pdf.savefig(fig)
             plt.close(fig)
 
-            # -------------------------------
-            # Plot 5 - Fitness vs Age
-            # -------------------------------
+            # ------------------------------------------------------------------------------------------------------
+            # 10.2.6 FITNESS VS AGE CHART
+            # ------------------------------------------------------------------------------------------------------
+
             fig, ax = plt.subplots(figsize=(11, 8.5))
             sns.scatterplot(x="Age", y="FitnessScore", data=dataframe, ax=ax)
             if len(dataframe) >= 2:
@@ -648,9 +607,10 @@ Select a report below to export the latest club data.
             pdf.savefig(fig)
             plt.close(fig)
 
-            # -------------------------------
-            # Plot 6 - Injury Status
-            # -------------------------------
+            # ------------------------------------------------------------------------------------------------------
+            # 10.2.7 INJURY STATUS CHART
+            # ------------------------------------------------------------------------------------------------------
+
             fig, ax = plt.subplots(figsize=(11, 8.5))
             injury_counts = dataframe["InjuryStatus"].value_counts()
             injury_counts.plot(kind="bar", ax=ax, color="salmon")
@@ -661,35 +621,33 @@ Select a report below to export the latest club data.
         pdf_buffer.seek(0)
         return pdf_buffer.getvalue()
 
+    # --------------------------------------------------------------------------------------------------------------
+    # 10.3 CREATE DIVISION DATASETS
+    # --------------------------------------------------------------------------------------------------------------
+
     female_df = df[df["Gender"] == "F"]
     male_df = df[df["Gender"] == "M"]
+
+    # --------------------------------------------------------------------------------------------------------------
+    # 10.4 GENERATE PDF REPORTS
+    # --------------------------------------------------------------------------------------------------------------
 
     overall_pdf = create_dashboard_pdf(df, "Overall Team Dashboard Report")
     female_pdf = create_dashboard_pdf(female_df, "Female Division Dashboard Report")
     male_pdf = create_dashboard_pdf(male_df, "Male Division Dashboard Report")
 
+    # --------------------------------------------------------------------------------------------------------------
+    # 10.5 DOWNLOAD BUTTONS
+    # --------------------------------------------------------------------------------------------------------------
+
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.download_button(
-            label="⬇️ Download Overall Team PDF",
-            data=overall_pdf,
-            file_name="overall_team_dashboard.pdf",
-            mime="application/pdf"
-        )
+        st.download_button(label="⬇️ Download Overall Team PDF", data=overall_pdf, file_name="overall_team_dashboard.pdf", mime="application/pdf")
 
     with col2:
-        st.download_button(
-            label="⬇️ Download Female Division PDF",
-            data=female_pdf,
-            file_name="female_division_dashboard.pdf",
-            mime="application/pdf"
-        )
+        st.download_button(label="⬇️ Download Female Division PDF", data=female_pdf, file_name="female_division_dashboard.pdf", mime="application/pdf")
 
     with col3:
-        st.download_button(
-            label="⬇️ Download Male Division PDF",
-            data=male_pdf,
-            file_name="male_division_dashboard.pdf",
-            mime="application/pdf"
-        )
+        st.download_button(label="⬇️ Download Male Division PDF", data=male_pdf, file_name="male_division_dashboard.pdf", mime="application/pdf")
+    
