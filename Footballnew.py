@@ -1,3 +1,48 @@
+# ======================================================================================================================
+# INTRODUCTION
+# ======================================================================================================================
+# Sehr geehrte/r Dozent/in,
+#
+# im Rahmen dieser Arbeit wurde eine Streamlit-Applikation mit dem Titel „Football Club Performance Monitor“ entwickelt.
+# Die Anwendung dient dazu, Leistungsdaten von Fussballspielerinnen und Fussballspielern übersichtlich darzustellen,
+# zu analysieren und für weitere Auswertungen nutzbar zu machen.
+#
+# Die App greift auf einen Google-Sheets-Datensatz zu, in dem verschiedene Spielerdaten gespeichert sind. Dazu gehören
+# unter anderem Name, Geschlecht, Alter, Division, Position, Trainingsanwesenheit, gespielte Matches, Tore, Assists,
+# Fitnessstatus, Verletzungsstatus und ein Performance Score. Die Daten werden beim Start der Anwendung geladen und
+# anschliessend mit Python, Pandas, Streamlit, Matplotlib und Seaborn verarbeitet und visualisiert.
+#
+# Die Anwendung ist in mehrere Hauptbereiche gegliedert. Auf der Startseite erhält der Nutzer einen Überblick über den
+# Zweck der App und kann über Navigationsbuttons zu den verschiedenen Bereichen wechseln. Der Dashboard-Bereich zeigt
+# zentrale Kennzahlen und Visualisierungen zur Spielerleistung, darunter Altersverteilung, Positionsverteilung, Tore
+# nach Position, Performance im Verhältnis zur Trainingsanwesenheit, Fitness im Verhältnis zum Alter sowie den
+# Verletzungsstatus. Diese Auswertungen werden sowohl für den gesamten Datensatz als auch getrennt nach männlichen und
+# weiblichen Spielern angezeigt.
+#
+# Ein weiterer Bereich der App ist das Machine-Learning-Modul. Dort wird ein K-Nearest-Neighbors-Regressionsmodell
+# eingesetzt, um den Performance Score eines Spielers auf Basis von Alter, Trainingsanwesenheit, Fitness Score und Toren
+# vorherzusagen. Die App teilt die vorhandenen Daten in Trainings- und Testdaten auf, skaliert die Eingabewerte und zeigt
+# anschliessend Modellkennzahlen wie den R² Score und den durchschnittlichen Fehler an. Zusätzlich kann der Nutzer eigene
+# Werte eingeben, um eine beispielhafte Performance-Prognose zu erhalten.
+#
+# Der Bereich „Data Management“ ermöglicht die direkte Verwaltung der Spielerdaten. Nutzer können neue Spieler hinzufügen,
+# bestehende Spieler bearbeiten oder Spieler aus dem Datensatz löschen. Diese Änderungen werden direkt in Google Sheets
+# gespeichert, wodurch die App als einfache Verwaltungsoberfläche für den zugrunde liegenden Datensatz funktioniert.
+#
+# Abschliessend enthält die App einen Reporting-Bereich. Dort können automatisch generierte PDF-Berichte heruntergeladen
+# werden. Die Berichte enthalten zentrale Dashboard-Auswertungen für das gesamte Team sowie separat für die weibliche und
+# männliche Division. Dadurch können die Analyseergebnisse auch ausserhalb der Anwendung weiterverwendet oder präsentiert
+# werden.
+#
+# Insgesamt kombiniert die Applikation Datenverwaltung, Visualisierung, maschinelles Lernen und Reporting in einer
+# einheitlichen Benutzeroberfläche. Ziel der App ist es, Fussballdaten verständlich aufzubereiten und daraus praktische
+# Erkenntnisse für Training, Spielerentwicklung und Teammanagement abzuleiten.
+# ======================================================================================================================
+
+
+
+
+
 #########################################################################################################################
 #############################################     Source Code      ######################################################
 #########################################################################################################################
@@ -650,4 +695,374 @@ Select a report below to export the latest club data.
 
     with col3:
         st.download_button(label="⬇️ Download Male Division PDF", data=male_pdf, file_name="male_division_dashboard.pdf", mime="application/pdf")
+
+
+# ======================================================================================================================
+# 11. FUNCTION REFERENCE LIBRARY
+# ======================================================================================================================
+# Dieser Abschnitt listet die wichtigsten Funktionen, Methoden und aufrufbaren Objekte auf, die in der Anwendung verwendet werden.
+# Die Funktionen sind nach Bibliothek/Objekt gruppiert, damit die Dokumentationslinks einfacher gesammelt werden können.
+# ======================================================================================================================
+
+
+# ======================================================================================================================
+# 11.1 STREAMLIT FUNCTIONS
+# ======================================================================================================================
+# Streamlit is used to build the application interface, handle navigation, display text, show charts,
+# collect user inputs and provide download buttons.
+#
+# st.set_page_config()
+# Purpose: Configures the Streamlit page title, page icon and layout.
+# Reference: https://docs.streamlit.io/develop/api-reference/configuration/st.set_page_config
+#
+# st.markdown()
+# Purpose: Displays formatted Markdown text and is also used to inject custom CSS styling.
+# Reference: https://docs.streamlit.io/develop/api-reference/text/st.markdown
+#
+# st.title()
+# Purpose: Displays main page titles.
+# Reference: https://docs.streamlit.io/develop/api-reference/text/st.title
+#
+# st.subheader()
+# Purpose: Displays section-level headings.
+# Reference: https://docs.streamlit.io/develop/api-reference/text/st.subheader
+#
+# st.write()
+# Purpose: Displays text, separators and general output on the page.
+# Reference: https://docs.streamlit.io/develop/api-reference/write-magic/st.write
+#
+# st.button()
+# Purpose: Creates clickable buttons for navigation and actions.
+# Reference: https://docs.streamlit.io/develop/api-reference/widgets/st.button
+#
+# st.columns()
+# Purpose: Splits the app layout into multiple columns.
+# Reference: https://docs.streamlit.io/develop/api-reference/layout/st.columns
+#
+# st.metric()
+# Purpose: Displays key performance indicators such as total players and average performance.
+# Reference: https://docs.streamlit.io/develop/api-reference/data/st.metric
+#
+# st.pyplot()
+# Purpose: Displays Matplotlib figures inside the Streamlit app.
+# Reference: https://docs.streamlit.io/develop/api-reference/charts/st.pyplot
+#
+# st.warning()
+# Purpose: Displays warning messages when data is missing or insufficient.
+# Reference: https://docs.streamlit.io/develop/api-reference/status/st.warning
+#
+# st.error()
+# Purpose: Displays error messages when required columns are missing.
+# Reference: https://docs.streamlit.io/develop/api-reference/status/st.error
+#
+# st.success()
+# Purpose: Displays success messages after actions such as adding, editing or deleting players.
+# Reference: https://docs.streamlit.io/develop/api-reference/status/st.success
+#
+# st.stop()
+# Purpose: Stops the app execution when validation fails.
+# Reference: https://docs.streamlit.io/develop/api-reference/execution-flow/st.stop
+#
+# st.slider()
+# Purpose: Creates slider inputs for numerical user inputs.
+# Reference: https://docs.streamlit.io/develop/api-reference/widgets/st.slider
+#
+# st.text_input()
+# Purpose: Creates text input fields, for example for player names.
+# Reference: https://docs.streamlit.io/develop/api-reference/widgets/st.text_input
+#
+# st.number_input()
+# Purpose: Creates numerical input fields for values such as age, goals, assists and matches played.
+# Reference: https://docs.streamlit.io/develop/api-reference/widgets/st.number_input
+#
+# st.selectbox()
+# Purpose: Creates dropdown menus for categories such as gender, division, position and injury status.
+# Reference: https://docs.streamlit.io/develop/api-reference/widgets/st.selectbox
+#
+# st.form()
+# Purpose: Groups input widgets into a form that is submitted together.
+# Reference: https://docs.streamlit.io/develop/api-reference/execution-flow/st.form
+#
+# st.form_submit_button()
+# Purpose: Creates a submit button inside a Streamlit form.
+# Reference: https://docs.streamlit.io/develop/api-reference/execution-flow/st.form_submit_button
+#
+# st.download_button()
+# Purpose: Creates buttons for downloading generated PDF reports.
+# Reference: https://docs.streamlit.io/develop/api-reference/widgets/st.download_button
+#
+# st.session_state
+# Purpose: Stores page navigation state and selected subpages during the Streamlit session.
+# Reference: https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state
+
+
+# ======================================================================================================================
+# 11.2 GOOGLE SHEETS / GSPREAD FUNCTIONS
+# ======================================================================================================================
+# gspread is used to connect the app to Google Sheets, read the player dataset and write changes back to the sheet.
+#
+# gspread.authorize()
+# Purpose: Authorizes the Google Sheets client using service-account credentials.
+# Reference: https://docs.gspread.org/en/latest/oauth2.html
+#
+# client.open()
+# Purpose: Opens the Google Sheet file named "Dataset".
+# Reference: https://docs.gspread.org/en/latest/user-guide.html
+#
+# sheet1
+# Purpose: Selects the first worksheet inside the opened Google Sheet.
+# Reference: https://docs.gspread.org/en/latest/user-guide.html
+#
+# worksheet.get_all_records()
+# Purpose: Reads the Google Sheet data as a list of records using the first row as headers.
+# Reference: https://docs.gspread.org/en/latest/user-guide.html#getting-all-values-from-a-row-or-a-column
+#
+# worksheet.get_all_values()
+# Purpose: Reads all values from the worksheet, including headers.
+# Reference: https://docs.gspread.org/en/latest/user-guide.html#getting-all-values-from-a-row-or-a-column
+#
+# worksheet.append_row()
+# Purpose: Adds a new player record as a new row in Google Sheets.
+# Reference: https://docs.gspread.org/en/latest/api/models/worksheet.html#gspread.worksheet.Worksheet.append_row
+#
+# worksheet.update()
+# Purpose: Updates an existing player row in Google Sheets.
+# Reference: https://docs.gspread.org/en/latest/api/models/worksheet.html#gspread.worksheet.Worksheet.update
+#
+# worksheet.delete_rows()
+# Purpose: Deletes a selected player row from Google Sheets.
+# Reference: https://docs.gspread.org/en/latest/api/models/worksheet.html#gspread.worksheet.Worksheet.delete_rows
+
+
+# ======================================================================================================================
+# 11.3 GOOGLE AUTHENTICATION FUNCTIONS
+# ======================================================================================================================
+# Google authentication is used to securely connect Streamlit to Google Sheets through service-account credentials.
+#
+# Credentials.from_service_account_info()
+# Purpose: Creates Google service-account credentials from the credential information stored in Streamlit secrets.
+# Reference: https://google-auth.readthedocs.io/en/latest/reference/google.oauth2.service_account.html
+
+
+# ======================================================================================================================
+# 11.4 PANDAS FUNCTIONS
+# ======================================================================================================================
+# Pandas is used to convert, clean, filter and analyse the player dataset.
+#
+# pd.DataFrame()
+# Purpose: Converts Google Sheets data into a Pandas DataFrame.
+# Reference: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
+#
+# dataframe.empty
+# Purpose: Checks whether a DataFrame contains no rows.
+# Reference: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.empty.html
+#
+# dataframe.copy()
+# Purpose: Creates a copy of the selected machine-learning dataset.
+# Reference: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.copy.html
+#
+# pd.to_numeric()
+# Purpose: Converts selected columns to numeric values and replaces invalid values with missing values.
+# Reference: https://pandas.pydata.org/docs/reference/api/pandas.to_numeric.html
+#
+# dataframe.dropna()
+# Purpose: Removes rows with missing values before training the machine-learning model.
+# Reference: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html
+#
+# series.mean()
+# Purpose: Calculates averages such as average performance and average attendance.
+# Reference: https://pandas.pydata.org/docs/reference/api/pandas.Series.mean.html
+#
+# series.value_counts()
+# Purpose: Counts category frequencies, for example players by position or injury status.
+# Reference: https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html
+#
+# series.plot()
+# Purpose: Creates simple charts from Pandas data, such as bar charts.
+# Reference: https://pandas.pydata.org/docs/reference/api/pandas.Series.plot.html
+
+
+# ======================================================================================================================
+# 11.5 MATPLOTLIB FUNCTIONS
+# ======================================================================================================================
+# Matplotlib is used to create figures, axes and PDF report charts.
+#
+# plt.subplots()
+# Purpose: Creates a figure and axes object for each chart.
+# Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html
+#
+# ax.set_title()
+# Purpose: Sets the title of a chart.
+# Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html
+#
+# ax.set_xlabel()
+# Purpose: Sets the label of the x-axis.
+# Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html
+#
+# ax.set_ylabel()
+# Purpose: Sets the label of the y-axis.
+# Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_ylabel.html
+#
+# ax.axis()
+# Purpose: Shows or hides chart axes, used in the PDF cover page.
+# Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.axis.html
+#
+# ax.text()
+# Purpose: Adds text to a Matplotlib figure, used for the PDF cover page.
+# Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.text.html
+#
+# plt.close()
+# Purpose: Closes figures after saving them to avoid unnecessary memory usage.
+# Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.close.html
+
+
+# ======================================================================================================================
+# 11.6 SEABORN FUNCTIONS
+# ======================================================================================================================
+# Seaborn is used to create statistical visualisations for the dashboard and PDF reports.
+#
+# sns.histplot()
+# Purpose: Creates histograms, used for the age distribution chart.
+# Reference: https://seaborn.pydata.org/generated/seaborn.histplot.html
+#
+# sns.boxplot()
+# Purpose: Creates boxplots, used for goals by position.
+# Reference: https://seaborn.pydata.org/generated/seaborn.boxplot.html
+#
+# sns.scatterplot()
+# Purpose: Creates scatterplots, used for performance vs attendance and fitness vs age.
+# Reference: https://seaborn.pydata.org/generated/seaborn.scatterplot.html
+#
+# sns.regplot()
+# Purpose: Adds regression trend lines to scatterplots.
+# Reference: https://seaborn.pydata.org/generated/seaborn.regplot.html
+
+
+# ======================================================================================================================
+# 11.7 SCIKIT-LEARN FUNCTIONS
+# ======================================================================================================================
+# scikit-learn is used to prepare the data, train the machine-learning model and evaluate its performance.
+#
+# train_test_split()
+# Purpose: Splits the dataset into training and testing data.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
+#
+# StandardScaler()
+# Purpose: Creates a scaler object to standardise input features before model training.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+#
+# scaler.fit_transform()
+# Purpose: Fits the scaler to the training data and transforms the training data.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+#
+# scaler.transform()
+# Purpose: Applies the fitted scaler to test data and user input data.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+#
+# KNeighborsRegressor()
+# Purpose: Creates the K-Nearest-Neighbors regression model.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html
+#
+# model.fit()
+# Purpose: Trains the machine-learning model using the scaled training data.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html
+#
+# model.predict()
+# Purpose: Predicts performance scores using the trained model.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html
+#
+# r2_score()
+# Purpose: Calculates the R² score of the model.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html
+#
+# mean_absolute_error()
+# Purpose: Calculates the average prediction error of the model.
+# Reference: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.mean_absolute_error.html
+
+
+# ======================================================================================================================
+# 11.8 NUMPY FUNCTIONS
+# ======================================================================================================================
+# NumPy is used to prepare the user input values for the machine-learning model.
+#
+# np.array()
+# Purpose: Converts the user's prediction inputs into an array format that can be used by the model.
+# Reference: https://numpy.org/doc/stable/reference/generated/numpy.array.html
+
+
+# ======================================================================================================================
+# 11.9 MATPLOTLIB PDF FUNCTIONS
+# ======================================================================================================================
+# PdfPages is used to generate multi-page PDF dashboard reports.
+#
+# PdfPages()
+# Purpose: Creates a multi-page PDF object that can store several Matplotlib figures.
+# Reference: https://matplotlib.org/stable/api/backend_pdf_api.html
+#
+# pdf.savefig()
+# Purpose: Saves a Matplotlib figure as a page inside the PDF report.
+# Reference: https://matplotlib.org/stable/api/backend_pdf_api.html
+
+
+# ======================================================================================================================
+# 11.10 PYTHON BUILT-IN FUNCTIONS AND METHODS
+# ======================================================================================================================
+# Python built-ins and standard methods are used for basic data processing, conversion and formatting.
+#
+# len()
+# Purpose: Counts the number of rows, players or data points.
+# Reference: https://docs.python.org/3/library/functions.html#len
+#
+# round()
+# Purpose: Rounds numeric values before they are displayed.
+# Reference: https://docs.python.org/3/library/functions.html#round
+#
+# int()
+# Purpose: Converts values into integers.
+# Reference: https://docs.python.org/3/library/functions.html#int
+#
+# list.index()
+# Purpose: Finds the position of a selected player in a list.
+# Reference: https://docs.python.org/3/tutorial/datastructures.html
+#
+# str.replace()
+# Purpose: Removes the "P" from a player ID before generating the next player number.
+# Reference: https://docs.python.org/3/library/stdtypes.html#str.replace
+#
+# f-strings
+# Purpose: Formats dynamic text such as player IDs, success messages and model output.
+# Reference: https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals
+
+
+# ======================================================================================================================
+# 11.11 PYTHON IO FUNCTIONS
+# ======================================================================================================================
+# The io library is used to create the PDF reports in memory before they are downloaded.
+#
+# io.BytesIO()
+# Purpose: Creates an in-memory binary buffer for the generated PDF.
+# Reference: https://docs.python.org/3/library/io.html#io.BytesIO
+#
+# pdf_buffer.getvalue()
+# Purpose: Returns the PDF content from the in-memory buffer.
+# Reference: https://docs.python.org/3/library/io.html#io.BytesIO.getvalue
+#
+# pdf_buffer.seek()
+# Purpose: Resets the buffer position to the beginning before returning the PDF.
+# Reference: https://docs.python.org/3/library/io.html#io.IOBase.seek
+
+
+# ======================================================================================================================
+# 11.12 CUSTOM FUNCTIONS DEFINED IN THIS APPLICATION
+# ======================================================================================================================
+# These functions are written directly inside this application and therefore do not have external documentation pages.
+#
+# plot_dashboard(dataframe, title)
+# Purpose: Generates the dashboard section for a given dataset, including KPIs and charts.
+# Used in: Overall Player Dashboard, Female Player Dashboard, Male Player Dashboard.
+#
+# create_dashboard_pdf(dataframe, report_title)
+# Purpose: Generates a downloadable PDF dashboard report for a given dataset.
+# Used in: Overall Team Dashboard Report, Female Division Dashboard Report, Male Division Dashboard Report.
+# ======================================================================================================================
     
