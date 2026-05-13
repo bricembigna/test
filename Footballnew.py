@@ -2,6 +2,7 @@
 ##################################################     Source Code      ###########################################################
 ###################################################################################################################################
 
+
 import streamlit as st
 import gspread
 from google.oauth2.service_account import Credentials
@@ -15,7 +16,11 @@ import io
 # --------------------------------------------------
 # PAGE CONFIG
 # --------------------------------------------------
-st.set_page_config(page_title="Football Club Performance Monitor", page_icon="⚽", layout="wide")
+st.set_page_config(
+    page_title="Football Club Performance Monitor",
+    page_icon="⚽",
+    layout="wide"
+)
 
 # --------------------------------------------------
 # GLOBAL STYLE — TACTICAL FOOTBALL DASHBOARD THEME
@@ -128,6 +133,9 @@ input {
 </style>
 """, unsafe_allow_html=True)
 
+
+
+
 # Define scopes
 # The 'scopes' variable defines the level of access the application has to Google Sheets and Drive.
 # These specific scopes allow the app to read and write data from Google Sheets and Drive, 
@@ -137,7 +145,10 @@ scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapi
 # Authenticate using Streamlit secrets
 # This method uses a JSON configuration stored in Streamlit secrets for authentication.
 # It's a secure way to handle credentials, ensuring sensitive data is not hard-coded.
-credentials = Credentials.from_service_account_info(st.secrets["google_credentials"], scopes=scopes)
+credentials = Credentials.from_service_account_info(
+    st.secrets["google_credentials"],
+    scopes=scopes
+)
 client = gspread.authorize(credentials)
 
 # Access Google Sheet
@@ -177,6 +188,7 @@ if st.session_state.page == "Home":
     Built to support smarter coaching decisions and a deeper understanding of player progression across the club.
     """)
 
+    
     # Display navigation buttons under the explanation
     # The buttons provide quick navigation to other sections of the application.
     st.write("### Navigate to:")
@@ -194,10 +206,15 @@ if st.session_state.page == "Home":
         if st.button("Division Report"):
             st.session_state.page = "Division Report"
 
+
+
+
+
 ########################################### Dashboard Page ###########################################
 # Dashboard Page
 
 elif st.session_state.page == "Dashboard":
+
     st.title("⚽ Player Performance Dashboard")
 
     if st.button("Homepage"):
@@ -207,6 +224,7 @@ elif st.session_state.page == "Dashboard":
     # Helper function for dashboards
     # -------------------------------
     def plot_dashboard(dataframe, title):
+
         st.markdown("---")
         st.title(title)
 
@@ -292,17 +310,25 @@ elif st.session_state.page == "Dashboard":
     male_df = df[df["Gender"] == "M"]
     plot_dashboard(male_df, "👨 Male Player Dashboard")
 
+
 ########################################### ML Page ###########################################
+
+
+
 
 # Machine Learning Page and title 
 # Machine Learning Page
 elif st.session_state.page == "Machine Learning":
+
     st.title("⚽ Player Performance Predictor")
 
     if st.button("Homepage"):
         st.session_state.page = "Home"
 
-    st.write("This section uses live player data from Google Sheets to predict a player's performance score based on age, training attendance, fitness score, and goals.")
+    st.write(
+        "This section uses live player data from Google Sheets to predict a player's "
+        "performance score based on age, training attendance, fitness score, and goals."
+    )
 
     # Required columns for machine learning
     FEATURES = ["Age", "TrainingAttendanceRate", "FitnessScore", "Goals"]
@@ -342,7 +368,12 @@ elif st.session_state.page == "Machine Learning":
     import numpy as np
 
     # Split data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.2,
+        random_state=42
+    )
 
     # Standardise the input variables
     scaler = StandardScaler()
@@ -381,8 +412,10 @@ elif st.session_state.page == "Machine Learning":
     prediction = model.predict(input_scaled)[0]
 
     st.success(f"Predicted Performance Score: {prediction:.1f}")
+   
 
 ########################################### Data Management Page ###########################################
+
 
 # ─────────────────────────────────────────────────────────────────
 # AI Usage Declaration – Data Management Page
@@ -451,6 +484,7 @@ elif st.session_state.page == "Data Management":
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
 
+
     elif st.session_state.dm_subpage == "edit":
         st.subheader("✏️ Edit Player")
     
@@ -510,9 +544,12 @@ elif st.session_state.page == "Data Management":
         if st.button("Back"):
             st.session_state.dm_subpage = "main"
 
+
+
 ########################################### Division Report Page ###########################################
 
 elif st.session_state.page == "Division Report":
+
     st.title("📄 Division Report Downloads")
 
     if st.button("Homepage"):
@@ -532,9 +569,11 @@ Select a report below to export the latest club data.
     from matplotlib.backends.backend_pdf import PdfPages
 
     def create_dashboard_pdf(dataframe, report_title):
+
         pdf_buffer = io.BytesIO()
 
         with PdfPages(pdf_buffer) as pdf:
+
             # -------------------------------
             # Cover Page
             # -------------------------------
@@ -629,10 +668,25 @@ Select a report below to export the latest club data.
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.download_button(label="⬇️ Download Overall Team PDF", data=overall_pdf, file_name="overall_team_dashboard.pdf", mime="application/pdf")
+        st.download_button(
+            label="⬇️ Download Overall Team PDF",
+            data=overall_pdf,
+            file_name="overall_team_dashboard.pdf",
+            mime="application/pdf"
+        )
 
     with col2:
-        st.download_button(label="⬇️ Download Female Division PDF", data=female_pdf, file_name="female_division_dashboard.pdf", mime="application/pdf")
+        st.download_button(
+            label="⬇️ Download Female Division PDF",
+            data=female_pdf,
+            file_name="female_division_dashboard.pdf",
+            mime="application/pdf"
+        )
 
     with col3:
-        st.download_button(label="⬇️ Download Male Division PDF", data=male_pdf, file_name="male_division_dashboard.pdf", mime="application/pdf")
+        st.download_button(
+            label="⬇️ Download Male Division PDF",
+            data=male_pdf,
+            file_name="male_division_dashboard.pdf",
+            mime="application/pdf"
+        )
