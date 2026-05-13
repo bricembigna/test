@@ -700,8 +700,8 @@ Select a report below to export the latest club data.
 # ======================================================================================================================
 # 11. FUNCTION REFERENCE LIBRARY
 # ======================================================================================================================
-# Dieser Abschnitt listet die wichtigsten Funktionen, Methoden und aufrufbaren Objekte auf, die in der Anwendung verwendet werden.
-# Die Funktionen sind nach Bibliothek/Objekt gruppiert, damit die Dokumentationslinks einfacher gesammelt werden können.
+# This section lists the main functions, methods and callable objects used in the application.
+# The functions are grouped by library/object so that documentation links can be collected more easily.
 # ======================================================================================================================
 
 
