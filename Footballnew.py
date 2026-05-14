@@ -53,7 +53,7 @@
 # - Überprüfung und Unterstützung des PDF-Report-Generation-Bereichs
 # - Unterstützung bei der Erstellung der Funktionsreferenz-Bibliothek
 #   Hinweis: Das Überprüfen der einzelnen Bibliotheks- und Funktionsreferenzen wurde manuell
-#   durch die Autoren durchgeführt.
+#   durch die Autor:innen durchgeführt.
 # - Unterstützung beim Debugging, insbesondere bei der Erklärung von Funktionsparametern und Fehlerursachen
 # - Übersetzung der Applikations-Einleitung ins Deutsche
 #
@@ -61,7 +61,7 @@
 # - Unterstützung beim Bereich Data Management, einschliesslich Add-, Edit- und Delete-Funktionalität
 # - Unterstützung beim Machine-Learning-Bereich
 #
-# Der Autor bleibt verantwortlich für die finale Implementierung, die Auswahl der Quellen, die Anpassung des Codes,
+# Die Autor:innen bleiben verantwortlich für die finale Implementierung, die Auswahl der Quellen, die Anpassung des Codes,
 # die Funktionalität sowie die Erklärung der eingereichten Applikation.
 #
 # Referenzen:
