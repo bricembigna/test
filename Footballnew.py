@@ -1,7 +1,7 @@
 # ======================================================================================================================
 # INTRODUCTION
 # ======================================================================================================================
-# Sehr geehrte/r Dozent/in,
+# Sehr geehrter Ruben
 #
 # im Rahmen dieser Arbeit wurde eine Streamlit-Applikation mit dem Titel „Football Club Performance Monitor“ entwickelt.
 # Die Anwendung dient dazu, Leistungsdaten von Fussballspielerinnen und Fussballspielern übersichtlich darzustellen,
