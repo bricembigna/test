@@ -43,7 +43,31 @@
 # ======================================================================================================================
 
 
-
+# ======================================================================================================================
+# ERKLÄRUNG ZUR NUTZUNG VON GENERATIVER KI
+# ======================================================================================================================
+# Während der Entwicklung dieser Applikation wurden generative KI-Tools als unterstützende Hilfsmittel verwendet.
+# Der finale Code wurde vom Autor überprüft, angepasst und in die Applikation integriert.
+#
+# OpenAI ChatGPT wurde verwendet für:
+# - Überprüfung und Unterstützung des PDF-Report-Generation-Bereichs
+# - Unterstützung bei der Erstellung der Funktionsreferenz-Bibliothek
+#   Hinweis: Das Überprüfen der einzelnen Bibliotheks- und Funktionsreferenzen wurde manuell
+#   durch den Autor durchgeführt.
+# - Unterstützung beim Debugging, insbesondere bei der Erklärung von Funktionsparametern und Fehlerursachen
+# - Übersetzung der Applikations-Einleitung ins Deutsche
+#
+# Claude von Anthropic wurde verwendet für:
+# - Unterstützung beim Bereich Data Management, einschliesslich Add-, Edit- und Delete-Funktionalität
+# - Unterstützung beim Machine-Learning-Bereich
+#
+# Der Autor bleibt verantwortlich für die finale Implementierung, die Auswahl der Quellen, die Anpassung des Codes,
+# die Funktionalität sowie die Erklärung der eingereichten Applikation.
+#
+# Referenzen:
+# - OpenAI ChatGPT, chat.openai.com, Mai 2026
+# - Claude von Anthropic, claude.ai, Mai 2026
+# ======================================================================================================================
 
 
 # ======================================================================================================================
@@ -387,16 +411,6 @@ elif st.session_state.page == "Machine Learning":
 # ======================================================================================================================
 # 9. DATA MANAGEMENT PAGE
 # ======================================================================================================================
-
-
-# ─────────────────────────────────────────────────────────────────
-# AI Usage Declaration – Data Management Page
-# Author: Fabian
-# This section was developed with the support of Claude (Anthropic).
-# Claude was used as a coding assistant to help write the
-# Data Management page including the add, edit and delete functions.
-# Reference: Claude (Anthropic), claude.ai, May 2026
-# ─────────────────────────────────────────────────────────────────
 
 # Backend Page (Data Management)
 elif st.session_state.page == "Data Management":
