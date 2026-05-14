@@ -37,7 +37,12 @@
 # Insgesamt kombiniert die Applikation Datenverwaltung, Visualisierung, maschinelles Lernen und Reporting in einer
 # einheitlichen Benutzeroberfläche. Ziel der App ist es, Fussballdaten verständlich aufzubereiten und daraus praktische
 # Erkenntnisse für Training, Spielerentwicklung und Teammanagement abzuleiten.
+#
+# Frontend App Link: https://5ojsipufq2ps7vgp7qlmfr.streamlit.app
+#
 # ======================================================================================================================
+
+
 
 
 
