@@ -53,7 +53,7 @@
 # - Überprüfung und Unterstützung des PDF-Report-Generation-Bereichs
 # - Unterstützung bei der Erstellung der Funktionsreferenz-Bibliothek
 #   Hinweis: Das Überprüfen der einzelnen Bibliotheks- und Funktionsreferenzen wurde manuell
-#   durch den Autor durchgeführt.
+#   durch die Autoren durchgeführt.
 # - Unterstützung beim Debugging, insbesondere bei der Erklärung von Funktionsparametern und Fehlerursachen
 # - Übersetzung der Applikations-Einleitung ins Deutsche
 #
