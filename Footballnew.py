@@ -1,5 +1,5 @@
 # ======================================================================================================================
-# INTRODUCTION
+# EINLEITUNG
 # ======================================================================================================================
 # Sehr geehrter Ruben
 #
@@ -37,6 +37,16 @@
 # Insgesamt kombiniert die Applikation Datenverwaltung, Visualisierung, maschinelles Lernen und Reporting in einer
 # einheitlichen Benutzeroberfläche. Ziel der App ist es, Fussballdaten verständlich aufzubereiten und daraus praktische
 # Erkenntnisse für Training, Spielerentwicklung und Teammanagement abzuleiten.
+#
+# Diese Arbeit wurde von den folgenden Gruppenmitgliedern erstellt und eingereicht:
+#
+# - Benjamin Rousseau (24-615-072)
+# - Brice Olivier Mbigna Mbakop (15-971-328)
+# - Cedric Neuenschwander (24-617-060)
+# - Fabian Peyer (23-608-953)
+# - Lily Mappin (22-619-795)
+#
+# Gruppe 09.05
 #
 # Frontend App Link: https://5ojsipufq2ps7vgp7qlmfr.streamlit.app
 #
